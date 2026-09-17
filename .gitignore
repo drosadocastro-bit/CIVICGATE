@@ -1,0 +1,34 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+*.egg-info/
+.env
+audit/
+.build/
+.codex-finalizer/
+
+# Never commit credentials or local API/model configuration.
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*credentials*
+*secrets*
+secrets/
+
+# Never commit API traffic, public or private. Recreate these locally with the
+# documented smoke/evaluation commands when evidence needs to be refreshed.
+artifacts/live-smoke.json
+artifacts/demo.json
+artifacts/evaluation.json
+artifacts/tests.xml
+artifacts/environment-*.txt
+artifacts/dependency-audit.json
+artifacts/files-created.txt
+*.ndjson
