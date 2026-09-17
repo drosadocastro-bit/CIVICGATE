@@ -27,8 +27,8 @@ The local generated file inventory is intentionally ignored along with API captu
 | MCP stdio | Real subprocess initialize/list/call passed; four tools with output schemas |
 | Live USAspending | Search, detail and recipient contracts passed; timestamped hashes in artifacts/live-smoke.json |
 | Presentation | Six editable slides exported, package/layout validated and all rendered slides visually inspected |
-| GitHub CI | Defined for Ubuntu/Windows Python 3.11/3.12; not executed remotely |
-| Docker runtime | Not run locally: Docker CLI exists but Linux engine named pipe is unavailable |
+| GitHub CI | Run `35252552354` passed Ubuntu/Windows Python 3.11/3.12 and the Linux Docker smoke |
+| Docker runtime | Remote hardened container smoke passed; not run locally because the Linux engine named pipe is unavailable |
 
 The initial dependency audit flagged the virtual environment's pip 25.2. It was updated to 26.2.1; CI and Docker now upgrade pip before installation. No advisory was suppressed. The environment snapshot is observational, not a cross-platform lockfile.
 

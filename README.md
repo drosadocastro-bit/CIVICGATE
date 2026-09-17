@@ -79,6 +79,6 @@ Award totals are not fiscal-year transaction spending. A date filter finds match
 
 See [evaluation](docs/EVALUATION.md), [build report](docs/BUILD_REPORT.md), [demo](docs/DEMO.md), [architecture](docs/ARCHITECTURE.md), [authority](docs/AUTHORITY_MODEL.md), [security](docs/SECURITY.md), [GSA alignment](docs/GSA_ALIGNMENT.md), and [mechanism transfer](docs/PRAETOR_MECHANISM_TRANSFER.md).
 
-CI defines Ubuntu/Windows Python 3.11/3.12 checks and a Linux Docker smoke. Remote CI has not run until the repository is published and a workflow executes. Docker is stdio-only, runs as non-root, and exposes no port. Build with `docker build -t civicgate:test .`; use `python scripts/container_smoke.py` for protocol verification.
+CI defines Ubuntu/Windows Python 3.11/3.12 checks and a Linux Docker smoke. GitHub Actions run `35252552354` passed all five jobs, including the hardened container smoke. Docker is stdio-only, runs as non-root, and exposes no port. Build with `docker build -t civicgate:test .`; use `python scripts/container_smoke.py` for protocol verification. The local Docker daemon was unavailable during this build, so local Docker execution remains unverified.
 
 This is not production-ready. PRAETOR served only as a read-only mechanism reference; none of its research results validate CivicGate. No commit, push, deployment, extra domain or write capability is included.
