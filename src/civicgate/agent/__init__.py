@@ -1,0 +1,1 @@
+"""CivicGate agent boundary."""

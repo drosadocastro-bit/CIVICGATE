@@ -1,0 +1,1 @@
+"""Validated CivicGate contracts."""
