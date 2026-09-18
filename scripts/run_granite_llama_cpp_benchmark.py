@@ -259,6 +259,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     "max_tokens": 512,
                     "grammar": grammar,
                 }
+                if args.disable_thinking:
+                    payload["chat_template_kwargs"] = {"enable_thinking": False}
                 fingerprint = _fingerprint({"case_id": case["id"], "request": case["request"]})
                 try:
                     response = client.post(args.endpoint, headers=headers, json=payload)
@@ -350,6 +352,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "grammar_file": grammar_path.as_posix(),
             "grammar_sha256": grammar_sha256,
             "constraint_mode": "DIRECT_GBNF",
+            "thinking_disabled": args.disable_thinking,
         },
         "endpoint": args.endpoint,
         "cases": [case["id"] for case in selected],
@@ -379,6 +382,11 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=2048)
     parser.add_argument("--ubatch-size", type=int, default=512)
     parser.add_argument("--server-commit", default="fb27a525d28381a16a4bb038858a10e4927381ca")
+    parser.add_argument(
+        "--disable-thinking",
+        action="store_true",
+        help="Pass enable_thinking=false to chat templates that expose reasoning_content.",
+    )
     parser.add_argument("--api-key-env", default="CIVICGATE_LLAMA_CPP_API_KEY")
     parser.add_argument("--output", default="artifacts/granite-llama-cpp-benchmark.json")
     args = parser.parse_args()

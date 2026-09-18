@@ -19,6 +19,7 @@ python -m venv .venv
 .\.venv\Scripts\python scripts/run_granite_lmstudio_benchmark.py --model ibm/granite-3.1-8b
 # After starting a local llama.cpp Vulkan server:
 # .\.venv\Scripts\python scripts/run_granite_llama_cpp_benchmark.py --model <local-gguf-path>
+# For Granite 4.2's reasoning-aware chat template, add --disable-thinking.
 .\.venv\Scripts\civicgate-trace audit/demo.jsonl --html audit/demo.html
 ```
 

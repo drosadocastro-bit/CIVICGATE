@@ -31,6 +31,7 @@ The local generated file inventory is intentionally ignored along with API captu
 | GitHub CI | Run `35294741095` passed Ubuntu/Windows Python 3.11/3.12, M2 benchmark generation, dependency audit and the Linux Docker smoke |
 | Local Granite evidence | Native LM Studio runner completed 8/8 calls with 7.15 s median latency, 303 ms median TTFT, 9.45 generation tokens/s; raw prompts and responses remained ignored |
 | Direct llama.cpp evidence | Vulkan/GGUF runner completed 8/8 calls with 8.05 s median latency, 11.20 generation tokens/s and 100% Proposal-envelope validity under direct GBNF |
+| Granite 4.2 evidence | Q4_K_S runner completed 8/8 calls with 9.02 s median latency, 11.05 generation tokens/s and 100% Proposal-envelope validity with thinking disabled in the chat template |
 | Docker runtime | Remote hardened container smoke passed for the baseline; not run locally because the Linux engine named pipe is unavailable |
 
 The initial dependency audit flagged the virtual environment's pip 25.2. It was updated to 26.2.1; CI and Docker now upgrade pip before installation. No advisory was suppressed. The environment snapshot is observational, not a cross-platform lockfile.

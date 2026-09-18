@@ -27,6 +27,19 @@ The first direct run against the active LM Studio llama.cpp process used 8 calls
 
 This direct GBNF result improves the outer Proposal contract compared with the native LM Studio diagnostic, while argument validity remains a separate semantic and schema concern. The two runs use different server paths and should not be treated as a global model-speed comparison. The deterministic CivicGate policy remains authoritative in both paths.
 
+## Granite 4.2 comparison
+
+The same runner was repeated with `granite-4.2-8b-Q4_K_S.gguf`:
+
+```text
+sha256 = 6b2438a9177be0883b27722dadd5271c8e18806e068a7fc30a42c481c000c092
+size   = 5,090,820,224 bytes
+```
+
+The LM Studio llama.cpp process used Vulkan, 21 GPU layers, context 131,072, batch `2048/512`, Flash Attention, KV offload and the same backend commit `b49650a`. Eight calls completed without transport errors or timeouts: median latency **9.02 s**, p95 **14.41 s**, **8,070** prompt tokens, **682** completion tokens, **11.42 prompt tokens/s** and **11.05 generation tokens/s**. Proposal-envelope validity and expected-tool selection were **100%**; complete tool-argument validity was **25%**; repeat consistency was **100%**. TTFT was not exposed.
+
+Granite 4.2's template enables thinking by default and returned this JSON in `reasoning_content` while leaving `content` empty. The comparable run therefore passes `chat_template_kwargs: {"enable_thinking": false}` through `--disable-thinking`; the runner keeps the channel choice explicit in its runtime metadata. The first strict default-channel observation remains a compatibility finding, not a valid Proposal result.
+
 The active process is currently exposed on an LM Studio-managed loopback port. For a clean H.E.L.M.-aligned trial, unload the model from LM Studio first and start the pinned build in a separate local terminal. The command below is a template; it keeps the server on loopback and selects the discrete Vulkan device explicitly:
 
 ```powershell
