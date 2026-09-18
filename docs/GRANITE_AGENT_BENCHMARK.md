@@ -23,3 +23,9 @@ Se ejecutaron cuatro fixtures representativos con dos repeticiones cada uno, tem
 - Dos de las tres fixtures con `Proposal` válido fueron consistentes entre repeticiones; la fixture de inyección cambió los argumentos entre repeticiones y la de registros privados produjo salida no válida, así que ambas quedan para revisión.
 
 Estas cifras describen el comportamiento del planificador, no una decisión de autoridad. La política determinista de CivicGate sigue siendo la autoridad final y debe bloquear o enviar a revisión propuestas ambiguas, fuera de alcance o con argumentos inválidos. Esta medición nativa es evidencia diagnóstica separada: la integración configurada del agente continúa usando `/v1/chat/completions`, que en esta sesión respondió con un error de carga del modelo y debe verificarse después de confirmar la identidad exacta en LM Studio.
+
+### Corrida directa con llama.cpp y GBNF
+
+La misma instancia de Granite también se probó por el servidor llama.cpp directo que administra LM Studio, usando `proposal.json.gbnf` y el mismo parser Pydantic. En 8 llamadas, la latencia mediana fue **8.05 s**, p95 **12.57 s**, con **8,356** tokens de entrada, **606** de salida, **11.47 tokens/s** de prompt y **11.20 tokens/s** de generación. TTFT no estuvo expuesto. El envelope `Proposal` fue válido en **100%**, la herramienta esperada coincidió en **100%**, los argumentos completos en **25%** y la consistencia de las propuestas válidas fue **100%**. No hubo timeouts ni errores de transporte.
+
+La mejora del envelope proviene de la restricción directa GBNF; no es una prueba de que el modelo sea Granite 3.2 ni una comparación global de velocidad. La identidad observada sigue siendo Granite 3.1 Q3_K_L y la validación de argumentos, fechas, autoridad y alcance permanece independiente.

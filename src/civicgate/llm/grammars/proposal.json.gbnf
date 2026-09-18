@@ -1,0 +1,12 @@
+# CivicGate Proposal envelope. Arguments remain generic JSON and are validated
+# independently by the Pydantic tool schemas after generation.
+root ::= "{" ws "\"tool\"" ws ":" ws string ws "," ws "\"arguments\"" ws ":" ws object ws "}"
+
+object ::= "{" ws (pair (ws "," ws pair)*)? ws "}"
+pair ::= string ws ":" ws value
+value ::= object | array | string | number | ("true" | "false" | "null") ws
+array ::= "[" ws (value (ws "," ws value)*)? ws "]" ws
+
+string ::= "\"" ([^"\\\x7F\x00-\x1F] | "\\" (["\\bfnrt] | "u" [0-9a-fA-F]{4}))* "\"" ws
+number ::= ("-"? ([0-9] | [1-9] [0-9]{0,15})) ("." [0-9]+)? ([eE] [-+]? [0-9] [1-9]{0,15})? ws
+ws ::= | " " | "\n" [ \t]{0,20}

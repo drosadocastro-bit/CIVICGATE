@@ -8,4 +8,6 @@ LM Studio telemetry may not expose TTFT, prompt/generation rates or VRAM. The be
 
 For local diagnosis, `scripts/run_granite_lmstudio_benchmark.py` can use LM Studio's native `/api/v1/chat` endpoint, which exposes TTFT and token statistics. In the recorded session, the operator called the model Granite 3.2 while LM Studio reported `ibm/granite-3.1-8b`; that identity mismatch remains a review condition. Native benchmark evidence is kept in the ignored local artifact and does not replace the configured `/v1/chat/completions` integration contract.
 
+The H.E.L.M.-aligned direct path is documented in `docs/LLAMA_CPP_VULKAN.md`. It uses a local llama.cpp server with direct GBNF, then applies CivicGate's independent Proposal and tool-argument validation. It avoids the failing OpenAI-compatible constrained route observed in this session, but it does not make invalid dates or authority-sensitive requests safe; deterministic policy and review gates still decide.
+
 Live USAspending checks are also separate observations: retain UTC timestamp, endpoint, query and response fingerprints, latency, schema validity, record count and truncation. Do not freeze changing public content or treat one sample as uptime or factual assurance.
