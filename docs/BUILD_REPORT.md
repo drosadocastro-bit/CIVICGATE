@@ -28,7 +28,8 @@ The local generated file inventory is intentionally ignored along with API captu
 | MCP stdio | Real subprocess initialize/list/call passed; four tools with output schemas |
 | Live USAspending | Search, detail and recipient contracts passed; timestamped hashes in artifacts/live-smoke.json |
 | Presentation | Milestone 2 six editable slides exported, package/layout validated and all rendered slides visually inspected |
-| GitHub CI | Run `35292538847` passed Ubuntu/Windows Python 3.11/3.12, M2 benchmark generation, dependency audit and the Linux Docker smoke |
+| GitHub CI | Run `35294741095` passed Ubuntu/Windows Python 3.11/3.12, M2 benchmark generation, dependency audit and the Linux Docker smoke |
+| Local Granite evidence | Native LM Studio runner completed 8/8 calls with 7.15 s median latency, 303 ms median TTFT, 9.45 generation tokens/s; raw prompts and responses remained ignored |
 | Docker runtime | Remote hardened container smoke passed for the baseline; not run locally because the Linux engine named pipe is unavailable |
 
 The initial dependency audit flagged the virtual environment's pip 25.2. It was updated to 26.2.1; CI and Docker now upgrade pip before installation. No advisory was suppressed. The environment snapshot is observational, not a cross-platform lockfile.
@@ -43,4 +44,4 @@ Not ported: G2/G3/G3B artifacts, freeze machinery, adaptive runtime, NEXRAD fixt
 
 Real-model semantic accuracy is unmeasured; only the provider contract is implemented. The mock planner recognizes the prescribed demo patterns and is not a general natural-language interpreter. Lexical authority checks can overblock or miss paraphrases. An external MCP client can misrepresent intended use. Recipient name search is not legal-entity verification; candidate selection remains manual. Summary amounts describe the returned award page, not FY transaction spending. No availability/load guarantee, tamper-proof audit, persistent containment or production readiness is claimed.
 
-Milestone 2 CI is green at commit `672f254`. Live Granite and Luna/Sonnet evidence remains an external, opt-in handoff with frozen conditions and credentials. Scope stops at this one public-data domain and read-only capability.
+Milestone 2 CI is green at commit `cc53c9e` (run `35294741095`). Live Granite and Luna/Sonnet evidence remains an external, opt-in handoff with frozen conditions and credentials. Scope stops at this one public-data domain and read-only capability.
