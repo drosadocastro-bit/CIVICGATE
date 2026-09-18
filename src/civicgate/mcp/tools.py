@@ -12,7 +12,7 @@ from civicgate.governance.agent_k import inspect
 from civicgate.governance.judge import assess
 from civicgate.governance.policy import PolicyFacts, evaluate
 from civicgate.llm.base import JudgeModel
-from civicgate.models.governance import Governance, JudgeSignal
+from civicgate.models.governance import Governance, JudgeSignal, KSignal
 from civicgate.models.requests import TOOLS, Award, Proposal, Recipient, Search
 from civicgate.models.responses import Envelope, Error
 
@@ -24,7 +24,14 @@ class Gateway:
     """
 
     def __init__(
-        self, adapter: USAspending, judge: JudgeModel, trace: Trace, threshold: float = 0.85
+        self,
+        adapter: USAspending,
+        judge: JudgeModel,
+        trace: Trace,
+        threshold: float = 0.85,
+        *,
+        require_judge: bool = True,
+        enable_agent_k: bool = True,
     ) -> None:
         if not 0 <= threshold <= 1:
             raise ValueError("Invalid confidence threshold")
@@ -32,6 +39,8 @@ class Gateway:
         self._judge = judge
         self.trace = trace
         self.threshold = threshold
+        self.require_judge = require_judge
+        self.enable_agent_k = enable_agent_k
         self._denials = 0
         self._lock = asyncio.Lock()
 
@@ -60,6 +69,7 @@ class Gateway:
             valid_input=valid,
             bounded=bounded,
             review_reason="PLANNER_FAILURE" if planning_failed else None,
+            semantic_required=self.require_judge,
         )
         # Audit must be writable BEFORE any model or public-data operation.
         self.trace.record(
@@ -67,11 +77,31 @@ class Gateway:
         )
         judge = (
             await assess(self._judge, request, proposal)
-            if valid
-            else JudgeSignal(rationale="Invalid input; semantic call skipped")
+            if valid and self.require_judge
+            else JudgeSignal(
+                rationale=(
+                    "Invalid input; semantic call skipped"
+                    if not valid
+                    else "Semantic judge disabled for this evaluation matrix"
+                ),
+                provider="disabled" if not self.require_judge else "unavailable",
+            )
         )
-        k_signal = inspect(text, judge, self._denials, proposal.tool in TOOLS)
+        k_signal = (
+            inspect(text, judge, self._denials, proposal.tool in TOOLS)
+            if self.enable_agent_k
+            else KSignal()
+        )
         policy = evaluate(facts, judge, k_signal, self.threshold)
+        failure_accounting: list[str] = []
+        if planning_failed:
+            failure_accounting.append("PLANNER_FAILURE")
+        if self.require_judge and not judge.available:
+            failure_accounting.append("JUDGE_SEMANTIC_FAILURE")
+        if any(signal != "NONE" for signal in k_signal.signals):
+            failure_accounting.append("AGENT_K_DETECTION")
+        if policy.decision != "PERMIT":
+            failure_accounting.append("GOVERNANCE_HELD")
         self.trace.record(
             request_id,
             "policy",
@@ -80,6 +110,7 @@ class Gateway:
             facts=facts.__dict__,
             confidence_threshold=self.threshold,
             policy=policy.model_dump(),
+            failure_accounting=failure_accounting,
         )
         envelope = Envelope(
             decision=policy.decision,

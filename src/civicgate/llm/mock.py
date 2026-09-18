@@ -8,6 +8,10 @@ from civicgate.models.requests import Proposal
 
 
 class MockProvider:
+    @property
+    def provider_name(self) -> str:
+        return "mock"
+
     async def propose(self, request: str) -> Proposal:
         match = re.search(r"recipient (.+?) in Puerto Rico during FY(\d{4})", request, re.I)
         if match:
@@ -36,3 +40,11 @@ class MockProvider:
             available=True,
             provider="mock",
         )
+
+
+class MockJudgeProvider(MockProvider):
+    """Named semantic-jury fixture provider for benchmark matrix J1."""
+
+
+class MockAgentProvider(MockProvider):
+    """Named deterministic planner fixture provider for offline tests."""

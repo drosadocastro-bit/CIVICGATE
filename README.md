@@ -2,7 +2,7 @@
 
 Governed MCP access to public US federal spending data. **Capability does not create authority.**
 
-Milestone 1 is a sandbox prototype: Python 3.11+, Pydantic, four read-only MCP tools, a natural-language agent, advisory semantic judge and Agent K, and a deterministic authority gate. USAspending is the only government source. No governmental decisions, private systems, payment execution or government writes.
+Milestone 2 adds a real local Granite planner path, external Luna/Sonnet judge adapters, explicit configuration/secret providers, a four-cell hybrid evaluation, and a redacted trace viewer. USAspending is the only government source. No governmental decisions, private systems, payment execution or government writes.
 
 ## Quickstart
 
@@ -15,6 +15,8 @@ python -m venv .venv
 .\.venv\Scripts\civicgate demo
 .\.venv\Scripts\pytest -q
 .\.venv\Scripts\python scripts/evaluate.py
+.\.venv\Scripts\python scripts/run_m2_benchmarks.py
+.\.venv\Scripts\civicgate-trace audit/demo.jsonl --html audit/demo.html
 ```
 
 On Linux/macOS replace `.\.venv\Scripts\` with `.venv/bin/`.
@@ -22,18 +24,19 @@ The demo uses **explicit synthetic data and a mock judge**, produces PERMIT / DE
 
 ## Agent and model configuration
 
-Configuration comes from environment variables; `.env.example` is a reference and is not automatically loaded. The default provider is unavailable and blocks execution for review.
+Configuration comes from injected `ConfigurationProvider` and `SecretProvider` implementations; the environment implementation reads process variables only. `.env.example` is a reference and is not automatically loaded. The default provider is unavailable and blocks execution for review. The optional Windows DPAPI provider is an edge store and is never imported by governance.
 
 ```powershell
-$env:CIVICGATE_PROVIDER = "openai_compatible"
-$env:CIVICGATE_MODEL_BASE_URL = "http://127.0.0.1:8080/v1"
+$env:CIVICGATE_AGENT_PROVIDER = "lm_studio"
+$env:CIVICGATE_AGENT_BASE_URL = "http://127.0.0.1:1234/v1"
 $env:CIVICGATE_AGENT_MODEL = "your-installed-agent-model"
-$env:CIVICGATE_JUDGE_MODEL = "your-installed-judge-model"
-# If required, set CIVICGATE_MODEL_API_KEY through your local secret mechanism.
+$env:CIVICGATE_JUDGE_PROVIDER = "unavailable"
+# For an opt-in external judge, set its provider/base URL/model and inject
+# CIVICGATE_JUDGE_API_KEY through a SecretProvider or process environment.
 .\.venv\Scripts\civicgate ask "Show federal awards to recipient WESTON SOLUTIONS INC in Puerto Rico during FY2025."
 ```
 
-The endpoint must support chat completions and JSON object responses. There are no model credentials in this repository. Agent and judge interfaces can be replaced independently. The provider implementation is wired but real-model quality has not been evaluated. An invalid response, timeout or missing model cannot grant permission.
+Granite uses the local LM Studio chat-completions endpoint and strict `Proposal` parsing. External judges use the same provider-neutral contract through OpenAI-compatible or Anthropic Messages protocols. There are no model credentials in this repository. An invalid response, timeout or missing model cannot grant permission.
 
 ## MCP
 
@@ -79,6 +82,8 @@ Award totals are not fiscal-year transaction spending. A date filter finds match
 
 See [evaluation](docs/EVALUATION.md), [build report](docs/BUILD_REPORT.md), [demo](docs/DEMO.md), [architecture](docs/ARCHITECTURE.md), [authority](docs/AUTHORITY_MODEL.md), [security](docs/SECURITY.md), [GSA alignment](docs/GSA_ALIGNMENT.md), and [mechanism transfer](docs/PRAETOR_MECHANISM_TRANSFER.md).
 
+Milestone 2 details: [MILESTONE_2](docs/MILESTONE_2.md), [Granite benchmark](docs/GRANITE_AGENT_BENCHMARK.md), [judge benchmark](docs/JUDGE_BENCHMARK.md), [hybrid evaluation](docs/HYBRID_EVALUATION.md), and [live limitations](docs/LIVE_MODEL_LIMITATIONS.md).
+
 CI defines Ubuntu/Windows Python 3.11/3.12 checks and a Linux Docker smoke. GitHub Actions run `35252552354` passed all five jobs, including the hardened container smoke. Docker is stdio-only, runs as non-root, and exposes no port. Build with `docker build -t civicgate:test .`; use `python scripts/container_smoke.py` for protocol verification. The local Docker daemon was unavailable during this build, so local Docker execution remains unverified.
 
-This is not production-ready. PRAETOR served only as a read-only mechanism reference; none of its research results validate CivicGate. No commit, push, deployment, extra domain or write capability is included.
+This is not production-ready. PRAETOR served only as a read-only mechanism reference; none of its research results validate CivicGate. Public API responses, model traffic and credentials are ignored by default; reviewed sanitized M2 benchmark artifacts are the exception. No extra domain or write capability is included.

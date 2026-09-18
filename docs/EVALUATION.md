@@ -28,3 +28,5 @@ Offline tests exercise HTTP through explicit mock transports. They do not measur
 Local Python version and platform are recorded in the report. The Windows/Ubuntu Python 3.11/3.12 CI matrix is defined but cannot be marked passed before actual GitHub execution. Docker runtime status is recorded in BUILD_REPORT.md. Dependency audit is a point-in-time advisory lookup; CivicGate itself is a local unpublished package and is skipped by the package database.
 
 Before broader use, independently label diverse natural-language prompts, evaluate the configured agent and judge, measure live latency/error distributions, validate recipient identity workflows, and exercise the CI/container matrix. Do not expand domains or add write capability as part of that validation.
+
+Milestone 2 adds [the Granite benchmark](GRANITE_AGENT_BENCHMARK.md), [judge benchmark](JUDGE_BENCHMARK.md), [hybrid matrix](HYBRID_EVALUATION.md), and [adversarial expansion](ADVERSARIAL_EVALUATION_M2.md). Their JSON artifacts deliberately retain `NOT_RUN_*` and `BLOCKED_*` states when exact live conditions or credentials are absent.

@@ -1,0 +1,44 @@
+name: opt-in-live-evaluation
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_live_models:
+        description: "Run configured external model endpoints"
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  live:
+    if: ${{ inputs.run_live_models == true }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - name: Run opt-in benchmark
+        env:
+          CIVICGATE_AGENT_PROVIDER: ${{ vars.CIVICGATE_AGENT_PROVIDER }}
+          CIVICGATE_AGENT_BASE_URL: ${{ vars.CIVICGATE_AGENT_BASE_URL }}
+          CIVICGATE_AGENT_MODEL: ${{ vars.CIVICGATE_AGENT_MODEL }}
+          CIVICGATE_JUDGE_PROVIDER: ${{ vars.CIVICGATE_JUDGE_PROVIDER }}
+          CIVICGATE_JUDGE_BASE_URL: ${{ vars.CIVICGATE_JUDGE_BASE_URL }}
+          CIVICGATE_JUDGE_MODEL: ${{ vars.CIVICGATE_JUDGE_MODEL }}
+          CIVICGATE_AGENT_API_KEY: ${{ secrets.CIVICGATE_AGENT_API_KEY }}
+          CIVICGATE_JUDGE_API_KEY: ${{ secrets.CIVICGATE_JUDGE_API_KEY }}
+        run: python scripts/run_m2_benchmarks.py
+      - name: Exercise live planner and judge contracts
+        env:
+          CIVICGATE_AGENT_PROVIDER: ${{ vars.CIVICGATE_AGENT_PROVIDER }}
+          CIVICGATE_AGENT_BASE_URL: ${{ vars.CIVICGATE_AGENT_BASE_URL }}
+          CIVICGATE_AGENT_MODEL: ${{ vars.CIVICGATE_AGENT_MODEL }}
+          CIVICGATE_JUDGE_PROVIDER: ${{ vars.CIVICGATE_JUDGE_PROVIDER }}
+          CIVICGATE_JUDGE_BASE_URL: ${{ vars.CIVICGATE_JUDGE_BASE_URL }}
+          CIVICGATE_JUDGE_MODEL: ${{ vars.CIVICGATE_JUDGE_MODEL }}
+          CIVICGATE_AGENT_API_KEY: ${{ secrets.CIVICGATE_AGENT_API_KEY }}
+          CIVICGATE_JUDGE_API_KEY: ${{ secrets.CIVICGATE_JUDGE_API_KEY }}
+        run: python scripts/run_live_model_evaluation.py

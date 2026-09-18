@@ -24,6 +24,10 @@ secrets/
 
 # Never commit API traffic, public or private. Recreate these locally with the
 # documented smoke/evaluation commands when evidence needs to be refreshed.
+artifacts/*
+!artifacts/granite-agent-benchmark.json
+!artifacts/judge-benchmark.json
+!artifacts/hybrid-evaluation.json
 artifacts/live-smoke.json
 artifacts/demo.json
 artifacts/evaluation.json

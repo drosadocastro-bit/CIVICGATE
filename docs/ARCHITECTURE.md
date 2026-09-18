@@ -32,3 +32,9 @@ USAspending responses are validated and projected to an intentionally small reco
 The stdio process is the local trust/session boundary. There is no network MCP listener, multi-user identity system or autonomous review approval flow. A fresh process resets short-term containment counters; this is not durable cross-session enforcement. Persistent JSONL is an audit artifact, not agent memory.
 
 The maintained MCP SDK 1.x API is pinned below 2 for FastMCP compatibility. Migration to SDK 2 requires an explicit compatibility review, not an unbounded dependency update.
+
+## Milestone 2 provider boundary
+
+`runtime_config.py` accepts a `ConfigurationProvider` and `SecretProvider`; the environment implementation reads process variables only. The Windows DPAPI store is an optional edge implementation in `windows_dpapi.py`, so governance has no platform-secret dependency. `GranitePlanner` is the only live agent path and sees registered tool schemas, never an adapter. `LiveJudgeProvider` supports OpenAI-compatible and Anthropic Messages protocols and returns typed advisory signals. Network errors, timeouts and malformed output become explicit unavailable semantic evidence.
+
+The benchmark and trace viewer are observers. They cannot inject a policy result. The viewer renders `USER → GRANITE proposal → JUDGE → K → policy → decision → executed? → provenance → final response` from redacted JSONL events.

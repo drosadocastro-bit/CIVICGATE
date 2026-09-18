@@ -10,6 +10,8 @@ The USAspending adapter uses a fixed HTTPS origin, bounded path identifiers, no 
 
 Model configuration is distinct from public-data access. Model credentials go only to the configured model origin. HTTPS is mandatory except loopback HTTP. Redirects and URL-embedded credentials are rejected. Model calls have a 30-second outer budget, bounded tokens and a 100 KB response cap. No model output is executed as code or used as a URL. Provider errors are converted to unavailable semantic state without exposing provider response bodies.
 
+Milestone 2 separates `ConfigurationProvider` and `SecretProvider`; `.env` files are never loaded as an authority source. An optional Windows DPAPI-backed store encrypts local values at rest and is isolated at the process edge. GitHub live evaluation receives credentials only from repository secrets. Benchmark artifacts contain statuses, metrics and fingerprints, never API keys or raw credential-bearing responses.
+
 ## Audit
 
 Audit appends before execution and after results. Failure to write the pre-execution audit prevents execution. Failure of final logging is surfaced as an invocation error; a previous public read cannot be undone. Files are append-only by application convention, not cryptographically tamper-proof. Use OS permissions and rotation outside the MVP. Retention/disk quotas are operator responsibilities.

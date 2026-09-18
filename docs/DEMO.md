@@ -11,3 +11,5 @@ For a real data demonstration configure an actual model endpoint using README in
 Walk through `proposal`, `policy`, `execution_started`, and `completed` audit events. Point out the difference between authorization, execution success, data provenance and semantic model correctness. A failed judge that is blocked is `SEMANTIC_FAILURE / GOVERNANCE_HELD`, not a successful judge result.
 
 The presentation draft summarizes these flows. Keep live API variability and mock performance separate during the demonstration.
+
+For Milestone 2, configure a local LM Studio Granite endpoint with `CIVICGATE_AGENT_PROVIDER=lm_studio`; configure a judge separately with `CIVICGATE_JUDGE_PROVIDER=openai_compatible` or `anthropic`. Run the opt-in benchmark only after recording frozen conditions. `civicgate-trace` provides a local redacted view of the complete decision path.

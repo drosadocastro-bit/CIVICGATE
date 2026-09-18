@@ -16,6 +16,7 @@ class PolicyFacts:
     adapter_available: bool = True
     capability: str = "PUBLIC_SPENDING_RESEARCH"
     review_reason: str | None = None
+    semantic_required: bool = True
 
 
 def evaluate(
@@ -44,10 +45,11 @@ def evaluate(
         review.append("ADAPTER_UNAVAILABLE")
     if facts.review_reason:
         review.append(facts.review_reason)
-    if not judge.available:
-        review.append("SEMANTIC_FAILURE")
-    elif judge.classification != "IN_SCOPE" or judge.confidence < threshold or judge.flags:
-        review.append("SEMANTIC_REVIEW_REQUIRED")
+    if facts.semantic_required:
+        if not judge.available:
+            review.append("SEMANTIC_FAILURE")
+        elif judge.classification != "IN_SCOPE" or judge.confidence < threshold or judge.flags:
+            review.append("SEMANTIC_REVIEW_REQUIRED")
     if any(s != "NONE" for s in agent_k.signals):
         review.append("AGENT_K_REVIEW_REQUIRED")
     return (

@@ -1,0 +1,61 @@
+{
+  "schema_version": "m2.judge-benchmark.v1",
+  "generated_at": "2026-09-18T00:42:13.589901+00:00",
+  "status": "PARTIAL_MOCK_ONLY",
+  "contract": "same provider-neutral prompt, schema, policy, Agent K and timeout/retry budget for J1-J3",
+  "candidates": [
+    {
+      "id": "J1",
+      "provider": "mock",
+      "model": "deterministic-fixture",
+      "status": "COMPLETED_SYNTHETIC_ONLY"
+    },
+    {
+      "id": "J2",
+      "provider": "openai_compatible",
+      "model": "GPT-5.6 Luna",
+      "status": "NOT_RUN_CREDENTIAL_UNAVAILABLE"
+    },
+    {
+      "id": "J3",
+      "provider": "anthropic",
+      "model": "Claude Sonnet 5",
+      "status": "NOT_RUN_CREDENTIAL_UNAVAILABLE"
+    }
+  ],
+  "metrics": {
+    "human_label_agreement": {
+      "value": null,
+      "status": "NOT_MEASURED_IN_DETERMINISTIC_CI"
+    },
+    "false_positive_rate": null,
+    "false_negative_rate": null,
+    "ambiguity_detection": null,
+    "consequential_detection": null,
+    "overreach_detection": null,
+    "malformed_output_rate": null,
+    "abstain_uncertainty_rate": null,
+    "calibration": null,
+    "repeat_consistency": null,
+    "latency_ms": {
+      "values": [],
+      "median": null
+    },
+    "tokens": {
+      "input": null,
+      "output": null
+    },
+    "cost": {
+      "value": null,
+      "currency": "USD",
+      "status": "provider pricing not assumed"
+    },
+    "paraphrase_consistency": null,
+    "injection_resistance": null
+  },
+  "semantic_authority": "Judge output is advisory evidence only; deterministic policy remains final.",
+  "limitations": [
+    "Synthetic fixture labels are not independent human labels",
+    "Live Luna and Sonnet calls require external credentials and opt-in execution"
+  ]
+}
