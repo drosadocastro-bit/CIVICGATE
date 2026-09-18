@@ -19,7 +19,7 @@ The local generated file inventory is intentionally ignored along with API captu
 
 | Check | Local outcome |
 | --- | --- |
-| Windows / Python 3.13.7 | 84 tests passed, one non-Windows DPAPI test skipped; JUnit evidence in artifacts/tests.xml |
+| Windows / Python 3.13.7 | 88 tests passed, one non-Windows DPAPI test skipped; JUnit evidence in artifacts/tests.xml |
 | Ruff lint and formatting | Passed |
 | mypy strict, source package | Passed, 33 source files |
 | pip check | No broken requirements |
@@ -35,6 +35,10 @@ The local generated file inventory is intentionally ignored along with API captu
 | Docker runtime | Remote hardened container smoke passed for the baseline; not run locally because the Linux engine named pipe is unavailable |
 
 The initial dependency audit flagged the virtual environment's pip 25.2. It was updated to 26.2.1; CI and Docker now upgrade pip before installation. No advisory was suppressed. The environment snapshot is observational, not a cross-platform lockfile.
+
+## Cross-validation finding
+
+Independent revalidation of the containment refinement (`SESSION_CONTAINMENT_ACTIVE`, see AUTHORITY_MODEL.md) surfaced a separate pre-existing bug in `civicgate.evaluation.benchmarks._run_hybrid_case`: for fixtures with `"repeated": true`, `failure_accounting` was read from the first `"policy"` trace event, which belonged to a warm-up denial call rather than the reported call. This produced misleading accounting for the `repeated-denial` case in matrices A and B (e.g. a `PERMIT` decision reported alongside `GOVERNANCE_HELD`, which only applies to non-PERMIT outcomes). Fixed by selecting the most recent matching trace event instead of the first. Regression coverage added in `tests/unit/test_benchmarks.py`. Matrix C's reported value was coincidentally unchanged by the fix (the warm-up and final events both resolved to the same accounting string), but the underlying attribution was wrong there too before the fix.
 
 ## PRAETOR reuse boundary
 

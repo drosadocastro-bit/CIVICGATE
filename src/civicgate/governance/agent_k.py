@@ -3,6 +3,7 @@ from civicgate.models.governance import JudgeSignal, KSignal, Signal
 
 
 def inspect(text: str, judge: JudgeSignal, denials: int, known_tool: bool) -> KSignal:
+    """Report behavioral signals only. ``denials`` counts prior tripwire denials in this process."""
     signals: list[Signal] = []
     reasons = denied_reasons(text)
     if "DENIED_AUTHORITY" in reasons:

@@ -61,16 +61,36 @@ async def test_judge_failure_preserved(search_args: dict[str, object]) -> None:
     assert not result.governance.judge_signal.available
 
 
-async def test_unknown_and_repeated_denials(gateway: Gateway) -> None:
-    for _ in range(2):
-        result = await gateway.call("read records", Proposal(tool="hidden_tool", arguments={}))
+async def test_repeated_tripwire_denials_contain_session(
+    gateway: Gateway, search_args: dict[str, object]
+) -> None:
+    for text in ("blacklist this contractor", "get private tax records"):
+        result = await gateway.call(
+            text, Proposal(tool="find_federal_awards", arguments=search_args)
+        )
         assert result.decision == "DENY"
+        assert "SESSION_CONTAINMENT_ACTIVE" not in result.governance.policy_reasons
     result = await gateway.call(
         "resolve recipient",
         Proposal(tool="resolve_federal_recipient", arguments={"recipient_name": "Acme"}),
     )
     assert result.decision == "DENY" and not result.tool_executed
     assert "REPEATED_DENIAL" in result.governance.agent_k_signal.signals
+    assert "SESSION_CONTAINMENT_ACTIVE" in result.governance.policy_reasons
+    assert result.clarification and "restart" in result.clarification
+
+
+async def test_protocol_mistakes_do_not_contain_session(
+    gateway: Gateway, search_args: dict[str, object]
+) -> None:
+    for _ in range(2):
+        result = await gateway.call("read records", Proposal(tool="hidden_tool", arguments={}))
+        assert result.decision == "DENY" and not result.tool_executed
+    result = await gateway.call(
+        "public awards", Proposal(tool="find_federal_awards", arguments=search_args)
+    )
+    assert result.decision == "PERMIT" and result.tool_executed
+    assert "REPEATED_DENIAL" not in result.governance.agent_k_signal.signals
 
 
 async def test_contradictory_judge_cannot_override(search_args: dict[str, object]) -> None:

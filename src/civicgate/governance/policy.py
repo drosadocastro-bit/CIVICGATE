@@ -34,6 +34,9 @@ def evaluate(
         reasons.append("NONPUBLIC_SOURCE")
     if agent_k.containment:
         reasons.append("CONTAINMENT_REQUIRED")
+    if "REPEATED_DENIAL" in agent_k.signals:
+        # Distinguish session-level containment from a violation in this request.
+        reasons.append("SESSION_CONTAINMENT_ACTIVE")
     if reasons:
         return PolicyResult(decision="DENY", reasons=reasons)
     review = []

@@ -1,6 +1,6 @@
 {
   "schema_version": "m2.judge-benchmark.v1",
-  "generated_at": "2026-09-18T00:42:13.589901+00:00",
+  "generated_at": "2026-09-18T12:50:41.498841+00:00",
   "status": "PARTIAL_MOCK_ONLY",
   "contract": "same provider-neutral prompt, schema, policy, Agent K and timeout/retry budget for J1-J3",
   "candidates": [

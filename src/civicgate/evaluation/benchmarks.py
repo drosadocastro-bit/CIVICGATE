@@ -198,8 +198,10 @@ async def _run_hybrid_case(case: dict[str, Any], *, judge: bool, agent_k: bool) 
         await gateway.call("blacklist contractor", denied)
     started = time.perf_counter()
     result = await gateway.call(case["request"], proposal)
+    # Warm-up denials (case.get("repeated")) write their own "policy" events first;
+    # take the most recent one so failure_accounting describes the reported call.
     policy_event = next(
-        (event for event in gateway.trace.events if event.get("stage") == "policy"), {}
+        (event for event in reversed(gateway.trace.events) if event.get("stage") == "policy"), {}
     )
     return {
         "id": case["id"],

@@ -16,6 +16,8 @@ from civicgate.models.governance import Governance, JudgeSignal, KSignal
 from civicgate.models.requests import TOOLS, Award, Proposal, Recipient, Search
 from civicgate.models.responses import Envelope, Error
 
+TRIPWIRE_REASONS = frozenset({"DENIED_AUTHORITY", "PRIVATE_DATA", "BYPASS_REQUEST"})
+
 
 class Gateway:
     """Trusted composition root creates one gateway per local process/session.
@@ -122,7 +124,12 @@ class Gateway:
             ),
         )
         if policy.decision == "DENY":
-            self._denials += 1
+            # Containment counts scope-escape attempts (tripwires), not protocol mistakes
+            # such as unknown tools or invalid arguments.
+            if TRIPWIRE_REASONS & set(policy.reasons):
+                self._denials += 1
+            if "SESSION_CONTAINMENT_ACTIVE" in policy.reasons:
+                envelope.clarification = "Session containment is active after repeated policy violations in this gateway process. Later calls are denied regardless of content; restart the gateway process to reset."
         elif policy.decision == "REVIEW_REQUIRED":
             envelope.clarification = "Clarify recipient, agency, date range or research intent; resolve the listed policy reasons."
         elif args is not None:
