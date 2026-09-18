@@ -11,6 +11,7 @@ import json
 import os
 from ctypes import POINTER, Structure, c_char, string_at
 from pathlib import Path
+from typing import Any
 
 from civicgate.runtime_config import ConfigurationProvider, SecretProvider
 
@@ -33,27 +34,31 @@ class WindowsDPAPIStore(ConfigurationProvider, SecretProvider):
         source_buffer = ctypes.create_string_buffer(value)
         source = _Blob(len(value), ctypes.cast(source_buffer, POINTER(c_char)))
         destination = _Blob()
-        if not ctypes.windll.crypt32.CryptProtectData(
+        if not self._windll().crypt32.CryptProtectData(
             ctypes.byref(source), None, None, None, None, 0, ctypes.byref(destination)
         ):
             raise OSError("CryptProtectData failed")
         try:
             return string_at(destination.pbData, destination.cbData)
         finally:
-            ctypes.windll.kernel32.LocalFree(destination.pbData)
+            self._windll().kernel32.LocalFree(destination.pbData)
 
     def _unprotect(self, value: bytes) -> bytes:
         source_buffer = ctypes.create_string_buffer(value)
         source = _Blob(len(value), ctypes.cast(source_buffer, POINTER(c_char)))
         destination = _Blob()
-        if not ctypes.windll.crypt32.CryptUnprotectData(
+        if not self._windll().crypt32.CryptUnprotectData(
             ctypes.byref(source), None, None, None, None, 0, ctypes.byref(destination)
         ):
             raise OSError("CryptUnprotectData failed")
         try:
             return string_at(destination.pbData, destination.cbData)
         finally:
-            ctypes.windll.kernel32.LocalFree(destination.pbData)
+            self._windll().kernel32.LocalFree(destination.pbData)
+
+    @staticmethod
+    def _windll() -> Any:
+        return ctypes.__dict__["windll"]
 
     def _read(self) -> dict[str, str]:
         if not self.path.exists():
