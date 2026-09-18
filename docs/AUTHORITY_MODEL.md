@@ -19,3 +19,7 @@ PERMIT authorizes only the specified factual read. It does not certify a respons
 Repeated denial: two denials in a gateway process trigger containment of later calls through deterministic policy. Agent K itself only reports the signal. No new authority is derived from repetition, model agreement or prior successful retrieval.
 
 Keyword tripwires are conservative and incomplete: benign discussions of denied topics may be blocked, and paraphrases can evade lexical detection. Real-model semantic calibration, multilingual coverage and adversarial robustness are not established. Read-only tool design limits actual capabilities regardless of semantic classification. A client can lie about its intended use; the server cannot inspect an external agent's hidden context or prevent misuse of public data after retrieval.
+
+## Milestone 2 provider roles
+
+`GranitePlanner` supplies a typed proposal from the local LM Studio endpoint. `LiveJudgeProvider` supplies a typed semantic signal from an external OpenAI-compatible or Anthropic endpoint. `ConfigurationProvider` and `SecretProvider` keep model settings and credentials outside governance; the optional Windows DPAPI implementation remains an edge integration. Provider failures, malformed output and unavailable credentials produce explicit review or containment states. They never create a new capability or bypass the ordered policy checks.
