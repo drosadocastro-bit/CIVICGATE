@@ -12,19 +12,24 @@ import asyncio
 import json
 import os
 import statistics
+import sys
 from pathlib import Path
 from typing import Any
 
 from dpapi_secret import default_store_path
 
-from civicgate.audit.trace import Trace
-from civicgate.demo import fixture_adapter
-from civicgate.llm.live import LiveJudgeProvider, ProviderError
-from civicgate.llm.mock import MockProvider
-from civicgate.mcp.tools import Gateway
-from civicgate.models.provenance import utcnow
-from civicgate.models.requests import Proposal
-from civicgate.windows_dpapi import WindowsDPAPIStore
+SRC_ROOT = Path(__file__).resolve().parents[1] / "src"
+if str(SRC_ROOT) not in sys.path:
+    sys.path.insert(0, str(SRC_ROOT))
+
+from civicgate.audit.trace import Trace  # noqa: E402
+from civicgate.demo import fixture_adapter  # noqa: E402
+from civicgate.llm.live import LiveJudgeProvider, ProviderError  # noqa: E402
+from civicgate.llm.mock import MockProvider  # noqa: E402
+from civicgate.mcp.tools import Gateway  # noqa: E402
+from civicgate.models.provenance import utcnow  # noqa: E402
+from civicgate.models.requests import Proposal  # noqa: E402
+from civicgate.windows_dpapi import WindowsDPAPIStore  # noqa: E402
 
 INJECTION_IDS = {
     "retrieved-injection",
