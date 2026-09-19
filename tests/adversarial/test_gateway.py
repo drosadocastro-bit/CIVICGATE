@@ -94,15 +94,87 @@ async def test_protocol_mistakes_do_not_contain_session(
 
 
 async def test_contradictory_judge_cannot_override(search_args: dict[str, object]) -> None:
+    """A permissive judge is never even consulted when deterministic policy would deny
+    regardless (DENY does not depend on the judge; see the preflight check in
+    mcp/tools.py). This is a stronger guarantee than 'ignored if consulted'.
+    """
+
     class PermissiveJudge:
+        def __init__(self) -> None:
+            self.calls = 0
+
         async def assess(self, request: str, proposal: Proposal) -> JudgeSignal:
+            self.calls += 1
             return JudgeSignal(classification="IN_SCOPE", confidence=1, available=True)
 
-    result = await Gateway(fixture_adapter(), PermissiveJudge(), Trace()).call(
+    judge = PermissiveJudge()
+    result = await Gateway(fixture_adapter(), judge, Trace()).call(
         "blacklist company", Proposal(tool="find_federal_awards", arguments=search_args)
     )
     assert result.decision == "DENY" and not result.tool_executed
-    assert result.governance.judge_signal.classification == "IN_SCOPE"
+    assert judge.calls == 0
+    assert result.governance.judge_signal.available is False
+
+
+async def test_judge_still_consulted_when_not_preemptively_denied(
+    search_args: dict[str, object],
+) -> None:
+    """The preflight skip only applies when text/tool alone already guarantee DENY.
+    An ordinary bounded request must still reach the real judge."""
+
+    class CountingJudge:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        async def assess(self, request: str, proposal: Proposal) -> JudgeSignal:
+            self.calls += 1
+            return JudgeSignal(classification="IN_SCOPE", confidence=0.99, available=True)
+
+    judge = CountingJudge()
+    result = await Gateway(fixture_adapter(), judge, Trace()).call(
+        "public awards", Proposal(tool="find_federal_awards", arguments=search_args)
+    )
+    assert result.decision == "PERMIT" and result.tool_executed
+    assert judge.calls == 1
+    assert result.governance.judge_signal.available is True
+
+
+@pytest.mark.parametrize("require_judge", [True, False])
+@pytest.mark.parametrize("invalid_kind", ["schema", "empty_request", "oversized_request"])
+async def test_invalid_input_records_judge_skip_not_semantic_failure(
+    search_args: dict[str, object], require_judge: bool, invalid_kind: str
+) -> None:
+    class CountingJudge:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        async def assess(self, request: str, proposal: Proposal) -> JudgeSignal:
+            self.calls += 1
+            return JudgeSignal(classification="IN_SCOPE", confidence=1, available=True)
+
+    def forbidden(request: httpx.Request) -> httpx.Response:
+        pytest.fail("Invalid input reached the adapter transport")
+
+    judge = CountingJudge()
+    trace = Trace()
+    request = {"schema": "public awards", "empty_request": "", "oversized_request": "x" * 4001}[
+        invalid_kind
+    ]
+    args = search_args | {"limit": 101} if invalid_kind == "schema" else search_args
+    gateway = Gateway(
+        USAspending(httpx.MockTransport(forbidden)), judge, trace, require_judge=require_judge
+    )
+    result = await gateway.call(request, Proposal(tool="find_federal_awards", arguments=args))
+    assert result.decision == "DENY" and not result.tool_executed
+    assert "INVALID_INPUT" in result.governance.policy_reasons
+    assert judge.calls == 0
+    event = next(event for event in reversed(trace.events) if event["stage"] == "policy")
+    assert event["judge_preflight_skipped"] is require_judge
+    assert event["failure_accounting"] == (
+        ["JUDGE_SKIPPED_PREFLIGHT_DENY", "GOVERNANCE_HELD"]
+        if require_judge
+        else ["GOVERNANCE_HELD"]
+    )
 
 
 async def test_summary_exact_decimal_and_scope(

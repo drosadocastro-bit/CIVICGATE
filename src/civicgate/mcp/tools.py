@@ -122,28 +122,48 @@ class Gateway:
         self.trace.record(
             request_id, "proposal", user_request=request, proposal=proposal.model_dump()
         )
-        judge = (
-            await assess(self._judge, request, proposal)
-            if valid and self.require_judge
-            else JudgeSignal(
-                rationale=(
-                    "Invalid input; semantic call skipped"
-                    if not valid
-                    else "Semantic judge disabled for this evaluation matrix"
-                ),
-                provider="disabled" if not self.require_judge else "unavailable",
-            )
-        )
-        k_signal = (
-            inspect(text, judge, self._denials, proposal.tool in TOOLS)
+        # Preflight: check whether deterministic policy already denies this request using
+        # only signals that never depend on the judge (text tripwires, unknown tool,
+        # invalid input, active containment). If so, skip the paid/external judge call
+        # entirely rather than sending a request that was never going anywhere.
+        probe_judge = JudgeSignal(available=False, provider="unavailable")
+        preflight_k_signal = (
+            inspect(text, probe_judge, self._denials, proposal.tool in TOOLS)
             if self.enable_agent_k
             else KSignal()
         )
-        policy = evaluate(facts, judge, k_signal, self.threshold)
+        preflight_policy = evaluate(facts, probe_judge, preflight_k_signal, self.threshold)
+        call_judge = valid and self.require_judge and preflight_policy.decision != "DENY"
+        judge_preflight_skipped = self.require_judge and preflight_policy.decision == "DENY"
+        if call_judge:
+            judge = await assess(self._judge, request, proposal)
+            k_signal = (
+                inspect(text, judge, self._denials, proposal.tool in TOOLS)
+                if self.enable_agent_k
+                else KSignal()
+            )
+            policy = evaluate(facts, judge, k_signal, self.threshold)
+        else:
+            if not valid:
+                rationale = "Invalid input; semantic call skipped"
+            elif not self.require_judge:
+                rationale = "Semantic judge disabled for this evaluation matrix"
+            else:
+                rationale = (
+                    "Deterministic policy already denies this request; semantic call skipped"
+                )
+            judge = JudgeSignal(
+                rationale=rationale,
+                provider="disabled" if not self.require_judge else "unavailable",
+            )
+            k_signal = preflight_k_signal
+            policy = preflight_policy
         failure_accounting: list[str] = []
         if planning_failed:
             failure_accounting.append("PLANNER_FAILURE")
-        if self.require_judge and not judge.available:
+        if judge_preflight_skipped:
+            failure_accounting.append("JUDGE_SKIPPED_PREFLIGHT_DENY")
+        elif call_judge and not judge.available:
             failure_accounting.append("JUDGE_SEMANTIC_FAILURE")
         if any(signal != "NONE" for signal in k_signal.signals):
             failure_accounting.append("AGENT_K_DETECTION")
@@ -158,6 +178,7 @@ class Gateway:
             confidence_threshold=self.threshold,
             policy=policy.model_dump(),
             failure_accounting=failure_accounting,
+            judge_preflight_skipped=judge_preflight_skipped,
         )
         envelope = Envelope(
             decision=policy.decision,

@@ -265,7 +265,8 @@ def build_hybrid_report() -> dict[str, Any]:
         "summary": summary,
         "disagreements": disagreements,
         "failure_accounting": {
-            "JUDGE_SEMANTIC_FAILURE": "recorded as unavailable semantic evidence and governance hold where required",
+            "JUDGE_SEMANTIC_FAILURE": "the judge was consulted but failed or returned unavailable semantic evidence; governance holds where required",
+            "JUDGE_SKIPPED_PREFLIGHT_DENY": "the configured judge was never called because deterministic policy already guarantees DENY from text, tool, input validation, or session containment, independent of any judge output",
             "AGENT_K_DETECTION": "recorded in matrix C/D policy reasons",
             "GOVERNANCE_HELD": "final deterministic result after component signals",
             "PLANNER_FAILURE": "separate gateway planning_failed reason; never a semantic success",
