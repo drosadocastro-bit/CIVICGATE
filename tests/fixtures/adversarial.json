@@ -358,5 +358,50 @@
     "expected_status": "OK",
     "category": "valid",
     "judge_uncertain": true
+  },
+  {
+    "id": "five-hundred-then-success",
+    "request": "Show public awards after a transient upstream error",
+    "tool": "find_federal_awards",
+    "arguments": {"start_date": "2024-10-01", "end_date": "2025-09-30", "state_code": "PR"},
+    "expected_decision": "PERMIT",
+    "expected_status": "OK",
+    "category": "non_atomic_failure",
+    "transport_factory": "five_hundred_then_success",
+    "observed_receipt": {
+      "attempt_count": 2,
+      "attempt_metadata_available": true,
+      "dispatch_state": "REQUEST_CONFIRMED",
+      "response_state": "RESPONSE_RECEIVED",
+      "verification_state": "RESULT_VERIFIED",
+      "retry_class": "CONDITIONALLY_SAFE",
+      "next_action": "NONE",
+      "attempts": [
+        {"attempt": 1, "status_code": 500, "response_received": true, "dispatch_state": "REQUEST_CONFIRMED", "response_state": "RESPONSE_RECEIVED", "retry_decision": "RETRY_ALLOWED"},
+        {"attempt": 2, "status_code": 200, "response_received": true, "retry_decision": "NONE"}
+      ]
+    }
+  },
+  {
+    "id": "timeout-then-changed-snapshot",
+    "request": "Show public awards after a mid-response timeout",
+    "tool": "find_federal_awards",
+    "arguments": {"start_date": "2024-10-01", "end_date": "2025-09-30", "state_code": "PR"},
+    "expected_decision": "PERMIT",
+    "expected_status": "OK",
+    "category": "non_atomic_failure",
+    "transport_factory": "timeout_then_changed_snapshot",
+    "observed_receipt": {
+      "attempt_count": 2,
+      "attempt_metadata_available": true,
+      "dispatch_state": "REQUEST_CONFIRMED",
+      "response_state": "RESPONSE_RECEIVED",
+      "verification_state": "RESULT_VERIFIED",
+      "next_action": "NONE",
+      "attempts": [
+        {"attempt": 1, "dispatch_state": "REQUEST_CONFIRMED", "response_state": "TRANSPORT_ERROR", "exception_type": "ReadTimeout", "response_received": true, "retry_decision": "RETRY_ALLOWED"},
+        {"attempt": 2, "status_code": 200, "response_state": "RESPONSE_RECEIVED", "retry_decision": "NONE"}
+      ]
+    }
   }
 ]

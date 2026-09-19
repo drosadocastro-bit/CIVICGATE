@@ -4,6 +4,7 @@ import asyncio
 import json
 import platform
 import statistics
+import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -23,6 +24,37 @@ from civicgate.models.provenance import utcnow
 from civicgate.models.requests import TOOLS, Proposal
 from civicgate.models.responses import Envelope
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from tests.fixture_transports import build_transport  # noqa: E402
+
+
+def assert_observed_receipt(expected: dict[str, Any], result: Envelope, trace: Trace) -> None:
+    """Check only receipt fields observable by CivicGate, never hidden snapshots."""
+    observed: dict[str, Any] = result.model_dump(mode="json")
+    completed = next(
+        (event for event in reversed(trace.events) if event.get("stage") == "completed"), {}
+    )
+    observed["attempts"] = completed.get("attempts", [])
+    for key, expected_value in expected.items():
+        if key == "attempts":
+            actual_attempts = observed["attempts"]
+            if len(actual_attempts) != len(expected_value):
+                raise AssertionError(f"attempt count mismatch for observed_receipt: {key}")
+            for index, partial in enumerate(expected_value):
+                for field, value in partial.items():
+                    if actual_attempts[index].get(field) != value:
+                        raise AssertionError(
+                            f"attempt {index} field {field!r}: "
+                            f"expected {value!r}, got {actual_attempts[index].get(field)!r}"
+                        )
+        elif observed.get(key) != expected_value:
+            raise AssertionError(
+                f"observed_receipt field {key!r}: expected {expected_value!r}, got {observed.get(key)!r}"
+            )
+
 
 def ratio(passed: int, total: int, scope: str) -> dict[str, Any]:
     return {
@@ -38,7 +70,9 @@ async def main() -> None:
     rows = []
     for case in fixtures:
         adapter = fixture_adapter()
-        if case.get("adapter") == "malformed":
+        if case.get("transport_factory"):
+            adapter = USAspending(build_transport(case["transport_factory"]), fixture=True)
+        elif case.get("adapter") == "malformed":
             adapter = USAspending(
                 httpx.MockTransport(lambda r: httpx.Response(200, json={})), fixture=True
             )
@@ -51,8 +85,13 @@ async def main() -> None:
                 await gateway.call("blacklist contractor", proposal)
         start = time.perf_counter()
         result = await gateway.call(case["request"], proposal)
+        if case.get("observed_receipt"):
+            assert_observed_receipt(case["observed_receipt"], result, trace)
         elapsed = (time.perf_counter() - start) * 1000
         well_formed = Envelope.model_validate_json(result.model_dump_json()) == result
+        completed_event = next(
+            (event for event in reversed(trace.events) if event.get("stage") == "completed"), {}
+        )
         schema_valid = False
         if proposal.tool in TOOLS:
             try:
@@ -83,6 +122,7 @@ async def main() -> None:
                 else "SEMANTIC_FAILURE / GOVERNANCE_FAILED",
                 "judge_classification": result.governance.judge_signal.classification,
                 "agent_k_signals": result.governance.agent_k_signal.signals,
+                "attempts": completed_event.get("attempts", []),
                 "response": result.model_dump(mode="json"),
             }
         )
@@ -177,4 +217,5 @@ async def main() -> None:
         raise SystemExit(1)
 
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
