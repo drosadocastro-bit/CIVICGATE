@@ -19,7 +19,7 @@ from civicgate.governance.policy import PolicyFacts, evaluate
 from civicgate.llm.base import UnavailableProvider
 from civicgate.llm.mock import MockProvider
 from civicgate.mcp.tools import Gateway
-from civicgate.models.governance import JudgeSignal, KSignal
+from civicgate.models.governance import JudgeSignal, KSignal, PolicyResult
 from civicgate.models.provenance import utcnow
 from civicgate.models.requests import TOOLS, Proposal
 from civicgate.models.responses import Envelope
@@ -29,6 +29,87 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from tests.fixture_transports import build_transport  # noqa: E402
+
+
+def semantic_outcome(result: Envelope, trace: Trace) -> str:
+    """Classify only the reported request's recorded judge participation.
+
+    Policy is recorded before adapter dispatch and may later escalate. Do not
+    infer judge success/failure from the final decision or tool_executed.
+    """
+    events = [
+        event
+        for event in trace.events
+        if event.get("stage") == "policy" and event.get("request_id") == result.request_id
+    ]
+    prefix = f"Judge accounting verification failed for request {result.request_id}: "
+    if len(events) != 1:
+        raise ValueError(prefix + "expected exactly one matching policy event")
+    event = events[0]
+    try:
+        skipped = event["judge_preflight_skipped"]
+        accounting = event["failure_accounting"]
+        required = event["facts"]["semantic_required"]
+        valid_input = event["facts"]["valid_input"]
+        if not isinstance(event["judge"], dict) or not {
+            "classification",
+            "confidence",
+            "available",
+            "provider",
+        }.issubset(event["judge"]):
+            raise ValueError("incomplete judge evidence")
+        judge = JudgeSignal.model_validate(event["judge"])
+        policy = PolicyResult.model_validate(event["policy"])
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError(prefix + "missing or invalid policy evidence") from exc
+    if (
+        type(skipped) is not bool
+        or type(required) is not bool
+        or type(valid_input) is not bool
+        or not isinstance(accounting, list)
+        or not all(isinstance(item, str) for item in accounting)
+        or len(accounting) != len(set(accounting))
+        or judge != result.governance.judge_signal
+    ):
+        raise ValueError(prefix + "invalid or inconsistent judge evidence")
+    skip_recorded = "JUDGE_SKIPPED_PREFLIGHT_DENY" in accounting
+    failed = "JUDGE_SEMANTIC_FAILURE" in accounting
+    held = "GOVERNANCE_HELD" in accounting
+    if skipped != skip_recorded or held != (policy.decision != "PERMIT"):
+        raise ValueError(prefix + "contradictory policy accounting")
+    if skipped:
+        if (
+            not required
+            or failed
+            or judge.available
+            or judge.provider == "disabled"
+            or policy.decision != "DENY"
+            or result.decision != "DENY"
+            or "SEMANTIC_FAILURE" in policy.reasons
+        ):
+            raise ValueError(prefix + "contradictory preflight skip")
+        return "JUDGE_SKIPPED_PREFLIGHT_DENY"
+    if not required:
+        if (
+            judge.provider != "disabled"
+            or judge.available
+            or failed
+            or "SEMANTIC_FAILURE" in policy.reasons
+        ):
+            raise ValueError(prefix + "contradictory disabled judge")
+        return "JUDGE_DISABLED"
+    if not valid_input or policy.decision == "DENY" or judge.provider == "disabled":
+        raise ValueError(prefix + "missing preflight skip or contradictory judge configuration")
+    if failed:
+        if judge.available or "SEMANTIC_FAILURE" not in policy.reasons or not held:
+            raise ValueError(prefix + "contradictory semantic failure")
+        # Preserve the existing failure label for an actually consulted judge.
+        return "SEMANTIC_FAILURE / GOVERNANCE_HELD"
+    if not judge.available or "SEMANTIC_FAILURE" in policy.reasons:
+        raise ValueError(prefix + "unavailable judge without recorded semantic failure")
+    if judge.provider != "mock":
+        raise ValueError(prefix + "this synthetic reporter cannot classify a non-mock assessment")
+    return "MOCK_SIGNAL_ONLY"
 
 
 def assert_observed_receipt(expected: dict[str, Any], result: Envelope, trace: Trace) -> None:
@@ -113,13 +194,7 @@ async def main() -> None:
                 "well_formed": well_formed,
                 "provenance_complete": result.provenance is not None,
                 "latency_ms": elapsed,
-                "semantic_outcome": "MOCK_SIGNAL_ONLY"
-                if result.governance.judge_signal.available
-                else "NOT_RUN_INVALID_INPUT"
-                if "INVALID_INPUT" in result.governance.policy_reasons
-                else "SEMANTIC_FAILURE / GOVERNANCE_HELD"
-                if not result.tool_executed
-                else "SEMANTIC_FAILURE / GOVERNANCE_FAILED",
+                "semantic_outcome": semantic_outcome(result, trace),
                 "judge_classification": result.governance.judge_signal.classification,
                 "agent_k_signals": result.governance.agent_k_signal.signals,
                 "attempts": completed_event.get("attempts", []),
