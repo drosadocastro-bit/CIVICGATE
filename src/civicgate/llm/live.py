@@ -305,17 +305,23 @@ class LiveJudgeProvider(JudgeProvider):
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json",
             }
+            luna_profile = (
+                self.client.base_url == "https://api.openai.com/v1" and self.model == "gpt-5.6-luna"
+            )
+            token_limit_field = "max_completion_tokens" if luna_profile else "max_tokens"
             payload = {
                 "model": self.model,
-                "temperature": 0,
-                "top_p": 1,
-                "max_tokens": 512,
+                token_limit_field: 512,
                 "response_format": {"type": "json_object"},
                 "messages": [
                     {"role": "system", "content": judge_prompt},
                     {"role": "user", "content": payload_content},
                 ],
             }
+            # Luna rejected temperature=0. Omit top_p deliberately to use the
+            # provider default; no rejection of top_p has been observed.
+            if not luna_profile:
+                payload.update({"temperature": 0, "top_p": 1})
             path = "/chat/completions"
         else:
             headers = {

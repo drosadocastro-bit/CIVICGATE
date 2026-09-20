@@ -31,6 +31,10 @@ async def test_granite_planner_strict_local_contract() -> None:
     def respond(request: httpx.Request) -> httpx.Response:
         seen["authorization"] = request.headers.get("authorization")
         seen["path"] = request.url.path
+        payload = json.loads(request.content)
+        assert payload["max_tokens"] == 512
+        assert "max_completion_tokens" not in payload
+        assert payload["temperature"] == 0 and payload["top_p"] == 1
         return httpx.Response(
             200,
             json={
@@ -62,6 +66,11 @@ async def test_judge_anthropic_contract_redacts_no_body() -> None:
     def respond(request: httpx.Request) -> httpx.Response:
         seen["api_key"] = request.headers.get("x-api-key")
         seen["path"] = request.url.path
+        payload = json.loads(request.content)
+        assert payload["max_tokens"] == 512
+        assert "max_completion_tokens" not in payload
+        assert payload["temperature"] == 0
+        assert "top_p" not in payload
         return httpx.Response(
             200,
             json={
@@ -87,6 +96,70 @@ async def test_judge_anthropic_contract_redacts_no_body() -> None:
     assert signal.provider == "live_judge"
     assert signal.classification == "IN_SCOPE" and signal.confidence == 0.9
     assert seen == {"api_key": "secret-value", "path": "/v1/messages"}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("base_url", "model", "token_limit_field"),
+    [
+        ("https://api.openai.com/v1", "gpt-5.6-luna", "max_completion_tokens"),
+        ("https://api.openai.com/v1/", "gpt-5.6-luna", "max_completion_tokens"),
+        ("https://judge.example/v1", "gpt-5.6-luna", "max_tokens"),
+        ("https://api.openai.com/v1", "other-model", "max_tokens"),
+    ],
+)
+async def test_judge_request_profile_is_scoped_to_diagnosed_openai_model(
+    base_url: str, model: str, token_limit_field: str
+) -> None:
+    from civicgate.llm.live import _JudgeSignalWire
+
+    def respond(request: httpx.Request) -> httpx.Response:
+        payload = json.loads(request.content)
+        assert request.url.path == "/v1/chat/completions"
+        expected_fields = {
+            "model",
+            token_limit_field,
+            "response_format",
+            "messages",
+        }
+        if token_limit_field == "max_completion_tokens":
+            assert "max_tokens" not in payload
+            assert "temperature" not in payload and "top_p" not in payload
+        else:
+            expected_fields.update({"temperature", "top_p"})
+            assert payload["temperature"] == 0 and payload["top_p"] == 1
+        assert set(payload) == expected_fields
+        assert "reasoning_effort" not in payload
+        assert payload[token_limit_field] == 512
+        assert payload["model"] == model
+        assert payload["response_format"] == {"type": "json_object"}
+        assert payload["messages"] == [
+            {
+                "role": "system",
+                "content": JUDGE_SYSTEM_PROMPT
+                + json.dumps(_JudgeSignalWire.model_json_schema(), sort_keys=True),
+            },
+            {
+                "role": "user",
+                "content": json.dumps(
+                    {"request": "Find awards", "proposal": proposal_payload()}, sort_keys=True
+                ),
+            },
+        ]
+        return httpx.Response(
+            200,
+            json={
+                "choices": [
+                    {"message": {"content": '{"classification":"IN_SCOPE","confidence":0.9}'}}
+                ]
+            },
+        )
+
+    judge = LiveJudgeProvider(
+        base_url, model, "synthetic-key", transport=httpx.MockTransport(respond)
+    )
+    signal = await judge.assess("Find awards", Proposal.model_validate(proposal_payload()))
+    assert signal.available and signal.classification == "IN_SCOPE"
 
 
 @pytest.mark.asyncio
