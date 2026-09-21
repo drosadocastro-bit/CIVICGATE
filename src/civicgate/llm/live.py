@@ -150,13 +150,45 @@ def _content_json(body: dict[str, Any], protocol: ProtocolName) -> str:
                 "MALFORMED_PROVIDER_RESPONSE", "Chat completion content must be text"
             )
         return content
-    try:
-        content = body["content"][0]["text"]
-    except (KeyError, IndexError, TypeError) as exc:
-        raise ProviderError("MALFORMED_PROVIDER_RESPONSE", "Missing messages API content") from exc
-    if not isinstance(content, str):
-        raise ProviderError("MALFORMED_PROVIDER_RESPONSE", "Messages API content must be text")
-    return content
+    return _anthropic_text(body)
+
+
+def _anthropic_text(body: dict[str, Any]) -> str:
+    """Select one text block, without reading non-text block payloads.
+
+    Multiple text blocks are explicitly nonvalidated: no documented JSON join
+    semantics have been established for this contract. Do not invent separators,
+    concatenate fragments, choose a favorable block or inspect thinking content.
+    """
+    blocks = body.get("content")
+    if not isinstance(blocks, list):
+        raise ProviderError("MALFORMED_PROVIDER_RESPONSE", "Messages content must be a list")
+    texts: list[str] = []
+    for block in blocks:
+        if not isinstance(block, dict):
+            raise ProviderError("MALFORMED_PROVIDER_RESPONSE", "Messages block must be an object")
+        if block.get("type") != "text":
+            continue
+        value = block.get("text")
+        if not isinstance(value, str):
+            raise ProviderError("MALFORMED_PROVIDER_RESPONSE", "Messages text must be a string")
+        texts.append(value)
+    if len(texts) != 1 or not texts[0].strip():
+        raise ProviderError("MALFORMED_PROVIDER_RESPONSE", "Expected exactly one usable text block")
+    return texts[0]
+
+
+def _validate_sonnet_stop(body: dict[str, Any]) -> None:
+    reason = body.get("stop_reason")
+    if reason == "end_turn":
+        return
+    if reason == "max_tokens":
+        raise ProviderError(
+            "PROVIDER_RESPONSE_INCOMPLETE", "Judge response reached the output limit"
+        )
+    if reason == "refusal":
+        raise ProviderError("PROVIDER_REFUSAL", "Provider refused the judge assessment")
+    raise ProviderError("MALFORMED_PROVIDER_RESPONSE", "Missing or unsupported judge stop reason")
 
 
 def _parse_model(content: str, schema: type[T]) -> T:
@@ -292,6 +324,14 @@ class LiveJudgeProvider(JudgeProvider):
     def provider_name(self) -> str:
         return self._provider_name
 
+    @property
+    def _sonnet_5_profile(self) -> bool:
+        return (
+            self.protocol == "anthropic_messages"
+            and self.client.base_url == "https://api.anthropic.com"
+            and self.model == "claude-sonnet-5"
+        )
+
     async def assess(self, request: str, proposal: Proposal) -> JudgeSignal:
         judge_prompt = JUDGE_SYSTEM_PROMPT + json.dumps(
             _JudgeSignalWire.model_json_schema(), sort_keys=True
@@ -331,14 +371,17 @@ class LiveJudgeProvider(JudgeProvider):
             }
             payload = {
                 "model": self.model,
-                "temperature": 0,
                 "max_tokens": 512,
                 "system": judge_prompt,
                 "messages": [{"role": "user", "content": payload_content}],
             }
+            if not self._sonnet_5_profile:
+                payload["temperature"] = 0
             path = "/v1/messages"
         try:
             body, usage = await self.client.post(path, headers=headers, payload=payload)
+            if self._sonnet_5_profile:
+                _validate_sonnet_stop(body)
             # A parseable-but-noncompliant response (e.g. {}) must not be accepted as a
             # real assessment; the wire schema requires the fields policy actually uses.
             wire = _parse_model(_content_json(body, self.protocol), _JudgeSignalWire)

@@ -33,12 +33,19 @@ from civicgate.llm.live import (  # noqa: E402
     JUDGE_SYSTEM_PROMPT,
     LiveJudgeProvider,
     ProviderError,
+    _anthropic_text,
     _JudgeSignalWire,
+    _validate_sonnet_stop,
 )
 from civicgate.llm.mock import MockProvider  # noqa: E402
 from civicgate.mcp.tools import Gateway  # noqa: E402
 from civicgate.models.provenance import utcnow  # noqa: E402
 from civicgate.models.requests import Proposal  # noqa: E402
+from civicgate.runtime_config import (  # noqa: E402
+    InMemoryConfiguration,
+    RuntimeSettings,
+    SecretProvider,
+)
 from civicgate.windows_dpapi import WindowsDPAPIStore  # noqa: E402
 from scripts.dpapi_secret import default_store_path  # noqa: E402
 
@@ -185,7 +192,7 @@ def _number(value: Any) -> int | None:
     return value if type(value) is int and value >= 0 else None
 
 
-def _response_metadata(response: httpx.Response, secret: str) -> dict[str, Any]:
+def _openai_response_metadata(response: httpx.Response, secret: str) -> dict[str, Any]:
     meta: dict[str, Any] = {
         "http_status": response.status_code,
         "request_id": _safe_text(response.headers.get("x-request-id"), secret),
@@ -248,6 +255,130 @@ def _response_metadata(response: httpx.Response, secret: str) -> dict[str, Any]:
     except (KeyError, IndexError, TypeError, AttributeError):
         pass
     return meta
+
+
+def observe_judge_response(
+    response: httpx.Response,
+    secret: str,
+    *,
+    protocol: str,
+    requested_model: str | None,
+) -> dict[str, Any]:
+    """Sanitized protocol-explicit observation, never a raw response archive.
+
+    Wire validity is distinct from completed-assessment validity. Raw stop names
+    remain separate; end_turn is never relabeled as OpenAI's stop. This observer
+    does not configure routes or authorize a future J3 benchmark.
+    """
+    if protocol == "openai_compatible":
+        meta = _openai_response_metadata(response, secret)
+        meta.update(
+            protocol=protocol,
+            requested_model=_safe_text(requested_model, secret),
+            finish_or_stop_reason=meta["finish_reason"],
+            stop_reason=None,
+            response_validation="PASS"
+            if response.status_code < 400
+            and meta["finish_reason"] == "stop"
+            and meta["wire_validation"] == "PASS"
+            and not meta["refusal_present"]
+            else "FAIL",
+            response_error_code=None,
+        )
+        return meta
+    if protocol != "anthropic_messages":
+        raise BenchmarkAbort("UNSUPPORTED_OBSERVATION_PROTOCOL")
+    meta = {
+        "protocol": protocol,
+        "requested_model": _safe_text(requested_model, secret),
+        "http_status": response.status_code,
+        "request_id": _safe_text(response.headers.get("request-id"), secret),
+        "returned_model": None,
+        "finish_reason": None,
+        "stop_reason": None,
+        "finish_or_stop_reason": None,
+        "content_present": None,
+        "json_parseable": None,
+        "wire_validation": "NOT_EVALUABLE",
+        "response_validation": "FAIL",
+        "response_error_code": None,
+        "refusal_present": None,
+        "error_type": None,
+        "error_code": None,
+        "error_param": None,
+        "input_tokens": None,
+        "output_tokens": None,
+        "total_tokens": None,
+        "reasoning_tokens": None,
+    }
+    try:
+        body = response.json()
+    except ValueError:
+        return meta
+    if not isinstance(body, dict):
+        return meta
+    meta["returned_model"] = _safe_text(body.get("model"), secret)
+    error = body.get("error")
+    if isinstance(error, dict):
+        for name in ("type", "code", "param"):
+            meta["error_" + name] = _safe_text(error.get(name), secret)
+    usage = body.get("usage")
+    if isinstance(usage, dict):
+        for name in ("input_tokens", "output_tokens"):
+            meta[name] = _number(usage.get(name))
+    # Provider totals/reasoning breakdown are not inferred from other counters.
+    meta["stop_reason"] = _safe_text(body.get("stop_reason"), secret)
+    meta["finish_or_stop_reason"] = meta["stop_reason"]
+    meta["refusal_present"] = (
+        body["stop_reason"] == "refusal" if isinstance(body.get("stop_reason"), str) else None
+    )
+    blocks = body.get("content")
+    if isinstance(blocks, list):
+        meta["content_present"] = any(
+            isinstance(block, dict)
+            and block.get("type") == "text"
+            and isinstance(block.get("text"), str)
+            and bool(block["text"].strip())
+            for block in blocks
+        )
+    if response.status_code >= 400:
+        return meta
+    try:
+        _validate_sonnet_stop(body)
+        content = _anthropic_text(body)
+        try:
+            parsed = json.loads(content)
+        except ValueError:
+            meta["json_parseable"] = False
+            meta["wire_validation"] = "FAIL"
+        else:
+            meta["json_parseable"] = True
+            try:
+                _JudgeSignalWire.model_validate(parsed)
+            except ValueError:
+                meta["wire_validation"] = "FAIL"
+            else:
+                meta["wire_validation"] = "PASS"
+                meta["response_validation"] = "PASS"
+    except ProviderError as exc:
+        meta["response_error_code"] = exc.code
+    return meta
+
+
+def _response_metadata(response: httpx.Response, secret: str) -> dict[str, Any]:
+    """Keep J2's exact evidence shape while using the protocol-neutral observer."""
+    meta = observe_judge_response(
+        response, secret, protocol="openai_compatible", requested_model=MODEL
+    )
+    extra = {
+        "protocol",
+        "requested_model",
+        "finish_or_stop_reason",
+        "stop_reason",
+        "response_validation",
+        "response_error_code",
+    }
+    return {key: value for key, value in meta.items() if key not in extra}
 
 
 class ObservedTransport(httpx.AsyncBaseTransport):
@@ -663,6 +794,21 @@ def _verify_freeze(frozen: dict[str, Any]) -> None:
             raise BenchmarkAbort("LOCAL_PROVIDER_CONFIGURATION_MISMATCH")
 
 
+def _judge_settings(secrets: SecretProvider) -> RuntimeSettings:
+    """Use shared credential precedence with the instrument's pinned J2 route."""
+    return RuntimeSettings.from_providers(
+        InMemoryConfiguration(
+            {
+                "CIVICGATE_JUDGE_PROVIDER": PROVIDER,
+                "CIVICGATE_JUDGE_PROTOCOL": "openai_compatible",
+                "CIVICGATE_JUDGE_BASE_URL": BASE_URL,
+                "CIVICGATE_JUDGE_MODEL": MODEL,
+            }
+        ),
+        secrets,
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
@@ -702,8 +848,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         _verify_freeze(frozen)
         api_key = (
-            WindowsDPAPIStore(Path(frozen["dpapi_store"])).get_secret("CIVICGATE_JUDGE_API_KEY")
-            or ""
+            _judge_settings(WindowsDPAPIStore(Path(frozen["dpapi_store"]))).judge_api_key or ""
         )
         if not api_key or api_key != api_key.strip() or "\n" in api_key or "\r" in api_key:
             raise BenchmarkAbort("DPAPI_CREDENTIAL_UNSAFE_OR_MISSING")

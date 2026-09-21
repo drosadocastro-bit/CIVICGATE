@@ -9,6 +9,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from os import environ
 from typing import Protocol
+from urllib.parse import urlparse
 
 
 class ConfigurationError(ValueError):
@@ -102,6 +103,8 @@ class RuntimeSettings:
         judge_model = configuration.get("CIVICGATE_JUDGE_MODEL")
         # Legacy model configuration remains an explicit environment choice.
         if legacy == "openai_compatible":
+            if configuration.get("CIVICGATE_JUDGE_PROVIDER") not in {None, "", "openai_compatible"}:
+                raise ConfigurationError("Legacy provider conflicts with explicit judge provider")
             agent_provider = "openai_compatible"
             judge_provider = "openai_compatible"
         if agent_provider == "lm_studio" and not agent_model:
@@ -124,6 +127,27 @@ class RuntimeSettings:
             raise ConfigurationError(f"Unknown judge provider: {judge_provider}")
         if protocol not in {"openai_compatible", "anthropic_messages"}:
             raise ConfigurationError(f"Unsupported judge protocol: {protocol}")
+        if judge_provider == "anthropic":
+            # This provider is Anthropic direct, not an inferred/proxy route.
+            # Reject inherited legacy URLs and cross-provider protocol overrides
+            # before resolving credentials or constructing any transport.
+            if protocol != "anthropic_messages":
+                raise ConfigurationError("Anthropic judge requires anthropic_messages")
+            if (
+                not configuration.get("CIVICGATE_JUDGE_BASE_URL")
+                or not judge_base_url
+                or judge_base_url.rstrip("/") != "https://api.anthropic.com"
+            ):
+                raise ConfigurationError(
+                    "Anthropic judge requires explicit root https://api.anthropic.com"
+                )
+        elif judge_provider == "openai_compatible":
+            if protocol != "openai_compatible":
+                raise ConfigurationError("OpenAI-compatible judge requires openai_compatible")
+            if judge_base_url and urlparse(judge_base_url).hostname == "api.anthropic.com":
+                raise ConfigurationError(
+                    "OpenAI-compatible credentials cannot use the Anthropic origin"
+                )
         try:
             confidence = float(configuration.get("CIVICGATE_MIN_CONFIDENCE") or "0.85")
         except ValueError as exc:
@@ -132,7 +156,20 @@ class RuntimeSettings:
             raise ConfigurationError("CIVICGATE_MIN_CONFIDENCE must be between 0 and 1")
         legacy_key = secrets.get_secret("CIVICGATE_MODEL_API_KEY")
         agent_key = secrets.get_secret("CIVICGATE_AGENT_API_KEY") or legacy_key
-        judge_key = secrets.get_secret("CIVICGATE_JUDGE_API_KEY") or legacy_key
+        if judge_provider == "anthropic":
+            judge_key = secrets.get_secret("CIVICGATE_ANTHROPIC_JUDGE_API_KEY")
+            if not judge_key:
+                raise ConfigurationError(
+                    "CIVICGATE_ANTHROPIC_JUDGE_API_KEY is required for anthropic"
+                )
+        elif judge_provider == "openai_compatible":
+            judge_key = (
+                secrets.get_secret("CIVICGATE_OPENAI_JUDGE_API_KEY")
+                or secrets.get_secret("CIVICGATE_JUDGE_API_KEY")
+                or legacy_key
+            )
+        else:
+            judge_key = secrets.get_secret("CIVICGATE_JUDGE_API_KEY") or legacy_key
         if (
             agent_provider in {"openai_compatible", "lm_studio"}
             and agent_provider != "lm_studio"
