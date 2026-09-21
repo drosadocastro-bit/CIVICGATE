@@ -211,6 +211,13 @@ async def test_import_and_missing_offline_validation_cannot_read_credentials(tmp
 async def test_ten_case_execution_is_separate_bounded_and_has_no_three_failure_stop(
     tmp_path, monkeypatch, valid
 ):
+    # This execution test does not exercise host-specific DPAPI path resolution.
+    monkeypatch.delenv("LOCALAPPDATA", raising=False)
+    monkeypatch.setattr(
+        diagnostic.frozen.engine,
+        "default_store_path",
+        lambda: tmp_path / "synthetic-secrets.json",
+    )
     history = tmp_path / "history"
     history.mkdir()
     previous = [{"id": c["id"]} for c in diagnostic.frozen.engine._load_fixtures()]

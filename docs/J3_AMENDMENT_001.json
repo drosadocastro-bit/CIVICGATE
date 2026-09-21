@@ -315,7 +315,7 @@
       "scripts/run_j3_amendment_001.py": "643976624680c143c13e62f93532363f0b7e08dec00a3fca78ff76135d08dba6",
       "tests/unit/test_j3_amendment_001.py": "e4c26ce390ce4e1ee51875fcba5cb4b13d5778334802fcbabc0b245583243d0d",
       "scripts/diagnose_j3_run001_failures.py": "db0710a0a3fa3c9822719e61168a146de0ef9cc63d9ec32c6ad9a7470b432e9d",
-      "tests/unit/test_j3_failure_characterization.py": "3bd774c968d09a29f060d83cf2ccccc5f820f84fcbc402941013cc5ec5d6ccea"
+      "tests/unit/test_j3_failure_characterization.py": "a68b31395614c9f835a7a494a6a2e163ba33a6f18c1406a7e1282644234ab442"
     },
     "canonical_scoring": "Unchanged shared J1/injection/repeat scoring over VALID typed assessments only",
     "continue_after": {
