@@ -1,6 +1,6 @@
 """Frozen, opt-in J2 engineering benchmark; private DPAPI-backed evidence only.
 
-Prepare with --freeze-only --output <private result.json>, validate the freeze,
+Select --profile j2-luna; prepare with --freeze-only --output <private result.json>,
 then authorize exactly one --run-frozen <freeze.json> --yes execution. Production
 provider behavior is unchanged; this instrument disables retries on its instance.
 """
@@ -47,7 +47,6 @@ from civicgate.runtime_config import (  # noqa: E402
     SecretProvider,
 )
 from civicgate.windows_dpapi import WindowsDPAPIStore  # noqa: E402
-from scripts.dpapi_secret import default_store_path  # noqa: E402
 
 MODEL = "gpt-5.6-luna"
 BASE_URL = "https://api.openai.com/v1"
@@ -55,6 +54,16 @@ ENDPOINT = BASE_URL + "/chat/completions"
 PROVIDER = "openai_compatible"
 TIMEOUT = 30.0
 MAX_CALLS = 44
+
+
+def default_store_path() -> Path:
+    """Resolve the existing edge store without importing the mutable local CLI."""
+    local_app_data = os.environ.get("LOCALAPPDATA")
+    if not local_app_data:
+        raise RuntimeError("LOCALAPPDATA is required for the Windows DPAPI store")
+    return Path(local_app_data) / "CivicGate" / "secrets.json"
+
+
 INJECTION_IDS = {
     "retrieved-injection",
     "smuggled-authority",
@@ -531,7 +540,11 @@ async def _assess_case(
         meta = transport.metadata
         if not typed.available or meta.get("wire_validation") != "PASS":
             outcome, error_code = "SCHEMA_FAILURE", "NO_VALID_TYPED_ASSESSMENT"
-        elif meta.get("finish_reason") != "stop" or meta.get("refusal_present"):
+        elif (
+            meta.get("stop_reason") != "end_turn"
+            if judge.protocol == "anthropic_messages"
+            else meta.get("finish_reason") != "stop"
+        ) or meta.get("refusal_present"):
             outcome, error_code = "SCHEMA_FAILURE", "INCOMPLETE_OR_REFUSED_RESPONSE"
         else:
             outcome = "VALID"
@@ -543,7 +556,12 @@ async def _assess_case(
             outcome = "TRANSPORT_FAILURE"
         elif (transport.metadata.get("http_status") or 0) >= 400:
             outcome = "PROVIDER_FAILURE"
-        elif exc.code in {"MALFORMED_PROVIDER_RESPONSE", "PROVIDER_RESPONSE_TOO_LARGE"}:
+        elif exc.code in {
+            "MALFORMED_PROVIDER_RESPONSE",
+            "PROVIDER_RESPONSE_TOO_LARGE",
+            "PROVIDER_RESPONSE_INCOMPLETE",
+            "PROVIDER_REFUSAL",
+        }:
             outcome = "SCHEMA_FAILURE"
         else:
             outcome = "OTHER_FAILURE"
@@ -576,6 +594,14 @@ async def _assess_case(
         "error_param",
         "transport_error_class",
     )
+    if judge.protocol == "anthropic_messages":
+        meta_fields += (
+            "protocol",
+            "stop_reason",
+            "finish_or_stop_reason",
+            "response_validation",
+            "response_error_code",
+        )
     return {
         **entry,
         "category": case["category"],
@@ -811,6 +837,7 @@ def _judge_settings(secrets: SecretProvider) -> RuntimeSettings:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--profile", required=True, choices=["j2-luna"])
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--freeze-only", action="store_true")
     mode.add_argument("--run-frozen", type=Path)

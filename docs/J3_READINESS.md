@@ -165,3 +165,13 @@ is not added to the model prompt, and the two review conditions remain distingui
 No files are staged, committed or pushed. The required checks regenerated the already
 modified deterministic artifacts; unrelated local work remains preserved. There were
 zero external calls, no secret-value reads and no live J3 execution in this pass.
+
+## Versioned follow-up
+
+The offline results above describe the preserved pre-smoke checkpoint. The first
+subsequent authorized live call passed; see [the sanitized smoke record](J3_SONNET_SMOKE.md).
+Commit `a5cdb8b12983c498ddf86a7425c62f03417bf029` preserves the exact six smoke files.
+The next commit prepares [the J3 benchmark freeze](J3_BENCHMARK_FREEZE.md) and an explicit
+profile runner. The historical packet and first observation remain unchanged. The
+44-call live benchmark, disagreement analysis, replay and independent human adjudication
+remain unperformed and require their respective authorization/review gates.
