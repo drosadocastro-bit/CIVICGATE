@@ -312,8 +312,8 @@
       "src/civicgate/windows_dpapi.py": "4ce59f87da2c5bf9eb75698c2ab692d1b92a56bb15bb0dd9db55cf4d74102bf0"
     },
     "amendment_source_sha256": {
-      "scripts/run_j3_amendment_001.py": "643976624680c143c13e62f93532363f0b7e08dec00a3fca78ff76135d08dba6",
-      "tests/unit/test_j3_amendment_001.py": "e4c26ce390ce4e1ee51875fcba5cb4b13d5778334802fcbabc0b245583243d0d",
+      "scripts/run_j3_amendment_001.py": "21811f8d003f09802e9c2cef5b6c2f876e214eb690d6cf1f24e45dba9cf7444a",
+      "tests/unit/test_j3_amendment_001.py": "22355e9bb1a5c53383cefd44a2b618ce45b9831efc2dcaa825df2ad8128c6bdf",
       "scripts/diagnose_j3_run001_failures.py": "db0710a0a3fa3c9822719e61168a146de0ef9cc63d9ec32c6ad9a7470b432e9d",
       "tests/unit/test_j3_failure_characterization.py": "a68b31395614c9f835a7a494a6a2e163ba33a6f18c1406a7e1282644234ab442"
     },

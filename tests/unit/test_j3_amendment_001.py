@@ -2,6 +2,7 @@
 
 import importlib
 import json
+from datetime import UTC, datetime, timedelta
 
 import httpx
 import pytest
@@ -268,9 +269,10 @@ async def test_evidence_write_failure_prevents_any_next_request(stage):
     assert report["abort_reason"] == "EVIDENCE_WRITE_FAILURE"
 
 
-async def test_accounting_violation_prevents_dispatch():
+@pytest.mark.parametrize("prior_count", [-1, 1, 44])
+async def test_accounting_violation_prevents_dispatch(prior_count):
     fixtures, judge, transport, seen, persist, _ = harness()
-    transport.calls = 1
+    transport.calls = prior_count
     report = await amend.run_amended(fixtures, judge, transport, persist)
     assert not seen and report["abort_reason"] == "CALL_ACCOUNTING_VIOLATION"
 
@@ -361,8 +363,60 @@ async def test_future_execution_writes_complete_private_journal_with_mock_only(
         "plan": amend.plan(),
     }
     seen = []
+    clock_reads = []
+    starts = []
+    written_stages = []
+    real_write = amend.parent.engine._write
+
+    def clock():
+        instant = datetime(2026, 1, 1, tzinfo=UTC) + timedelta(microseconds=len(clock_reads))
+        clock_reads.append(instant)
+        return instant
+
+    def write(path, value, secret="", *, exclusive=False):
+        if path.name.endswith("-start.json"):
+            assert exclusive is True
+            assert value["utc_start"] == clock_reads[-1].isoformat()
+            written_stages.append(("start", value["sequence"]))
+        elif path.name.endswith("-result.json"):
+            assert exclusive is True
+            written_stages.append(("result", value["sequence"]))
+        return real_write(path, value, secret, exclusive=exclusive)
+
+    monkeypatch.setattr(amend.parent, "utcnow", clock)
+    monkeypatch.setattr(amend.parent.engine, "_write", write)
 
     def handler(request):
+        ordinal = len(seen) + 1
+        start = json.loads((tmp_path / f"observation-{ordinal:02d}-start.json").read_text())
+        assert set(start) == {
+            "run_id",
+            "sequence",
+            "id",
+            "phase",
+            "observation",
+            "prior_http_count",
+            "expected_request_ordinal",
+            "utc_start",
+        }
+        assert start["run_id"] == freeze["run_id"]
+        assert start["sequence"] == start["expected_request_ordinal"] == ordinal
+        assert start["prior_http_count"] == ordinal - 1
+        assert {k: start[k] for k in ("id", "phase", "observation")} == freeze["plan"]["schedule"][
+            ordinal - 1
+        ]
+        stamp = datetime.fromisoformat(start["utc_start"])
+        assert stamp.utcoffset() == timedelta(0)
+        assert stamp.isoformat() == clock_reads[-1].isoformat()
+        assert (
+            start["utc_start"] != json.loads((tmp_path / "started.json").read_text())["utc_start"]
+        )
+        if starts:
+            assert stamp > datetime.fromisoformat(starts[-1]["utc_start"])
+            assert (tmp_path / f"observation-{ordinal - 1:02d}-result.json").is_file()
+        assert not (tmp_path / f"observation-{ordinal:02d}-result.json").exists()
+        starts.append(start)
+        written_stages.append(("dispatch", ordinal))
         seen.append(request)
         return response(VALID | {"rationale": TOO_LONG}) if len(seen) <= 3 else response()
 
@@ -373,6 +427,14 @@ async def test_future_execution_writes_complete_private_journal_with_mock_only(
     assert result["http_call_count"] == len(seen) == 44
     assert len(list(tmp_path.glob("observation-*-start.json"))) == 44
     assert len(list(tmp_path.glob("observation-*-result.json"))) == 44
+    assert result["retry_count"] == 0
+    assert written_stages == [
+        (stage, ordinal) for ordinal in range(1, 45) for stage in ("start", "dispatch", "result")
+    ]
+    assert not (tmp_path / "observation-45-start.json").exists()
+    assert all(
+        "fixture-credential-value-73fa" not in path.read_text() for path in tmp_path.glob("*.json")
+    )
     row = json.loads((tmp_path / "observation-01-result.json").read_text())
     assert row["j3"] is None and "j2" not in row
     assert row["structural_evidence"]["unvalidated_wire_semantic_fields"]["fields"] == VALID
@@ -380,6 +442,51 @@ async def test_future_execution_writes_complete_private_journal_with_mock_only(
     with pytest.raises(amend.parent.engine.BenchmarkAbort, match="EXISTING_RUN_OUTPUT"):
         await amend.execute(freeze, secrets)
     assert len(seen) == 44
+
+
+@pytest.mark.parametrize("stage,sequence", [("start", 1), ("start", 2), ("result", 1)])
+async def test_execution_exclusive_journal_failure_stops_dispatch(
+    tmp_path, monkeypatch, stage, sequence
+):
+    from civicgate.runtime_config import InMemorySecretProvider
+
+    monkeypatch.setattr(amend, "verify_execution", lambda _: None)
+    freeze = {
+        "run_id": "synthetic-exclusive-journal",
+        "output": str(tmp_path / "result.json"),
+        "plan": amend.plan(),
+    }
+    collision = tmp_path / f"observation-{sequence:02d}-{stage}.json"
+    collision.write_text("preserve-existing-evidence")
+    seen = []
+
+    def handler(request):
+        seen.append(request)
+        return response()
+
+    report = await amend.execute(
+        freeze,
+        InMemorySecretProvider({"CIVICGATE_ANTHROPIC_JUDGE_API_KEY": "synthetic-key"}),
+        lambda: httpx.MockTransport(handler),
+    )
+    assert report["abort_reason"] == "EVIDENCE_WRITE_FAILURE"
+    assert len(seen) == report["http_call_count"] == (sequence - 1 if stage == "start" else 1)
+    assert report["retry_count"] == 0
+    assert collision.read_text() == "preserve-existing-evidence"
+
+
+async def test_accounting_drift_after_first_result_blocks_second_start():
+    fixtures, judge, transport, seen, persist, events = harness()
+
+    def corrupt_counter(stage, row):
+        persist(stage, row)
+        if stage == "result":
+            transport.calls += 1
+
+    report = await amend.run_amended(fixtures, judge, transport, corrupt_counter)
+    assert report["abort_reason"] == "CALL_ACCOUNTING_VIOLATION"
+    assert len(seen) == 1
+    assert [stage for stage, _ in events] == ["start", "result"]
 
 
 async def test_execution_freeze_failure_precedes_credential_access(tmp_path, monkeypatch):

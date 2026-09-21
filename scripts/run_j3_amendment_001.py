@@ -174,11 +174,20 @@ async def run_amended(fixtures, judge, transport, persist):
         except Exception:
             aborted = "FREEZE_OR_INSTRUMENT_MISMATCH"
             break
-        if before >= 44 or before != len(rows):
+        expected_request_ordinal = before + 1
+        if before >= 44 or before != sequence - 1 or expected_request_ordinal != sequence:
             aborted = "CALL_ACCOUNTING_VIOLATION"
             break
         try:
-            persist("start", {"sequence": sequence, **entry, "prior_http_count": before})
+            persist(
+                "start",
+                {
+                    "sequence": sequence,
+                    **entry,
+                    "prior_http_count": before,
+                    "expected_request_ordinal": expected_request_ordinal,
+                },
+            )
         except Exception:
             aborted = "EVIDENCE_WRITE_FAILURE"
             break
@@ -390,6 +399,12 @@ async def execute(freeze, secrets, inner_factory=None):
     judge.client.max_attempts = 1
 
     def persist(stage, row):
+        if stage == "start":
+            row = {
+                **row,
+                "run_id": freeze["run_id"],
+                "utc_start": parent.utcnow().isoformat(),
+            }
         parent.engine._write(
             output.with_name(f"observation-{row['sequence']:02d}-{stage}.json"),
             row,

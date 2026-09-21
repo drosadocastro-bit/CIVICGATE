@@ -100,6 +100,24 @@ preserves an in-flight attempt if a later write or process interruption prevents
 result. An exclusive run marker prevents automatic restart. A disk failure may
 prevent writing the final report itself; it never authorizes further calls.
 
+Each start record explicitly contains `run_id` from the execution seal,
+`sequence`, fixture `id`, `phase`, `observation` (including the repeat index),
+`prior_http_count`, `expected_request_ordinal`, and `utc_start`. Before persistence,
+accounting must establish `prior_http_count == sequence - 1` and
+`expected_request_ordinal = prior_http_count + 1 == sequence`, within the 44-call
+budget. The execution persistence boundary captures a fresh ISO-8601 UTC timestamp
+immediately before each exclusive start write. A failed start write prevents that
+request; a failed result write prevents any subsequent request. Result records
+retain their existing shape and pair with start records by sequence in the unique
+run directory; no scientific fields or metrics are added.
+
+Run 002 preflight `j3-amend001-run002-preflight-20260921T140546287025Z` was blocked
+before execution because the versioned start-journal record did not satisfy the
+authorized evidence contract: zero observations, model calls, credential reads
+and retries. That evidence remains unchanged. This journal fix supplies no Sonnet
+Run 002 result or live authorization; a new execution requires separate approval
+after versioning and successful CI.
+
 Amended completion statuses:
 
 - `J3_AMEND_001_RUN_COMPLETE_ALL_ASSESSMENTS_VALID`: all 44 attempted, all valid.
@@ -216,7 +234,7 @@ Run 001 remains immutable and incomplete. The diagnostic remains a separate
 experiment. Human approval covers versioning this amendment; it does not
 authorize Run 002 or any additional characterization observation.
 
-## Offline validation of this amendment
+## Initial offline validation of this amendment
 
 - Focused amendment tests: **39 passed**.
 - Full suite: **401 passed, 1 skipped**; the skipped configuration contract test
@@ -238,3 +256,11 @@ authorize Run 002 or any additional characterization observation.
 
 These results establish offline implementation behavior only. No live Run 002
 interoperability, performance, semantic accuracy or full-corpus outcome is claimed.
+
+The subsequent journal-contract fix passed **45 focused tests** and **407 full
+suite tests, with 1 non-Windows contract test skipped on Windows**. Its mocked
+execution verifies 44 complete exclusive start records before their corresponding
+44 mock requests, and 44 result records before advancing, with zero retries.
+The strengthened journal regression fails against the prior runner in an isolated
+copy. Ruff, format, mypy, 35/35 fixture evaluation, M2 benchmarks, offline plan and
+diff-check also pass. These checks use no live provider calls or DPAPI access.
