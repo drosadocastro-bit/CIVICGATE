@@ -30,3 +30,11 @@ Local Python version and platform are recorded in the report. The Windows/Ubuntu
 Before broader use, independently label diverse natural-language prompts, evaluate the configured agent and judge, measure live latency/error distributions, validate recipient identity workflows, and exercise the CI/container matrix. Do not expand domains or add write capability as part of that validation.
 
 Milestone 2 adds [the Granite benchmark](GRANITE_AGENT_BENCHMARK.md), [judge benchmark](JUDGE_BENCHMARK.md), [hybrid matrix](HYBRID_EVALUATION.md), and [adversarial expansion](ADVERSARIAL_EVALUATION_M2.md). Their JSON artifacts deliberately retain `NOT_RUN_*` and `BLOCKED_*` states when exact live conditions or credentials are absent.
+
+## Open design finding: literal NONE flag
+
+Status: **OPEN_DESIGN_FINDING**. In the recorded-signal replay, an available `JudgeSignal` with `classification="IN_SCOPE"`, `confidence=0.96` and `flags=["NONE"]` was review-relevant. Policy currently tests whether the flag list is non-empty, rather than whether it contains a substantive risk flag. The observed reference-to-replay effect was `PERMIT` → `REVIEW_REQUIRED / BLOCKED` before adapter execution.
+
+This is historical integration behavior, **preserved, not corrected**. A dedicated characterization test records the current result without endorsing it. It does not establish that the desired future result should be `PERMIT`, and is not classified here as a security vulnerability. Design review is required before any semantic change; historical J2 evidence must not be rewritten.
+
+See [offline recorded-signal replay](J2_SIGNAL_REPLAY.md) for the input contract, bounded historical summary and research method. The replay provider remains evaluation-only; policy, Agent K and Gateway production semantics are unchanged.
