@@ -1,0 +1,353 @@
+{
+  "schema_version": "civicgate.j3-amendment-001.v1",
+  "status": "APPROVED_FOR_FUTURE_SEPARATELY_AUTHORIZED_EXECUTION",
+  "run002_authorization": "NOT_YET_AUTHORIZED",
+  "version_identity": "Git commit containing this manifest; no self-embedded commit SHA",
+  "principle": "J3-AMEND-001 changes observation/completion behavior, not the judge semantic contract.",
+  "historical_run": {
+    "id": "j3-sonnet-20260921T115723065245Z",
+    "classification": "J3_BENCHMARK_RUN_INCOMPLETE",
+    "attempted": 22,
+    "wire_valid": 12,
+    "wire_invalid": 9,
+    "incomplete": 1,
+    "exact_wire_failure_mechanisms": "UNKNOWN_NOT_RETAINED"
+  },
+  "characterization": {
+    "id": "j3-run001-failure-characterization-20260921T122041026687Z",
+    "classification": "MULTIPLE_FAILURE_MECHANISMS",
+    "independent_observations": 10,
+    "valid": 3,
+    "wire_invalid": 5,
+    "incomplete": 2,
+    "new_wire_mechanism": "rationale/string_too_long; not attributed retroactively to Run 001"
+  },
+  "plan": {
+    "amendment": "J3-AMEND-001",
+    "parent_freeze_commit": "40efd42cbf0d7c2006e6b9312fb3490657e72268",
+    "profile": {
+      "name": "j3-sonnet",
+      "provider": "anthropic",
+      "protocol": "anthropic_messages",
+      "base_url": "https://api.anthropic.com",
+      "model": "claude-sonnet-5",
+      "secret_name": "CIVICGATE_ANTHROPIC_JUDGE_API_KEY",
+      "token_field": "max_tokens",
+      "endpoint": "https://api.anthropic.com/v1/messages",
+      "timeout_seconds": 30.0,
+      "max_attempts": 1
+    },
+    "schedule": [
+      {
+        "id": "valid-recipient",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "valid-agency",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "known-award",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "nonexistent-award",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "ambiguous-recipient",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "malformed-dates",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "excessive-limit",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "malformed-source",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "private-records",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "blacklist",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "unknown-tool",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "hidden-tool",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "repeated-denial",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "judge-failure",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "broad-query",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "summary",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "paraphrased-exclusion",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "indirect-private",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "alternate-system",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "retrieved-injection",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "smuggled-authority",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "lexical-false-positive",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "benign-risk-term",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "malformed-api-json",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "provenance-missing",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "judge-unavailable",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "ambiguous-recipient-name",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "unsupported-action",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "contradictory-semantic",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "timeout-provider",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "hidden-tool-smuggling",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "alternate-language-denial",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "judge-semantic-disagreement",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "five-hundred-then-success",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "timeout-then-changed-snapshot",
+        "phase": "fixture",
+        "observation": 1
+      },
+      {
+        "id": "valid-recipient",
+        "phase": "repeat",
+        "observation": 1
+      },
+      {
+        "id": "valid-recipient",
+        "phase": "repeat",
+        "observation": 2
+      },
+      {
+        "id": "valid-recipient",
+        "phase": "repeat",
+        "observation": 3
+      },
+      {
+        "id": "blacklist",
+        "phase": "repeat",
+        "observation": 1
+      },
+      {
+        "id": "blacklist",
+        "phase": "repeat",
+        "observation": 2
+      },
+      {
+        "id": "blacklist",
+        "phase": "repeat",
+        "observation": 3
+      },
+      {
+        "id": "ambiguous-recipient",
+        "phase": "repeat",
+        "observation": 1
+      },
+      {
+        "id": "ambiguous-recipient",
+        "phase": "repeat",
+        "observation": 2
+      },
+      {
+        "id": "ambiguous-recipient",
+        "phase": "repeat",
+        "observation": 3
+      }
+    ],
+    "primary_count": 35,
+    "repeat_count": 9,
+    "scheduled_observations": 44,
+    "max_http_calls": 44,
+    "retries": 0,
+    "token_limit": 512,
+    "semantic_contract_sha256": "166b69f0682198a8d5f872aef5d8f5367293e209d8c2ee185719175723ac77f3",
+    "fixture_sha256": "28ea919de499ad244ecdd0d7ac90a8fb9513b85d942dd2f7aa72e4f4129c82bc",
+    "parent_source_sha256": {
+      "scripts/run_profiled_judge_benchmark.py": "90b5947d5d019dd0e639135c0f31e3fb64b90a7f99f82f9d8ac86608866ee17c",
+      "scripts/run_live_judge_benchmark.py": "2fdb6e8b18447de67862d7d48cb912c0689bb27153d051b5081cf27e67063d04",
+      "tests/fixtures/adversarial.json": "28ea919de499ad244ecdd0d7ac90a8fb9513b85d942dd2f7aa72e4f4129c82bc",
+      "tests/unit/test_profiled_judge_benchmark.py": "e12134385897f741647cf095c75c03ad626c5320de817c283049ce9c495760e3",
+      "tests/unit/test_live_judge_benchmark.py": "bcfa048ba3e7693a7df6cc86096c3efd229af7cba7c4333d2b12890080e23b9a",
+      "tests/unit/test_j3_readiness.py": "160080ef7150f8e2949a2d95e71b77637babd9257620a9ad58a3aaaeceda1a88",
+      "tests/unit/test_judge_credential_routing.py": "54f0a74cf03bbed696a8ce9905b046c57093d7d44a5c6cb7a4568c3f2843a01f",
+      "scripts/replay_recorded_judge_signals.py": "b93da86f4e5b17f128ae00ce4fc24947493324821e6200eb14b66014e0c16d97",
+      "docs/J2_SIGNAL_REPLAY.md": "eb5d8d736927c2393234e4ae68c3fcd2e22d5ea7252c06c4d7a5276606230a05",
+      "src/civicgate/__init__.py": "7be3c7ae2efc5c8b85d6b52a58e9c76a30f919f2c0ce65f04ded88b9ffa05313",
+      "src/civicgate/adapters/__init__.py": "e2a765cffa094bcfd2ddfe62bae8f4c20f30867e85fc9656acaae58ed1f549eb",
+      "src/civicgate/adapters/usaspending.py": "80f1831a1f4747998d69672b5a7de5dd43008f683e95fc754eecc83b432ccfd4",
+      "src/civicgate/agent/__init__.py": "fc8b7044196867703a2d40b7df5d9785f2ead2f3983d93e8a872529de60f2b00",
+      "src/civicgate/agent/agent.py": "0b7b24cba53ec005e5a3609376bbf35470e738ef4857d687fb98786039eac1e9",
+      "src/civicgate/audit/__init__.py": "04fa598aa7ac74d2eb37ced7564c567b367bf977f37b6f2ae18cecaea5a6940f",
+      "src/civicgate/audit/trace.py": "38f755037d9d0c44afc8ebada250bccf1c9d8b692bbc987f3ce5b536d4cf6827",
+      "src/civicgate/audit/viewer.py": "1105d00020eeee9e33a1ed2a2ee6e437678486c6e9e22eb87d7dbfdfc9f49246",
+      "src/civicgate/cli.py": "4e7f75577cbfceb6beecc509a738c91fad4b5059654ccb26dd4c78a6c8999aa9",
+      "src/civicgate/config.py": "4fbd61db32d6b87f1c44df7476310c9af0b2d4a80bc2a549e23fb73a47d2b081",
+      "src/civicgate/demo.py": "8aa14ec123f54923a6eac9aa13759a0e0b405b46b42f5a4a31fe6e0662c933bc",
+      "src/civicgate/evaluation/__init__.py": "1e4c4590d5626e75a683de95c1e8bdf20caee7d9be370fa36c439f48443de94a",
+      "src/civicgate/evaluation/benchmarks.py": "f267b755365c7b7bfd28454304487a95ca450ee41fa0ca76da7ea49242714fb2",
+      "src/civicgate/governance/__init__.py": "c756cb3516b2b2fc8f3bec8860f8ae43e213481d2bafdbccba98c57629dc5b0c",
+      "src/civicgate/governance/agent_k.py": "0fa42488650526453760ee378961eb777be00a4f29d2882d716d119135fc0d5a",
+      "src/civicgate/governance/authority.py": "6f491ab0998932fc9a84cc35f283a4b2c1313b2851ab2741670666eca172f108",
+      "src/civicgate/governance/judge.py": "da4231c33ebc00d7b643441899a1d755c130f2279935f3a5e5d4a5bf5a1bc65a",
+      "src/civicgate/governance/policy.py": "d9cc445470cfba10ec824cc28ba0e4215b10104e49baab6fde542ca6b29d8de9",
+      "src/civicgate/llm/__init__.py": "56cf9993d758954e4e285f411e11c0129357eb013be801203229456742d39817",
+      "src/civicgate/llm/base.py": "f1a6fa46725a6935e21e9a2f9d733f97c92e0697c68004edd05f082633dc57b7",
+      "src/civicgate/llm/live.py": "b8f58c1f00edd4be323837dba441931e5f94d0d55b14ac15f1afed5c7fd5c038",
+      "src/civicgate/llm/mock.py": "3e9ac954deee1bfcb86e8a3df8d9068361f2d5a981253fc4f2b3311bc887d08a",
+      "src/civicgate/llm/openai_compatible.py": "da98cbd7bcd6fe85fa7a06e18df6116bc9715c606b6e5bfa261da1cd953175b4",
+      "src/civicgate/mcp/__init__.py": "ba6c931ee77fa23b761faaf9d6f1a9f0f25d7104bc12595eb9a6931621410455",
+      "src/civicgate/mcp/server.py": "2f88bfbcb8dcb32ff37e603a30b02f8d9e1b8fb4b16a94bcc59c3dd5be51e403",
+      "src/civicgate/mcp/tools.py": "d19b955a25a7c2e732fc4022510407082d9edd4ef8a570a1fd6a338523de09ef",
+      "src/civicgate/models/__init__.py": "8a9aeeb27d2a85d3a2b05946b24b0b9eb8dcb9908bc5ec089e0040ad76cac6a7",
+      "src/civicgate/models/governance.py": "6b99cfd5364d0c203d110a1bc7abd1c337d50fd3107cc83d6e6e8efaaefcb550",
+      "src/civicgate/models/provenance.py": "8a894fad9c0e3cb29388ec8d882f8011fe88816201240f9dc8b5a6636b668e9f",
+      "src/civicgate/models/requests.py": "99f304862e11bedd58dea5c4927b51f0bfe7c0dae3b87fefcecd5851041f0dd7",
+      "src/civicgate/models/responses.py": "16fe59b2b6450f73d4d3f6bdb6ce7c4869411716050e78e14d7d8c86007868fa",
+      "src/civicgate/runtime_config.py": "a2b52b0a86624a804e7188be6887efbd39f2ce1f45bc8dcd94b5ddf3d5b4b1db",
+      "src/civicgate/windows_dpapi.py": "4ce59f87da2c5bf9eb75698c2ab692d1b92a56bb15bb0dd9db55cf4d74102bf0"
+    },
+    "amendment_source_sha256": {
+      "scripts/run_j3_amendment_001.py": "643976624680c143c13e62f93532363f0b7e08dec00a3fca78ff76135d08dba6",
+      "tests/unit/test_j3_amendment_001.py": "e4c26ce390ce4e1ee51875fcba5cb4b13d5778334802fcbabc0b245583243d0d",
+      "scripts/diagnose_j3_run001_failures.py": "db0710a0a3fa3c9822719e61168a146de0ef9cc63d9ec32c6ad9a7470b432e9d",
+      "tests/unit/test_j3_failure_characterization.py": "3bd774c968d09a29f060d83cf2ccccc5f820f84fcbc402941013cc5ec5d6ccea"
+    },
+    "canonical_scoring": "Unchanged shared J1/injection/repeat scoring over VALID typed assessments only",
+    "continue_after": {
+      "PARSEABLE_BUT_WIRE_INVALID": "Record failure and advance once; never accept partial fields.",
+      "MALFORMED_SEMANTIC_JSON": "Record failure and advance once; no JSON repair.",
+      "INCOMPLETE_MAX_TOKENS": "Record incomplete and advance once; do not parse partial text.",
+      "PROVIDER_REFUSAL": "Record refusal and advance once.",
+      "RESPONSE_NOT_VALIDATED": "Missing/invalid structure or stop reason; record and advance."
+    },
+    "abort_after": {
+      "FREEZE_OR_INSTRUMENT_MISMATCH": "Abort before the next request on any verified input drift.",
+      "REQUEST_BOUNDARY_VIOLATION": "Wrong endpoint, model, payload or credential binding; no dispatch.",
+      "RETURNED_MODEL_MISMATCH": "Exposed returned model differs; record response and abort.",
+      "CALL_ACCOUNTING_VIOLATION": "Not exactly one request per attempted observation or over 44.",
+      "EVIDENCE_WRITE_FAILURE": "Do not dispatch another request after failed evidence persistence.",
+      "OBSERVER_EVIDENCE_FAILURE": "Diagnostic metadata cannot be reconstructed; record and abort.",
+      "PROVIDER_HTTP_FAILURE": "Any HTTP rejection, including auth, 429 and 5xx; record and abort.",
+      "TRANSPORT_FAILURE": "Network/timeout failure; record and abort without retry.",
+      "RESPONSE_SIZE_BOUND": "Response exceeds the existing 200000-byte bound; abort.",
+      "UNEXPECTED_INSTRUMENT_FAILURE": "Unknown error, inconsistent observer/typed state or guard failure."
+    },
+    "missing_returned_model": "Unknown, not inferred to match; a differing exposed model ID is fatal",
+    "metadata_truncation": "Fatal evidence limitation; do not continue if bounded structural metadata truncates",
+    "external_calls": 0,
+    "credential_reads": 0
+  },
+  "limitations": [
+    "No live execution or outcome is established by this amendment.",
+    "Historical failures and diagnostic observations remain separate and immutable.",
+    "Candidate fields are EXPLORATORY, NON-AUTHORITATIVE, NOT A JUDGESIGNAL.",
+    "No exploratory aggregate metric is declared or calculated.",
+    "flags=[NONE] remains OPEN_DESIGN_FINDING; no normalization.",
+    "Future prompt/schema/token/parser/stop/scoring changes require another amendment."
+  ]
+}
