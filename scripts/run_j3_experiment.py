@@ -19,6 +19,7 @@ import httpx  # noqa: E402
 
 from civicgate.llm.live import LiveJudgeProvider, ProviderError  # noqa: E402
 from scripts import j3_credential_amendment as credential_amendment  # noqa: E402
+from scripts import j3_optimizer_stability as optimizer_amendment  # noqa: E402
 from scripts import run_j3_amendment_001 as historical  # noqa: E402
 from scripts.judge_experiment_observers import observer_for  # noqa: E402
 
@@ -36,6 +37,9 @@ NEW_SOURCES = (
     "tests/unit/test_dpapi_selective.py",
     "tests/unit/test_j3_credential_amendment.py",
     "docs/J3_CREDENTIAL_ACCESS_001.md",
+    "docs/J3_OPTIMIZER_STABILITY_001.md",
+    "scripts/j3_optimizer_stability.py",
+    "tests/unit/test_j3_optimizer_stability.py",
 )
 CONTRACT_SHA256 = "166b69f0682198a8d5f872aef5d8f5367293e209d8c2ee185719175723ac77f3"
 FIXTURE_SHA256 = "28ea919de499ad244ecdd0d7ac90a8fb9513b85d942dd2f7aa72e4f4129c82bc"
@@ -66,6 +70,7 @@ def plan(profile_name):
     return {
         "schema_version": "civicgate.shared-j3-experiment.v1",
         "credential_amendment": credential_amendment.AMENDMENT,
+        "optimizer_amendment": optimizer_amendment.AMENDMENT,
         "shared": asdict(SPEC),
         "profile": baseline["profile"],
         "schedule": baseline["schedule"],
@@ -341,6 +346,9 @@ async def run_experiment(fixtures, judge, transport, persist, *, run_id):
 def raw_hashes():
     return {
         **historical.raw_hashes(),
+        "docs/J3_OPTIMIZER_STABILITY_001.json": hashlib.sha256(
+            optimizer_amendment.MANIFEST.read_bytes()
+        ).hexdigest(),
         **{name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in NEW_SOURCES},
         "docs/J3_CREDENTIAL_ACCESS_001.json": hashlib.sha256(
             credential_amendment.MANIFEST.read_bytes()
@@ -349,7 +357,7 @@ def raw_hashes():
 
 
 def seal(profile_name, output):
-    credential_amendment.verify_amendment()
+    optimizer_amendment.verify_amendment()
     for name in raw_hashes():
         committed = engine._git("show", "HEAD:" + name)
         if committed.replace(b"\r\n", b"\n") != (ROOT / name).read_bytes().replace(b"\r\n", b"\n"):
@@ -364,7 +372,7 @@ def seal(profile_name, output):
 
 
 def verify_execution(freeze):
-    credential_amendment.verify_amendment()
+    optimizer_amendment.verify_amendment()
     profile = parent.select_profile(freeze["plan"]["profile"]["name"])
     if (
         freeze["plan"] != plan(profile.name)

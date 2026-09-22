@@ -1,33 +1,36 @@
-"""Prospective credential amendment; historical validators remain fail-closed."""
+"""Prospective optimizer-stability amendment; historical validators remain fail-closed."""
 
 import hashlib
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PARENT = "ab561de8bf0a5cf61cc38e7f7caaba3c5861b9b0"
-AMENDMENT = "J3-CREDENTIAL-ACCESS-001"
-MANIFEST = ROOT / "docs/J3_CREDENTIAL_ACCESS_001.json"
+PARENT = "c06550cfd235c8d3c7690ebbdbb06a3d252cb3e1"
+AMENDMENT = "J3-OPTIMIZER-STABILITY-001"
+MANIFEST = ROOT / "docs/J3_OPTIMIZER_STABILITY_001.json"
 # Filled from the reviewed parent's canonical dependency map, not the new checkout.
-PARENT_MAP_SHA256 = "c2fa9e332e0822fcc52b4a4183b96c8b60416a996760d49aca9c73607dadb674"
+PARENT_MAP_SHA256 = "7c1bcd879f20f73ca043a01b7595d9ca583772de643432ea4b4614a1ba545905"
 ALLOWED_CHANGES = frozenset(
     {
-        "src/civicgate/windows_dpapi.py",
-        "scripts/dpapi_secret.py",
+        "scripts/j3_credential_amendment.py",
+        "src/civicgate/llm/live.py",
         "scripts/run_j3_experiment.py",
-        "tests/unit/test_profiled_judge_benchmark.py",
+        "tests/unit/test_j3_credential_amendment.py",
         "tests/unit/test_j3_experiment.py",
     }
 )
 ADDITIONS = frozenset(
     {
-        "scripts/j3_credential_amendment.py",
-        "tests/unit/test_dpapi_selective.py",
-        "tests/unit/test_j3_credential_amendment.py",
-        "docs/J3_CREDENTIAL_ACCESS_001.md",
+        "scripts/j3_optimizer_stability.py",
+        "tests/unit/test_j3_optimizer_stability.py",
+        "docs/J3_OPTIMIZER_STABILITY_001.md",
     }
 )
-HISTORICAL = ("docs/J3_BENCHMARK_FREEZE.json", "docs/J3_AMENDMENT_001.json")
+HISTORICAL = (
+    "docs/J3_BENCHMARK_FREEZE.json",
+    "docs/J3_AMENDMENT_001.json",
+    "docs/J3_CREDENTIAL_ACCESS_001.json",
+)
 
 
 def canonical_hash(data):
@@ -55,7 +58,7 @@ def current_hashes():
 
 def _require(condition):
     if not condition:
-        raise ValueError("CREDENTIAL_AMENDMENT_FREEZE_MISMATCH")
+        raise ValueError("OPTIMIZER_STABILITY_FREEZE_MISMATCH")
 
 
 def verify_amendment():
@@ -85,5 +88,5 @@ def verify_amendment():
             canonical_hash((ROOT / "tests/fixtures/adversarial.json").read_bytes())
             == runner.FIXTURE_SHA256
         )
-    except (KeyError, ValueError, OSError):
-        raise runner.engine.BenchmarkAbort("CREDENTIAL_AMENDMENT_FREEZE_MISMATCH") from None
+    except (KeyError, ValueError, OSError, TypeError):
+        raise runner.engine.BenchmarkAbort("OPTIMIZER_STABILITY_FREEZE_MISMATCH") from None

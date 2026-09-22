@@ -10,8 +10,9 @@ from scripts import j3_credential_amendment as amendment
 from scripts import run_j3_experiment as runner
 
 
-def test_current_prospective_manifest_and_both_profiles_validate():
-    amendment.verify_amendment()
+def test_published_credential_manifest_rejects_follow_on_checkout():
+    with pytest.raises(runner.engine.BenchmarkAbort, match="CREDENTIAL_AMENDMENT_FREEZE_MISMATCH"):
+        amendment.verify_amendment()
     for profile in runner.PROFILES:
         plan = runner.plan(profile)
         assert plan["credential_amendment"] == amendment.AMENDMENT

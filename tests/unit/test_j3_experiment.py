@@ -507,7 +507,7 @@ def test_verify_execution_rejects_plan_raw_hash_or_head_drift(name, monkeypatch)
         "raw_source_sha256": shared.raw_hashes(),
         "head": "synthetic-head",
     }
-    monkeypatch.setattr(shared.credential_amendment, "verify_amendment", lambda: None)
+    monkeypatch.setattr(shared.optimizer_amendment, "verify_amendment", lambda: None)
     monkeypatch.setattr(shared.engine, "_git", lambda *args: b"synthetic-head")
     assert shared.verify_execution(frozen) == shared.PROFILES[name]
     for key in ("plan", "raw_source_sha256", "head"):
