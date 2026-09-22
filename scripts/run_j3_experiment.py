@@ -18,6 +18,7 @@ for directory in (ROOT, ROOT / "src"):
 import httpx  # noqa: E402
 
 from civicgate.llm.live import LiveJudgeProvider, ProviderError  # noqa: E402
+from scripts import j3_credential_amendment as credential_amendment  # noqa: E402
 from scripts import run_j3_amendment_001 as historical  # noqa: E402
 from scripts.judge_experiment_observers import observer_for  # noqa: E402
 
@@ -30,6 +31,11 @@ NEW_SOURCES = (
     "scripts/judge_experiment_observers.py",
     "tests/unit/test_j3_experiment.py",
     "docs/PROVIDER_CONFIGURATION_DECISION.md",
+    "scripts/dpapi_secret.py",
+    "scripts/j3_credential_amendment.py",
+    "tests/unit/test_dpapi_selective.py",
+    "tests/unit/test_j3_credential_amendment.py",
+    "docs/J3_CREDENTIAL_ACCESS_001.md",
 )
 CONTRACT_SHA256 = "166b69f0682198a8d5f872aef5d8f5367293e209d8c2ee185719175723ac77f3"
 FIXTURE_SHA256 = "28ea919de499ad244ecdd0d7ac90a8fb9513b85d942dd2f7aa72e4f4129c82bc"
@@ -59,6 +65,7 @@ def plan(profile_name):
         raise engine.BenchmarkAbort("SHARED_EXPERIMENT_FREEZE_MISMATCH")
     return {
         "schema_version": "civicgate.shared-j3-experiment.v1",
+        "credential_amendment": credential_amendment.AMENDMENT,
         "shared": asdict(SPEC),
         "profile": baseline["profile"],
         "schedule": baseline["schedule"],
@@ -335,11 +342,14 @@ def raw_hashes():
     return {
         **historical.raw_hashes(),
         **{name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in NEW_SOURCES},
+        "docs/J3_CREDENTIAL_ACCESS_001.json": hashlib.sha256(
+            credential_amendment.MANIFEST.read_bytes()
+        ).hexdigest(),
     }
 
 
 def seal(profile_name, output):
-    historical.verify_manifest()
+    credential_amendment.verify_amendment()
     for name in raw_hashes():
         committed = engine._git("show", "HEAD:" + name)
         if committed.replace(b"\r\n", b"\n") != (ROOT / name).read_bytes().replace(b"\r\n", b"\n"):
@@ -354,7 +364,7 @@ def seal(profile_name, output):
 
 
 def verify_execution(freeze):
-    historical.verify_manifest()
+    credential_amendment.verify_amendment()
     profile = parent.select_profile(freeze["plan"]["profile"]["name"])
     if (
         freeze["plan"] != plan(profile.name)
