@@ -60,7 +60,8 @@ class WindowsDPAPIStore(ConfigurationProvider, SecretProvider):
     def _windll() -> Any:
         return ctypes.__dict__["windll"]
 
-    def _read(self) -> dict[str, str]:
+    def _read_encrypted(self) -> dict[str, str]:
+        """Read the container without decoding or decrypting any entry."""
         if not self.path.exists():
             return {}
         raw = json.loads(self.path.read_text(encoding="utf-8"))
@@ -68,25 +69,28 @@ class WindowsDPAPIStore(ConfigurationProvider, SecretProvider):
             isinstance(k, str) and isinstance(v, str) for k, v in raw.items()
         ):
             raise ValueError("DPAPI store is malformed")
-        return {
-            key: self._unprotect(base64.b64decode(value)).decode("utf-8")
-            for key, value in raw.items()
-        }
+        return raw
+
+    def list_names(self) -> list[str]:
+        return sorted(self._read_encrypted())
 
     def set_value(self, name: str, value: str) -> None:
         if not name or "\x00" in name or "\x00" in value:
             raise ValueError("DPAPI names and values must be non-empty and NUL-free")
-        values = self._read()
-        values[name] = value
+        values = self._read_encrypted()
+        values[name] = base64.b64encode(self._protect(value.encode("utf-8"))).decode("ascii")
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        encoded = {
-            key: base64.b64encode(self._protect(item.encode("utf-8"))).decode("ascii")
-            for key, item in values.items()
-        }
-        self.path.write_text(json.dumps(encoded, indent=2) + "\n", encoding="utf-8")
+        self.path.write_text(json.dumps(values, indent=2) + "\n", encoding="utf-8")
 
     def get(self, name: str) -> str | None:
-        return self._read().get(name)
+        encrypted = self._read_encrypted().get(name)
+        if encrypted is None:
+            return None
+        try:
+            return self._unprotect(base64.b64decode(encrypted, validate=True)).decode("utf-8")
+        except (ValueError, OSError):
+            # Never expose ciphertext, plaintext or a provider-controlled error.
+            raise ValueError("Requested DPAPI entry could not be decrypted") from None
 
     def get_secret(self, name: str) -> str | None:
         return self.get(name)

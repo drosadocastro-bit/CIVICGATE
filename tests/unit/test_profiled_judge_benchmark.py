@@ -80,7 +80,7 @@ def test_plan_import_and_inspection_have_no_secret_or_network_access(monkeypatch
         pytest.fail("Offline inspection reached credential or network construction")
 
     monkeypatch.setattr(httpx, "AsyncHTTPTransport", forbidden)
-    monkeypatch.setattr(runner.WindowsDPAPIStore, "_read", forbidden)
+    monkeypatch.setattr(runner.WindowsDPAPIStore, "_read_encrypted", forbidden)
     monkeypatch.setattr(runner.RuntimeSettings, "from_providers", forbidden)
     importlib.reload(runner)
     assert runner.main(["--profile", "j3-sonnet", "--plan"]) == 0
@@ -161,9 +161,12 @@ def test_frozen_profile_tampering_fails_before_credentials(field):
         runner.verify_run({"plan": p}, "j3-sonnet")
 
 
-def test_versioned_manifest_equals_offline_plan():
+def test_historical_manifest_rejects_amended_checkout_without_rewriting_history():
     manifest = json.loads(runner.MANIFEST.read_text())
-    assert manifest == runner.versioned_manifest()
+    # Current credential code differs; the old execution instrument must reject it.
+    assert manifest != runner.versioned_manifest()
+    with pytest.raises(runner.engine.BenchmarkAbort, match="VERSIONED_FREEZE_MISMATCH"):
+        runner.verify_versioned_manifest()
     assert manifest["plan"]["fixture_sha256"] == runner.plan("j2-luna")["fixture_sha256"]
 
 
@@ -187,6 +190,10 @@ def test_commit_binding_checks_manifest_bytes_and_required_parent(monkeypatch):
             return (runner.SMOKE_COMMIT + "\n").encode()
         return runner.MANIFEST.read_bytes()
 
+    # Isolate Git binding from the independently tested historical source rejection.
+    monkeypatch.setattr(
+        runner, "versioned_manifest", lambda: json.loads(runner.MANIFEST.read_text())
+    )
     monkeypatch.setattr(runner.engine, "_git", git)
     assert runner.verify_versioned_manifest() == commit
     assert ("rev-parse", commit + "^") in calls

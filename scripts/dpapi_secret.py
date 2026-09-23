@@ -47,7 +47,7 @@ def main(argv: list[str] | None = None) -> int:
         store = WindowsDPAPIStore(args.path or default_store_path())
         if args.command == "list":
             # The edge store intentionally exposes only names for this command.
-            names = sorted(store._read())
+            names = store.list_names()
             for name in names:
                 print(name)
             return 0
@@ -57,7 +57,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Stored {args.name} in the current Windows user's DPAPI store.")
         return 0
     except (OSError, RuntimeError, ValueError) as exc:
-        print(f"Unable to update the DPAPI store: {exc}")
+        print(f"Unable to update the DPAPI store: {type(exc).__name__}")
         return 1
 
 
