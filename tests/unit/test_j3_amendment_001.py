@@ -324,6 +324,7 @@ async def test_legacy_j2_unchanged_payload_and_three_failure_stop():
         "synthetic",
         protocol=profile.protocol,
         provider_name=profile.provider,
+        openai_profile_id=profile.name,
         transport=transport,
     )
     judge.client.max_attempts = 1
