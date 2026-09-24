@@ -81,6 +81,7 @@ class RuntimeSettings:
     judge_api_key: str | None
     audit_path: str
     min_confidence: float
+    judge_profile_id: str = "generic-openai"
 
     @classmethod
     def from_providers(
@@ -195,4 +196,5 @@ class RuntimeSettings:
             judge_api_key=judge_key,
             audit_path=configuration.get("CIVICGATE_AUDIT_PATH") or "audit/trace.jsonl",
             min_confidence=confidence,
+            judge_profile_id=configuration.get("CIVICGATE_JUDGE_PROFILE") or "generic-openai",
         )

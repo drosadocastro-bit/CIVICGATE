@@ -192,7 +192,11 @@ async def test_luna_payload_still_exact_frozen_j2_profile():
         return httpx.Response(200, json={"choices": [{"message": {"content": json.dumps(WIRE)}}]})
 
     provider = LiveJudgeProvider(
-        j2.BASE_URL, j2.MODEL, "synthetic-credential", transport=httpx.MockTransport(respond)
+        j2.BASE_URL,
+        j2.MODEL,
+        "synthetic-credential",
+        transport=httpx.MockTransport(respond),
+        openai_profile_id="j2-luna",
     )
     await provider.assess(REQUEST, PROPOSAL)
 

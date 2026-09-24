@@ -884,7 +884,13 @@ def main(argv: list[str] | None = None) -> int:
         payloads = [_payload(by_id[e["id"]]) for e in frozen["schedule"]]
         transport = ObservedTransport(payloads, api_key, lambda: _verify_freeze(frozen))
         judge = LiveJudgeProvider(
-            BASE_URL, MODEL, api_key, provider_name=PROVIDER, timeout=TIMEOUT, transport=transport
+            BASE_URL,
+            MODEL,
+            api_key,
+            provider_name=PROVIDER,
+            timeout=TIMEOUT,
+            transport=transport,
+            openai_profile_id="j2-luna",
         )
         judge.client.max_attempts = 1
 

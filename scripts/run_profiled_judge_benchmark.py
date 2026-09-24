@@ -374,6 +374,7 @@ async def execute(frozen: dict[str, Any], name: str, secrets: SecretProvider, in
         key,
         protocol=profile.protocol,
         provider_name=profile.provider,
+        openai_profile_id="j2-luna" if profile.name == "j2-luna" else "generic-openai",
         timeout=profile.timeout_seconds,
         transport=transport,
     )

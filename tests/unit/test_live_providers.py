@@ -100,16 +100,16 @@ async def test_judge_anthropic_contract_redacts_no_body() -> None:
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    ("base_url", "model", "token_limit_field"),
+    ("base_url", "model", "token_limit_field", "profile_id"),
     [
-        ("https://api.openai.com/v1", "gpt-5.6-luna", "max_completion_tokens"),
-        ("https://api.openai.com/v1/", "gpt-5.6-luna", "max_completion_tokens"),
-        ("https://judge.example/v1", "gpt-5.6-luna", "max_tokens"),
-        ("https://api.openai.com/v1", "other-model", "max_tokens"),
+        ("https://api.openai.com/v1", "gpt-5.6-luna", "max_completion_tokens", "j2-luna"),
+        ("https://api.openai.com/v1/", "gpt-5.6-luna", "max_completion_tokens", "j2-luna"),
+        ("https://judge.example/v1", "gpt-5.6-luna", "max_tokens", "generic-openai"),
+        ("https://api.openai.com/v1", "other-model", "max_tokens", "generic-openai"),
     ],
 )
 async def test_judge_request_profile_is_scoped_to_diagnosed_openai_model(
-    base_url: str, model: str, token_limit_field: str
+    base_url: str, model: str, token_limit_field: str, profile_id: str
 ) -> None:
     from civicgate.llm.live import _JudgeSignalWire
 
@@ -156,7 +156,11 @@ async def test_judge_request_profile_is_scoped_to_diagnosed_openai_model(
         )
 
     judge = LiveJudgeProvider(
-        base_url, model, "synthetic-key", transport=httpx.MockTransport(respond)
+        base_url,
+        model,
+        "synthetic-key",
+        transport=httpx.MockTransport(respond),
+        openai_profile_id=profile_id,
     )
     signal = await judge.assess("Find awards", Proposal.model_validate(proposal_payload()))
     assert signal.available and signal.classification == "IN_SCOPE"

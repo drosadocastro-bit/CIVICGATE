@@ -1,0 +1,99 @@
+{
+  "version": "j4-gpt6-luna-payload-contract-v1",
+  "experiment_id": "CIVICGATE-J4-GPT6-LUNA-001",
+  "profile_id": "j4-gpt6-luna",
+  "protocol": "openai_compatible",
+  "endpoint": "https://api.openai.com/v1/chat/completions",
+  "required_payload_fields": [
+    "model",
+    "reasoning_effort",
+    "max_completion_tokens",
+    "response_format",
+    "messages"
+  ],
+  "required_values": {
+    "model": "gpt-6-luna",
+    "reasoning_effort": "medium",
+    "max_completion_tokens": 512,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "forbidden_payload_fields": [
+    "max_tokens",
+    "temperature",
+    "top_p",
+    "top_logprobs",
+    "logprobs",
+    "tools",
+    "tool_choice",
+    "stream",
+    "n",
+    "reasoning_mode",
+    "service_tier",
+    "previous_response_id"
+  ],
+  "extra_payload_fields": "FORBIDDEN",
+  "semantic_serialization": {
+    "system": "JUDGE_SYSTEM_PROMPT + json.dumps(_JudgeSignalWire.model_json_schema(), sort_keys=True)",
+    "user": "json.dumps({'request': request, 'proposal': proposal.model_dump()}, sort_keys=True)",
+    "payload_sha256": "SHA-256 of json.dumps(exact_decoded_http_payload, sort_keys=True, separators=(',', ':'), ensure_ascii=True, allow_nan=False).encode('utf-8'); excludes all headers"
+  },
+  "message_roles": [
+    "system",
+    "user"
+  ],
+  "judge_visible_case_information": [
+    "request",
+    "proposal.tool",
+    "proposal.arguments"
+  ],
+  "response_identity": {
+    "expected": "gpt-6-luna",
+    "rule": "Exact safely observable equality; no alias normalization",
+    "missing": "OBSERVER_EVIDENCE_FAILURE",
+    "unexpected": "RETURNED_MODEL_MISMATCH"
+  },
+  "response_contract": "HTTP success, identity, exactly one assistant text payload, stop without refusal, JSON object, strict _JudgeSignalWire; no repair",
+  "strict_wire_validation": true,
+  "failure_taxonomy_reference": "scripts/run_j3_experiment.py:category/fatal_reason; scripts/run_j3_amendment_001.py:NONFATAL/FATAL",
+  "nonfatal_classes": [
+    "PARSEABLE_BUT_WIRE_INVALID",
+    "MALFORMED_SEMANTIC_JSON",
+    "INCOMPLETE_MAX_TOKENS",
+    "PROVIDER_REFUSAL",
+    "RESPONSE_NOT_VALIDATED"
+  ],
+  "fatal_classes": [
+    "FREEZE_OR_INSTRUMENT_MISMATCH",
+    "REQUEST_BOUNDARY_VIOLATION",
+    "RETURNED_MODEL_MISMATCH",
+    "CALL_ACCOUNTING_VIOLATION",
+    "EVIDENCE_WRITE_FAILURE",
+    "OBSERVER_EVIDENCE_FAILURE",
+    "PROVIDER_HTTP_FAILURE",
+    "TRANSPORT_FAILURE",
+    "RESPONSE_SIZE_BOUND",
+    "UNEXPECTED_INSTRUMENT_FAILURE"
+  ],
+  "optional_telemetry": [
+    "returned_model",
+    "request_id",
+    "finish_reason",
+    "system_fingerprint",
+    "input_tokens",
+    "output_tokens",
+    "total_tokens",
+    "reasoning_tokens",
+    "latency_ms",
+    "service_tier"
+  ],
+  "missing_optional_telemetry": null,
+  "retry_budget": 0,
+  "schedule": {
+    "primary": 35,
+    "repeat": 9,
+    "max_requests": 44
+  },
+  "gateway_execution": false
+}

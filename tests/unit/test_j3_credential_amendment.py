@@ -103,6 +103,7 @@ def test_additional_source_cannot_hide_in_rehashed_manifest(isolated_manifest, m
 
 def test_new_seal_requires_committed_dependencies(tmp_path, monkeypatch):
     # Simulate missing Git content; source validity alone must not allow a seal.
+    monkeypatch.setattr(runner.optimizer_amendment, "verify_amendment", lambda: None)
     monkeypatch.setattr(runner.engine, "_git", lambda *args: b"not the reviewed content")
     with pytest.raises(runner.engine.BenchmarkAbort, match="UNCOMMITTED_EXPERIMENT_DEPENDENCY"):
         runner.seal("j2-luna", tmp_path / "result.json")

@@ -52,6 +52,7 @@ def providers(
             settings.judge_api_key,
             protocol=settings.judge_protocol,  # type: ignore[arg-type]
             provider_name=settings.judge_provider,
+            openai_profile_id=settings.judge_profile_id,
         )
     else:
         raise ValueError(f"Unknown judge provider: {settings.judge_provider}")

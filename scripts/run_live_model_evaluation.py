@@ -40,6 +40,7 @@ async def run() -> dict[str, Any]:
         settings.judge_api_key,
         protocol=settings.judge_protocol,  # type: ignore[arg-type]
         provider_name=settings.judge_provider,
+        openai_profile_id=settings.judge_profile_id,
     )
     request = (
         "Show bounded public federal awards for EXAMPLE RECIPIENT in Puerto Rico during FY2025."
