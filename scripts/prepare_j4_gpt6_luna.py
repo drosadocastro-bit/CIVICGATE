@@ -370,25 +370,24 @@ class J4Transport(j3.ExperimentTransport):
         return await super().handle_async_request(request)
 
 
-async def observe_offline(
-    persist, mock_transport, *, profile_id=PROFILE_ID, verify=verify_instrument
+async def observe_with_transport(
+    persist, inner_factory, *, secret, run_id, profile_id=PROFILE_ID, verify=verify_instrument
 ):
-    """Exercise the future observation path with an explicit MockTransport only."""
-    require(isinstance(mock_transport, httpx.MockTransport), "LIVE_EXECUTION_NOT_AUTHORIZED")
+    """Reuse the frozen J4 observation path after an entrypoint validates execution."""
     profile = select_profile(profile_id)
     verify()
     fixtures = j3.engine._load_fixtures()
     by_id = {c["id"]: c for c in fixtures}
     transport = J4Transport(
         [payload(profile_id, by_id[e["id"]]) for e in j3.engine._schedule(fixtures)],
-        "synthetic-offline-only",
+        secret,
         verify,
-        lambda: mock_transport,
+        inner_factory,
     )
     judge = LiveJudgeProvider(
         profile.base_url,
         profile.model,
-        "synthetic-offline-only",
+        secret,
         provider_name="openai",
         openai_profile_id=profile_id,
         transport=transport,
@@ -409,8 +408,21 @@ async def observe_offline(
         if stage == "start":
             transport.journaled_sequence = row["sequence"]
 
-    return await j3.run_experiment(
-        fixtures, judge, transport, journal, run_id="offline-j4-instrument-test"
+    return await j3.run_experiment(fixtures, judge, transport, journal, run_id=run_id)
+
+
+async def observe_offline(
+    persist, mock_transport, *, profile_id=PROFILE_ID, verify=verify_instrument
+):
+    """Exercise the observation path with an explicit MockTransport only."""
+    require(isinstance(mock_transport, httpx.MockTransport), "LIVE_EXECUTION_NOT_AUTHORIZED")
+    return await observe_with_transport(
+        persist,
+        lambda: mock_transport,
+        secret="synthetic-offline-only",
+        run_id="offline-j4-instrument-test",
+        profile_id=profile_id,
+        verify=verify,
     )
 
 
