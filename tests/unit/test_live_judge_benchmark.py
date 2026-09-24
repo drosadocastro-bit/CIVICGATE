@@ -156,7 +156,12 @@ def setup(handler, fixtures=None):
         inner_factory=lambda: httpx.MockTransport(handler),
     )
     judge = b.LiveJudgeProvider(
-        b.BASE_URL, b.MODEL, "test-credential", provider_name=b.PROVIDER, transport=transport
+        b.BASE_URL,
+        b.MODEL,
+        "test-credential",
+        provider_name=b.PROVIDER,
+        transport=transport,
+        openai_profile_id="j2-luna",
     )
     judge.client.max_attempts = 1
     return fixtures, judge, transport

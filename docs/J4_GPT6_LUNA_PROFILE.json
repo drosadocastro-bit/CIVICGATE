@@ -1,0 +1,25 @@
+{
+  "version": "j4-gpt6-luna-profile-v1",
+  "experiment_id": "CIVICGATE-J4-GPT6-LUNA-001",
+  "profile_id": "j4-gpt6-luna",
+  "provider": "openai",
+  "protocol": "openai_compatible",
+  "base_url": "https://api.openai.com/v1",
+  "path": "/chat/completions",
+  "model": "gpt-6-luna",
+  "role": "judge",
+  "authority": "NONE",
+  "reasoning_effort": "medium",
+  "max_completion_tokens": 512,
+  "response_format": {
+    "type": "json_object"
+  },
+  "retry_budget": 0,
+  "gateway_execution": false,
+  "schedule": {
+    "primary": 35,
+    "repeat": 9,
+    "max_requests": 44
+  },
+  "comparison": "CONTROLLED_SEMANTIC_TASK_COMPARISON_WITH_MODEL_SPECIFIC_INFERENCE_PROFILE"
+}

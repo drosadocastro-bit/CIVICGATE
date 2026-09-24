@@ -102,6 +102,7 @@ def harness(name, responder=None, verify=lambda: None):
         protocol=profile.protocol,
         provider_name=profile.provider,
         timeout=30,
+        openai_profile_id="j2-luna" if name == "j2-luna" else "generic-openai",
         transport=transport,
     )
     judge.client.max_attempts = 1

@@ -65,7 +65,9 @@ schema_evidence = {
 """
 
 
-# Run the actual production function, redirecting only its input file locations.
+# Exercise the historical verifier's comparison logic with an explicitly synthetic
+# frozen hash-reader input. J4 must NOT make this historical manifest accept the
+# current checkout. Real filesystem hashing and current rejection are tested below.
 # Explicit subprocess checks must themselves survive optimized interpretation.
 VERIFY_CHILD = """
 import json
@@ -86,6 +88,7 @@ from scripts import run_j3_experiment as runner
 
 amendment.ROOT = Path(sys.argv[1])
 amendment.MANIFEST = amendment.ROOT / "docs/J3_OPTIMIZER_STABILITY_001.json"
+amendment.current_hashes = lambda: json.loads((amendment.ROOT / "observed-hashes.json").read_text())
 try:
     amendment.verify_amendment()
 except runner.engine.BenchmarkAbort as exc:
@@ -125,9 +128,9 @@ def test_production_verifier_survives_optimizer(
         shutil.copyfile(amendment.ROOT / name, destination)
     path = tmp_path / "docs/J3_OPTIMIZER_STABILITY_001.json"
     manifest = json.loads(path.read_text(encoding="utf-8"))
+    observed = dict(manifest["source_sha256"])
     if case == "source":
-        dependency = tmp_path / "src/civicgate/windows_dpapi.py"
-        dependency.write_bytes(dependency.read_bytes() + b"\n# synthetic tamper\n")
+        observed["src/civicgate/windows_dpapi.py"] = "0" * 64
     elif case == "parent_commit":
         manifest["parent_commit"] = "0" * 40
     elif case == "parent_map":
@@ -141,6 +144,7 @@ def test_production_verifier_survives_optimizer(
     elif case == "status":
         manifest["status"] = "LIVE_AUTHORIZED"
     path.write_text(json.dumps(manifest), encoding="utf-8")
+    (tmp_path / "observed-hashes.json").write_text(json.dumps(observed))
 
     env = dict(os.environ)
     env.pop("PYTHONOPTIMIZE", None)
@@ -177,8 +181,9 @@ def test_production_verifier_survives_optimizer(
     assert len(actual["validation"]) == 14
 
 
-def test_current_prospective_manifest_and_both_profiles_validate():
-    amendment.verify_amendment()
+def test_historical_optimizer_manifest_rejects_j4_checkout_but_plans_remain_semantic_peers():
+    with pytest.raises(runner.engine.BenchmarkAbort, match="OPTIMIZER_STABILITY_FREEZE_MISMATCH"):
+        amendment.verify_amendment()
     for profile in runner.PROFILES:
         plan = runner.plan(profile)
         assert plan["optimizer_amendment"] == amendment.AMENDMENT
@@ -194,7 +199,8 @@ def test_historical_amendment_is_not_reinterpreted_as_current():
 
 @pytest.fixture
 def isolated_manifest(tmp_path, monkeypatch):
-    paths = amendment.source_paths()
+    frozen = json.loads(amendment.MANIFEST.read_text())["source_sha256"]
+    paths = set(frozen)
     for name in paths | {"docs/J3_OPTIMIZER_STABILITY_001.json"}:
         target = tmp_path / name
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -202,7 +208,23 @@ def isolated_manifest(tmp_path, monkeypatch):
     monkeypatch.setattr(amendment, "ROOT", tmp_path)
     monkeypatch.setattr(amendment, "MANIFEST", tmp_path / "docs/J3_OPTIMIZER_STABILITY_001.json")
     monkeypatch.setattr(amendment, "source_paths", lambda: paths)
+    (tmp_path / "observed-hashes.json").write_text(json.dumps(frozen))
+    monkeypatch.setattr(
+        amendment,
+        "current_hashes",
+        lambda: json.loads((tmp_path / "observed-hashes.json").read_text()),
+    )
+    # Positive control: every comparison-mutation test begins with accepted
+    # synthetic historical observations, not an already-invalid J4 checkout.
+    amendment.verify_amendment()
     return tmp_path
+
+
+def observe_changed_fixture(root, name):
+    path = root / "observed-hashes.json"
+    observed = json.loads(path.read_text())
+    observed[name] = amendment.canonical_hash((root / name).read_bytes())
+    path.write_text(json.dumps(observed))
 
 
 @pytest.mark.parametrize(
@@ -222,6 +244,7 @@ def isolated_manifest(tmp_path, monkeypatch):
 def test_dependency_tamper_fails_closed(isolated_manifest, path):
     target = isolated_manifest / path
     target.write_bytes(target.read_bytes() + b"\n# tampered\n")
+    observe_changed_fixture(isolated_manifest, path)
     with pytest.raises(runner.engine.BenchmarkAbort, match="OPTIMIZER_STABILITY_FREEZE_MISMATCH"):
         amendment.verify_amendment()
 
@@ -249,6 +272,7 @@ def test_manifest_rehash_cannot_hide_unapproved_dependency_change(isolated_manif
     name = "src/civicgate/governance/policy.py"
     path = isolated_manifest / name
     path.write_bytes(path.read_bytes() + b"\n# changed\n")
+    observe_changed_fixture(isolated_manifest, name)
     manifest["source_sha256"][name] = amendment.canonical_hash(path.read_bytes())
     amendment.MANIFEST.write_text(json.dumps(manifest))
     with pytest.raises(runner.engine.BenchmarkAbort):
@@ -260,6 +284,7 @@ def test_additional_source_cannot_hide_in_rehashed_manifest(isolated_manifest, m
     path = "src/civicgate/unreviewed.py"
     paths.add(path)
     (isolated_manifest / path).write_text("# unreviewed\n")
+    observe_changed_fixture(isolated_manifest, path)
     monkeypatch.setattr(amendment, "source_paths", lambda: paths)
     manifest = json.loads(amendment.MANIFEST.read_text())
     manifest["source_sha256"] = amendment.current_hashes()
@@ -270,7 +295,20 @@ def test_additional_source_cannot_hide_in_rehashed_manifest(isolated_manifest, m
 
 def test_new_seal_requires_committed_dependencies(tmp_path, monkeypatch):
     # Simulate missing Git content; source validity alone must not allow a seal.
+    monkeypatch.setattr(amendment, "verify_amendment", lambda: None)
     monkeypatch.setattr(runner.engine, "_git", lambda *args: b"not the reviewed content")
     with pytest.raises(runner.engine.BenchmarkAbort, match="UNCOMMITTED_EXPERIMENT_DEPENDENCY"):
         runner.seal("j2-luna", tmp_path / "result.json")
     assert not (tmp_path / "result.json").exists()
+
+
+def test_real_hash_reader_tracks_file_bytes_and_new_source_inventory(tmp_path, monkeypatch):
+    name = "source.py"
+    path = tmp_path / name
+    path.write_bytes(b"before\r\n")
+    monkeypatch.setattr(amendment, "ROOT", tmp_path)
+    monkeypatch.setattr(amendment, "source_paths", lambda: {name})
+    first = amendment.current_hashes()
+    assert first == {name: amendment.canonical_hash(b"before\n")}
+    path.write_bytes(b"after\n")
+    assert amendment.current_hashes() != first

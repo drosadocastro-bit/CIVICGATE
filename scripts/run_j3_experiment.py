@@ -104,8 +104,17 @@ def public_row(row):
 class ExperimentTransport(httpx.AsyncBaseTransport):
     """One native request per armed journal; bounded response before the real parser."""
 
-    def __init__(self, profile, payloads, secret, verify, inner_factory=None):
-        if profile != parent.select_profile(profile.name):
+    def __init__(
+        self,
+        profile,
+        payloads,
+        secret,
+        verify,
+        inner_factory=None,
+        *,
+        profile_resolver=parent.select_profile,
+    ):
+        if profile != profile_resolver(profile.name):
             raise engine.BenchmarkAbort("PROFILE_MISMATCH")
         self.profile, self.payloads, self.secret = profile, payloads, secret
         self.verify = verify
@@ -115,6 +124,9 @@ class ExperimentTransport(httpx.AsyncBaseTransport):
         self.metadata, self.structural = {}, {}
         self.completion_state = "UNKNOWN"
         self.armed_sequence = None
+
+    def telemetry_extension(self):
+        return {}
 
     def arm(self, sequence):
         if self.armed_sequence is not None or sequence != self.calls + 1 or sequence > 44:
@@ -295,6 +307,7 @@ async def run_experiment(fixtures, judge, transport, persist, *, run_id):
             http_request_count=transport.calls - before,
             retry_count=0,
         )
+        row["telemetry"].update(transport.telemetry_extension())
         aborted = fatal_reason(row, transport, before)
         if aborted:
             row["experiment_fatal_reason"] = aborted
@@ -411,6 +424,7 @@ async def execute(freeze, secrets, inner_factory=None):
         key,
         protocol=profile.protocol,
         provider_name=profile.provider,
+        openai_profile_id="j2-luna" if profile.name == "j2-luna" else "generic-openai",
         timeout=profile.timeout_seconds,
         transport=transport,
     )

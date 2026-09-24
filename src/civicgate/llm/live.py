@@ -17,6 +17,7 @@ import httpx
 from pydantic import BaseModel, ConfigDict, Field
 
 from civicgate.llm.base import AgentModel, JudgeProvider
+from civicgate.llm.judge_profiles import select_openai_profile
 from civicgate.models.governance import Classification, JudgeSignal, Signal
 from civicgate.models.requests import TOOLS, Proposal, StrictModel
 
@@ -311,6 +312,7 @@ class LiveJudgeProvider(JudgeProvider):
         *,
         protocol: ProtocolName = "openai_compatible",
         provider_name: str = "live_judge",
+        openai_profile_id: str = "generic-openai",
         timeout: float = 30.0,
         transport: httpx.AsyncBaseTransport | None = None,
     ) -> None:
@@ -323,6 +325,13 @@ class LiveJudgeProvider(JudgeProvider):
         self.protocol = protocol
         self.api_key = api_key
         self.client = _BoundedClient(base_url, local=False, timeout=timeout, transport=transport)
+        self.openai_profile = select_openai_profile(openai_profile_id)
+        if openai_profile_id != "generic-openai" and (
+            protocol != "openai_compatible"
+            or model != self.openai_profile.model
+            or self.client.base_url != self.openai_profile.base_url
+        ):
+            raise ValueError("JUDGE_PROFILE_ENDPOINT_OR_MODEL_MISMATCH")
         self.last_telemetry: ModelTelemetry | None = None
 
     @property
@@ -350,23 +359,7 @@ class LiveJudgeProvider(JudgeProvider):
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json",
             }
-            luna_profile = (
-                self.client.base_url == "https://api.openai.com/v1" and self.model == "gpt-5.6-luna"
-            )
-            token_limit_field = "max_completion_tokens" if luna_profile else "max_tokens"
-            payload = {
-                "model": self.model,
-                token_limit_field: 512,
-                "response_format": {"type": "json_object"},
-                "messages": [
-                    {"role": "system", "content": judge_prompt},
-                    {"role": "user", "content": payload_content},
-                ],
-            }
-            # Luna rejected temperature=0. Omit top_p deliberately to use the
-            # provider default; no rejection of top_p has been observed.
-            if not luna_profile:
-                payload.update({"temperature": 0, "top_p": 1})
+            payload = self.openai_profile.payload(self.model, judge_prompt, payload_content)
             path = "/chat/completions"
         else:
             headers = {
