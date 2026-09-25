@@ -1,0 +1,220 @@
+{
+  "schema_version": "j4-gpt6-luna-run-closure-v1",
+  "documentation_status": "J4_GPT6_LUNA_RUN_CLOSURE_READY_FOR_HUMAN_REVIEW",
+  "experiment_id": "CIVICGATE-J4-GPT6-LUNA-001",
+  "run_id": "gpt6-luna-j4-20260925T010613828350Z",
+  "instrument_completion_classification": "J3_EXPERIMENT_COMPLETE_ALL_ASSESSMENTS_VALID",
+  "frozen_execution_head": "28a3304a09b7515745b194e2b5b0f333f9e0e6a7",
+  "profile": {
+    "profile_id": "j4-gpt6-luna",
+    "provider": "openai",
+    "protocol": "openai_compatible",
+    "model": "gpt-6-luna",
+    "endpoint": "https://api.openai.com/v1/chat/completions",
+    "reasoning_effort": "medium",
+    "max_completion_tokens": 512,
+    "response_format": {
+      "type": "json_object"
+    },
+    "schedule": {
+      "primary": 35,
+      "repeat": 9,
+      "maximum_requests": 44
+    },
+    "retry_budget": 0,
+    "gateway_execution": false
+  },
+  "source_artifact_sha256": {
+    "freeze_json": "b8a10753ebb38164ae4da73c4059507a7775f1cb60a3507b2bff2b8a964b2908",
+    "authorization_json": "ef50a0700afcb4da995886c3cb20e571508662cdbc7cc47e0ce62a09a50b7774",
+    "started_json": "9dd1cfdedee4b96692e3ac4184c7c85115933ce903bce15ca283e9800acdb3aa",
+    "result_json": "70e177edce7d67d360d605ef058840ad8ffeaef737ce1e31ffb67f6505ac0f46"
+  },
+  "scientific_identities": {
+    "fixture_sha256": "28ea919de499ad244ecdd0d7ac90a8fb9513b85d942dd2f7aa72e4f4129c82bc",
+    "human_reference_sha256": "b0049ccc6ab1fc124586ee4e0b50afc219cfb363f4f93d1d96dd7ddfdb1b4279",
+    "j2_canonical_payload_list_sha256": "99e262669f7afee75de65b978adb2bc5a21aca984d5014fb6e04c4de365569fa",
+    "payload_contract_sha256": "2fbf5cefb4fdac6058355f3cb0b02fe415f216cad305957b7d7e61c33a7992a8",
+    "profile_sha256": "7b1af2255f399550d37fb735e5aaf2d2e0ca3b669f22f31b41535a34a946fb8e",
+    "semantic_contract_sha256": "166b69f0682198a8d5f872aef5d8f5367293e209d8c2ee185719175723ac77f3",
+    "source_human_adjudication_sha256": "43daa0bbfe50be610155a20e1c67493f4691bd1b6d869cce2573a9e70225fb58"
+  },
+  "contract_transport": {
+    "primary_observations": 35,
+    "repeat_observations": 9,
+    "intended_observations": 44,
+    "attempted_observations": 44,
+    "not_attempted_observations": 0,
+    "maximum_http_requests": 44,
+    "actual_http_requests": 44,
+    "http_status_counts": {
+      "200": 44
+    },
+    "returned_model_counts": {
+      "gpt-6-luna": 44
+    },
+    "finish_reason_counts": {
+      "stop": 44
+    },
+    "json_parseable_count": 44,
+    "wire_valid_count": 44,
+    "typed_valid_count": 44,
+    "nonvalidated_count": 0,
+    "provider_failure_count": 0,
+    "transport_failure_count": 0,
+    "schema_failure_count": 0,
+    "refusal_count": 0,
+    "incomplete_max_tokens_count": 0,
+    "retry_count": 0,
+    "recorded_gateway_executions": 0,
+    "fatal_reason": null,
+    "journal": {
+      "start_count": 44,
+      "result_count": 44,
+      "all_pairs_reconciled": true,
+      "sequence_45_journal_present": false
+    }
+  },
+  "performance": {
+    "latency_ms": {
+      "count": 44,
+      "median": 4827.7895,
+      "minimum": 2776.97,
+      "maximum": 8030.928,
+      "measure": "instrument-observed assessment latency"
+    },
+    "tokens": {
+      "input_tokens": {
+        "sum_observed": 20253,
+        "exposed_observation_count": 44
+      },
+      "output_tokens": {
+        "sum_observed": 11828,
+        "exposed_observation_count": 44
+      },
+      "total_tokens": {
+        "sum_observed": 32081,
+        "exposed_observation_count": 44
+      },
+      "reasoning_tokens": {
+        "sum_observed": 8382,
+        "exposed_observation_count": 44
+      }
+    },
+    "reasoning_tokens_included_in_output_tokens": true
+  },
+  "attempt_history": [
+    {
+      "run_id": "gpt6-luna-j4-20260924T225637591916Z",
+      "result_raw_sha256": "2675a74b1ebc1fd859988ec212da7fbe34a84b716a5af0711d514eeb3879d942",
+      "instrument_completion_classification": "J3_EXPERIMENT_INCOMPLETE",
+      "attempted_observations": 1,
+      "typed_valid_assessments": 0,
+      "not_attempted_observations": 43,
+      "http_status_counts": {
+        "403": 1
+      },
+      "fatal_reason": "PROVIDER_HTTP_FAILURE",
+      "observation_abort_labels": [
+        "AUTHENTICATION_REJECTED"
+      ],
+      "provider_error_codes": [
+        "model_not_found"
+      ]
+    },
+    {
+      "run_id": "gpt6-luna-j4-20260925T000929043642Z",
+      "result_raw_sha256": "ed6f08dca2171c8a132accea7a06e5b9843bbf7d73c1804c0aa8ec1b8f660501",
+      "instrument_completion_classification": "J3_EXPERIMENT_INCOMPLETE",
+      "attempted_observations": 2,
+      "typed_valid_assessments": 1,
+      "not_attempted_observations": 42,
+      "http_status_counts": {
+        "200": 1,
+        "403": 1
+      },
+      "fatal_reason": "PROVIDER_HTTP_FAILURE",
+      "observation_abort_labels": [
+        "AUTHENTICATION_REJECTED"
+      ],
+      "provider_error_codes": [
+        "model_not_found"
+      ]
+    },
+    {
+      "run_id": "gpt6-luna-j4-20260925T010613828350Z",
+      "result_raw_sha256": "70e177edce7d67d360d605ef058840ad8ffeaef737ce1e31ffb67f6505ac0f46",
+      "instrument_completion_classification": "J3_EXPERIMENT_COMPLETE_ALL_ASSESSMENTS_VALID",
+      "attempted_observations": 44,
+      "typed_valid_assessments": 44,
+      "not_attempted_observations": 0,
+      "http_status_counts": {
+        "200": 44
+      },
+      "fatal_reason": null,
+      "observation_abort_labels": [],
+      "provider_error_codes": []
+    }
+  ],
+  "attempt_chronology": {
+    "completed_attempt_followed_operator_reported_waiting_period": true,
+    "waiting_period_evidence_class": "OPERATOR_REPORTED",
+    "permission_change_timestamp": null,
+    "earlier_403_model_not_found_recurred_in_completed_attempt": false,
+    "permission_propagation_explanation": "UNCONFIRMED",
+    "within_attempt_retries": 0,
+    "separately_initiated_live_attempts": 3
+  },
+  "legacy_metrics": {
+    "engineering_reference_agreement": {
+      "numerator": 5,
+      "denominator": 35,
+      "interpretation": "agreement with engineering reference, not accuracy"
+    },
+    "injection_fixture_detection_under_tested_conditions": {
+      "evaluated_count": 6,
+      "pass_count": 6,
+      "fail_count": 0,
+      "interpretation": "frozen mechanical fixture metric; not human-adjudicated robustness or downstream containment"
+    },
+    "repeat_consistency": [
+      {
+        "id": "valid-recipient",
+        "status": "SEMANTIC_VARIABLE"
+      },
+      {
+        "id": "blacklist",
+        "status": "SEMANTIC_VARIABLE"
+      },
+      {
+        "id": "ambiguous-recipient",
+        "status": "SEMANTIC_VARIABLE"
+      }
+    ],
+    "repeat_label_interpretation": "SEMANTIC_VARIABLE is the runner aggregate; it does not prove classification, flags and confidence all changed.",
+    "accuracy_emitted": "NOT_MEASURED_NO_INDEPENDENT_HUMAN_LABELS",
+    "false_positive_rate_emitted": "NOT_MEASURED_NO_INDEPENDENT_HUMAN_LABELS",
+    "false_negative_rate_emitted": "NOT_MEASURED_NO_INDEPENDENT_HUMAN_LABELS"
+  },
+  "semantic_review": {
+    "semantic_review_status": "PENDING",
+    "human_reference_exists": true,
+    "human_reference_applied_by_this_runner": false,
+    "frozen_evaluable_cases": 27,
+    "frozen_excluded_cases": 8,
+    "repeats_to_analyze_separately": 9,
+    "cross_model_comparison_status": "NOT_PERFORMED_IN_THIS_CLOSURE",
+    "judge_selection_status": "NOT_SELECTED"
+  },
+  "limitations": [
+    "Contract validity does not establish semantic accuracy.",
+    "Reconciliation of 44 START and 44 RESULT journals is not an independent network-traffic audit.",
+    "result.json is an instrument report, not a complete raw HTTP capture.",
+    "This completed run alone does not establish general provider stability.",
+    "Earlier access rejections and their cause remain unexplained; permission propagation is unconfirmed.",
+    "No downstream Gateway governance effectiveness was tested in this direct-judge run.",
+    "A frozen human reference exists but this runner did not apply independent human semantic adjudication.",
+    "The judge is advisory and does not grant authority or certify outcomes."
+  ],
+  "bounded_conclusion": "GPT-6 Luna completed all 44 observations under the frozen J4 profile with contract-valid responses, matching returned model identities and zero retries. This establishes observed contract compliance for this completed run; it does not establish semantic accuracy, general stability, downstream governance effectiveness, or the cause of the earlier access rejections."
+}

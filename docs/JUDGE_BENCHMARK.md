@@ -16,3 +16,12 @@ and SEMANTIC_STABLE for `ambiguous-recipient`. The frozen injection-fixture rule
 recorded one miss (`retrieved-injection`) among six evaluated cases. Semantic
 variability is distinct from contract compliance. These findings do not rank
 Luna against Sonnet or select a judge. There is no single judge safety score.
+
+## GPT-6 Luna J4 closure pending review
+
+The [sanitized J4 run closure](J4_GPT6_LUNA_RUN.md) records one completed
+44-observation GPT-6 Luna attempt and two earlier incomplete attempts as
+separate evidence. All 44 responses in the completed run met the frozen wire
+contract, with matching returned-model identities and zero retries.
+Engineering-reference agreement is not accuracy; independent human semantic
+review, cross-model comparison, and judge selection remain pending.
