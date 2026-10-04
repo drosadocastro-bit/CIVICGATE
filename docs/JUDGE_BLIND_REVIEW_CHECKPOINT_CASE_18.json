@@ -1,0 +1,34 @@
+{
+  "protocol_id": "CIVICGATE-JUDGE-COMPARISON-V1",
+  "package_id": "judge-comparison-blind-v1-20260928T002148956585Z",
+  "checkpoint_state": "JUDGE_BLIND_REVIEW_CASE_18_COMPLETE_UNBLINDED",
+  "cases_01_18": "CLOSED",
+  "per_case_closure_artifact_sha256": {
+    "valid-recipient": "3e9818b102d5b664a3dda8c11a7b0fad60032d2ee30f93e27c57fa1f8fe28881",
+    "valid-agency": "154021e48ac2e434e4cfe09deb0b4d09578635054b57e99ac6f2062bf3bd12a0",
+    "known-award": "b59981eed72202b72211ceaed011637caf6cfeaee59c4d9202826ab831d43c43",
+    "nonexistent-award": "18f2589a1c2a6354de4dbe6eaa8f7cc7b19ba4131af574a81031d33423af2b00",
+    "ambiguous-recipient": "d72759990dea88be64a99065393f7a93c6397b543e6fab4576e82d09b58ce1ac",
+    "malformed-dates": "bd99245b1c12340c21e5ac4c5d8cc70c7cf0efc31dab5c28c1517d12b33665d6",
+    "excessive-limit": "70a0ab35adb61476424e30950d2be62a3d1755683edbe1b2fdf265cb440ba559",
+    "private-records": "1dc6927c980f720a8f51f0c82aa2204ea1287fa3c0756ff6ff6876b9c43e6069",
+    "blacklist": "fd8ec2c334b0fed92863149165882ed85f0d7cebcd086be157d35ca7ee8aff2b",
+    "unknown-tool": "79f0595fadd033a61334c535c118ca01f734bf96e12f1860a92bc3c852e9e687",
+    "hidden-tool": "00cdf359507140322160bc9fb31b948e0a80b074efa7436470b085a7d2d99c77",
+    "broad-query": "aa4bb83f8d414858cb30d05c2508de833d2f8f438ec401495037e29d085a06f6",
+    "summary": "4fba7c40ed9487327034fc874359dc9bb86b8d8e3176fccb0580a53a464cdc39",
+    "paraphrased-exclusion": "11c434a81398ee4eb4585c97a437b7d5cb4f7e74eb543e5f11b313725942b86c",
+    "indirect-private": "84c443c0372a52af72adbb56502ca0c92205f33f5cd7347b419351d48fcb22c3",
+    "alternate-system": "9937a86aaa16c417a36a2a647461c5a7c2cbc51e54084857a5f3c924828e7f42",
+    "retrieved-injection": "4673c7ca189085fae2d48a9109acde7b263ea973e8a68cc24699a66ebc2de664",
+    "smuggled-authority": "0007a3800490a35397162e21726ae1294e7f259244eb7b2c854b73079fed4ad2"
+  },
+  "case_18_evidence_sha256": {
+    "pairwise_adjudication_receipt": "fd1d4228e8e2f11926151cb8491a9d93a1162d0e98fe7d60985c142df54d5801",
+    "unblind_receipt": "3a6aac6b1962f5512a9236622282f5b3472edddcf7e7d375d01727365e741436",
+    "closure_artifact": "0007a3800490a35397162e21726ae1294e7f259244eb7b2c854b73079fed4ad2"
+  },
+  "sealed_primary_cards_remaining": 18,
+  "sealed_repeat_bundles_remaining": 6,
+  "timestamp": "2026-10-04T16:47:03.722728+00:00"
+}
