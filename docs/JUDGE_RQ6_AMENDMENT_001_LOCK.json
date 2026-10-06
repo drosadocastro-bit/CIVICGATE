@@ -1,0 +1,118 @@
+{
+  "schema_version": "civicgate.rq6-amendment-lock-receipt.v1",
+  "protocol_id": "CIVICGATE-JUDGE-COMPARISON-V1",
+  "amendment_id": "CIVICGATE-RQ6-AMENDMENT-001",
+  "package_id": "judge-comparison-blind-v1-20260928T002148956585Z",
+  "approved": true,
+  "locked": true,
+  "state": "CIVICGATE_RQ6_AMENDMENT_001_LOCKED",
+  "approved_document_version": {
+    "markdown": "5a19676158b299437652bc2ea4a94d4f9613a5b38568c8a96bc3c2799c09ae19",
+    "json": "f44ead6460f7086965d4d54dccef9d32bf265ea7146ca12c313703963b5dd619"
+  },
+  "approved_document_paths": {
+    "markdown": "D:\\CIVICGATE-dpapi-selective-access\\docs\\JUDGE_RQ6_AMENDMENT_001.md",
+    "json": "D:\\CIVICGATE-dpapi-selective-access\\docs\\JUDGE_RQ6_AMENDMENT_001.json"
+  },
+  "human_approval_timestamp": "2026-10-06T17:43:54.781171+00:00",
+  "human_approval_timestamp_basis": "UTC time of recording the explicit human approval in this immutable receipt. The human instruction supplies no earlier event timestamp; none is reconstructed.",
+  "human_lock": {
+    "authorized_by": "Danny",
+    "authorization_source": "Explicit human authorization in the task conversation.",
+    "approval_decision": "APPROVE FOR LOCKING — exact paired version only.",
+    "approval_source": {
+      "attachment_path": "C:\\Users\\draku\\.codex\\attachments\\7e5362e3-9ccb-438d-9ac6-b5256b2ce108\\Pasted text.txt",
+      "attachment_sha256": "a8d227677761352ba7f7717d1b177062154fc1716172e3967ec33e2fca4d09b2"
+    },
+    "approval_actor_provenance": {
+      "protocol_json_sha256": "ad66217146a61bea22c295c6fb9218b8d22b00e5d6ce6bc7849942116dd91b2e",
+      "json_pointer": "/human_lock/authorized_by"
+    },
+    "transition": {
+      "from": "CIVICGATE_RQ6_AMENDMENT_001_PROPOSED_READY_FOR_FINAL_HUMAN_APPROVAL",
+      "to": "CIVICGATE_RQ6_AMENDMENT_001_LOCKED"
+    },
+    "authorized_state": "CIVICGATE_RQ6_AMENDMENT_001_LOCKED",
+    "scope": "prospective RQ6 repeat-review contract only",
+    "reviewed_pre_lock_sha256": {
+      "markdown": "5a19676158b299437652bc2ea4a94d4f9613a5b38568c8a96bc3c2799c09ae19",
+      "json": "f44ead6460f7086965d4d54dccef9d32bf265ea7146ca12c313703963b5dd619"
+    },
+    "not_authorized": [
+      "repeat_release",
+      "alias_mapping_generation",
+      "reviewer_card_generation",
+      "unblinding",
+      "bundle_stability_analysis",
+      "aggregate_analysis",
+      "judge_selection",
+      "model_inference",
+      "gateway_execution",
+      "repeat_workflow_implementation",
+      "commit",
+      "push"
+    ]
+  },
+  "lock_status_resolution": "This additive external receipt locks the exact approved document pair. Their proposal-time status and human_lock fields remain unchanged as approved bytes. Operational consumers must validate this receipt and both exact document hashes; this lock grants no operational authority.",
+  "amendment_lineage": {
+    "parent_protocol_id": "CIVICGATE-JUDGE-COMPARISON-V1",
+    "parent_protocol_status": "LOCKED",
+    "previous_amendment_id": null,
+    "scope": "Amendment001 prospectively governs all six still-sealed repeat bundles; original protocol and 27 completed primary cases remain immutable.",
+    "historical_instruction_gap": "UNRESOLVED_HISTORICAL_INSTRUCTION_GAP",
+    "future_scientific_changes": "After first repeat release, any changed scientific contract requires a new prospective amendment with explicit lineage."
+  },
+  "parent_protocol_commitments": {
+    "protocol_json_sha256": "ad66217146a61bea22c295c6fb9218b8d22b00e5d6ce6bc7849942116dd91b2e",
+    "protocol_markdown_sha256": "4587938d9a35bf145b385475e66aecec0fa1b7f2d451d06c7eece094117422a9",
+    "reviewer_manifest_sha256": "a4be2bb4670143729591dbc68a7fc89c7cedd9f3b0d95f76139afff053bcd0e7",
+    "reviewer_inventory_sha256": "5038cc138caee02ce0b462497dac2c47338cda5dc852c222a615c44abedc3b66",
+    "release_contract_sha256": "78f9aedc199f0ae8287e941927dff706f5db00090515510adff1f51808c9dda2",
+    "review_templates_sha256": "483c57e6c586649aea9b8708f4aec65c825324250c69d809a1590532c2b0b535",
+    "frozen_package_builder_sha256": "fef2cc2a84b339bb047809ab634b5e9bd7511713a8f28308c86eac289781e5b5",
+    "case_27_closure_sha256": "702673c203d10872cece4c22d96bdf9badd1268d71a11f4f74aa7bc0cd6199e2",
+    "preserved_diagnostic_hashes": [
+      "2fd19e3c34721f387242cc07e5acc00819ff72f261525b6f1d6d828cdda4cd52",
+      "ff604051a57116cc1879a0851f57b3e1b9d38150bdecbf85ab43428ba35bbc1a",
+      "b7f86aad3d94c3cdd8b4052823e01cd4573bd2b1ec64bd410af162840be6b4ef"
+    ],
+    "seed_commitment_sha256": "bf89759db4f5249c3708e78cf31e347666f16f455dc578968853609b010f0621",
+    "private_mapping_sha256": "bd74cc5914976ce45a3e4a525131ed9043eb0ef7c5b35bb538a93d100d8d6a89"
+  },
+  "operational_authority": {
+    "repeat_release": false,
+    "alias_mapping_generation": false,
+    "reviewer_card_generation": false,
+    "unblinding": false,
+    "bundle_stability_analysis": false,
+    "aggregate_analysis": false,
+    "judge_selection": false,
+    "model_inference": false,
+    "gateway_execution": false,
+    "repeat_workflow_implementation": false,
+    "commit": false,
+    "push": false
+  },
+  "validation_results": {
+    "approved_exact_document_hashes": "PASS",
+    "document_validation": "PASS",
+    "lock_receipt_schema": "PASS",
+    "lock_version_binding": "PASS",
+    "amendment_lineage": "PASS",
+    "primary_study_continuity": "PASS",
+    "historical_evidence_integrity": "PASS",
+    "repeat_evidence_sealed": "PASS",
+    "no_new_alias_mappings": "PASS",
+    "no_repeat_reviewer_artifacts": "PASS",
+    "aggregate_gate_closed": "PASS",
+    "judge_selection_gate_closed": "PASS"
+  },
+  "validation_scope": "Exact document and custody hashes, strict prospective receipt schema, explicit human approval/actor provenance, frozen-parent linkage and unmodified historical coverage only. No repeat scientific results, access-control implementation or operational workflow execution is claimed.",
+  "historical_preservation": {
+    "historical_package_files": 524,
+    "primary_cases_closed": 27,
+    "historical_absence_semantics": "FIELD_NOT_PRESENT_IN_HISTORICAL_SCHEMA",
+    "historical_fields_backfilled": false
+  },
+  "immutability_statement": "Add-only receipt, created exclusively without overwrite. Exact receipt SHA-256 is recorded externally. Do not rewrite or supersede the approved document bytes, historical evidence or recorded failures; later scientific changes require explicit prospective lineage."
+}

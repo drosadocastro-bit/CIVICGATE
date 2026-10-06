@@ -1,0 +1,113 @@
+{
+  "protocol_id": "CIVICGATE-JUDGE-COMPARISON-V1",
+  "amendment_id": "CIVICGATE-RQ6-AMENDMENT-001",
+  "package_id": "judge-comparison-blind-v1-20260928T002148956585Z",
+  "state": "CIVICGATE_RQ6_IMPLEMENTATION_BASELINE_VALIDATED",
+  "generated_at": "2026-10-06T19:21:11.229057+00:00",
+  "parent_commit": "71cababa7697fc85ad3d8ccfa0ddbcde6403bc7a",
+  "mode": "IMPLEMENTATION_FREEZE_AND_PUBLICATION_ONLY",
+  "parent_sources": {
+    "docs/JUDGE_RQ6_AMENDMENT_001.json": "f44ead6460f7086965d4d54dccef9d32bf265ea7146ca12c313703963b5dd619",
+    "docs/JUDGE_RQ6_AMENDMENT_001.md": "5a19676158b299437652bc2ea4a94d4f9613a5b38568c8a96bc3c2799c09ae19",
+    "docs/JUDGE_RQ6_AMENDMENT_001_LOCK.json": "3ec06104daa780f5c76b62166c46fd9ff331c112d7b198cadda06c9edfa00e32"
+  },
+  "approved_document_version": {
+    "markdown": "5a19676158b299437652bc2ea4a94d4f9613a5b38568c8a96bc3c2799c09ae19",
+    "json": "f44ead6460f7086965d4d54dccef9d32bf265ea7146ca12c313703963b5dd619"
+  },
+  "lock_receipt_sha256": "3ec06104daa780f5c76b62166c46fd9ff331c112d7b198cadda06c9edfa00e32",
+  "source_sha256": {
+    "src/civicgate/rq6/__init__.py": "ba7796ad11fe1e7e41611fc3f30ae4eab4052279279d5de0a90eb9a2a72187d5",
+    "src/civicgate/rq6/artifacts.py": "13487e854959a16f4bda0fcecf80c3a49b5a0de0962f727d39c8002e171eccaa",
+    "src/civicgate/rq6/continuity.py": "15de1059a314a73d4a5e7d6957c1cce52dbdb16cae51b7d3149d1235cb17f54e",
+    "src/civicgate/rq6/core.py": "66d98dfa87c5d2b2599962734bd40b8380d389a7f65f013adbbba7b57ea7c10b",
+    "src/civicgate/rq6/crypto.py": "0b845596c8b558ee698f837a4531ee5be7439196292f6dfcd6f7357dcb97bac1",
+    "src/civicgate/rq6/schemas.py": "c5fafbbc02319557c3ebea0c1eb03e52645315d0c048b59b83c9b6b722421baa",
+    "src/civicgate/rq6/source.py": "f35a1fbb4c040681a4ee91e7163e2fec2e8630b026f59db24d20ccbd99cc4038",
+    "src/civicgate/rq6/stability.py": "a8fa6cd9122620250a0712c2c6b94ea3a788c9391e8ba34b9b8a59165772d71c",
+    "src/civicgate/rq6/synthetic.py": "511e6aeb722879b40575e25211f0651cfca3eb65ae515aed10453577f941fbc2",
+    "src/civicgate/rq6/validators.py": "4dad93a0e9ef2a546e09bda11ddbdca7c20e2fbd3c8ce5597dc47934e39a8e28",
+    "src/civicgate/rq6/workflow.py": "0a7ed2a64354cb81f9d7ac64cc57f94ae1831231272f6f3ca9bab0bc05c81afa",
+    "tests/integration/test_rq6_pipeline.py": "00ba7671e6f22942dea0e4d18359312433c1a9de6bb8d8fa5c0e7620f05b5bd6",
+    "tests/unit/test_rq6_crypto.py": "37ba7fe8c237903d6063ea21a8e6667afe300dc2bdbad8fe4d63e0671db4acf2",
+    "tests/unit/test_rq6_integrity.py": "48a484afd381a9c8de7b27fefba115ffb6aecb035979bb5ed5b6cc23c2cca70d",
+    "tests/unit/test_rq6_schemas.py": "4fe48325663f84221b7840f656476c69e53753a9b46362f88225fc3d02e44c3f",
+    "tests/unit/test_rq6_stability.py": "3b258a69af150eee9a27ccc2b5455c9449811be1381212b442eb4f7b0ead6543",
+    "tests/unit/test_rq6_workflow.py": "786cdcefa691fd5ff5689015c97d0b5019fc37f659c37fdcdb4d23b9fdaef989"
+  },
+  "implementation_file_count": 17,
+  "source_hash_scope": "Exact UTF-8 file bytes for 11 source modules and 6 tests; this additive provenance record is excluded from its own hash set.",
+  "tests": {
+    "passed": 926,
+    "skipped": 1,
+    "failed": 0,
+    "errors": 0,
+    "new_RQ6_passed": 272,
+    "existing_regression_passed": 654,
+    "all_original_test_cases_retained": true
+  },
+  "validation_results": {
+    "workflow_implementation": "PASS",
+    "schema_implementation": "PASS",
+    "cryptographic_helper_tests": "PASS",
+    "state_machine_tests": "PASS",
+    "RQ6_V01_through_V12_validator_tests": "PASS",
+    "synthetic_end_to_end_tests": "PASS",
+    "existing_regression_suite": "PASS",
+    "lint_static_checks": "PASS",
+    "historical_continuity": "PASS",
+    "lint": "PASS",
+    "formatting": "PASS",
+    "mypy": "PASS",
+    "exact_implementation_baseline": "PASS",
+    "locked_document_bytes": "PASS",
+    "complete_working_tree_diff": "PASS"
+  },
+  "python": "3.13.7",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "runtime": {
+    "implementation": "CPython",
+    "version": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+    "dependencies": {
+      "pytest": "9.1.1",
+      "pytest-asyncio": "1.4.0",
+      "pydantic": "2.13.5",
+      "ruff": "0.16.8",
+      "mypy": "2.3.1",
+      "mcp": "1.30.0",
+      "httpx": "0.28.1"
+    }
+  },
+  "historical_continuity": {
+    "result": "PASS",
+    "historical_files_byte_identical": 524,
+    "primary_cases_closed": 27,
+    "remaining_sealed_primary_cards": 0,
+    "remaining_sealed_repeat_bundles": 6,
+    "historical_release_receipts_verified": 81,
+    "historical_explicit_leakage_PASS": 39,
+    "FIELD_NOT_PRESENT_IN_HISTORICAL_SCHEMA": 42,
+    "historical_fields_backfilled": false,
+    "diagnostics_and_audit_notes_preserved": true
+  },
+  "boundaries": {
+    "repeat_content_exposed": false,
+    "production_alias_mappings_created": false,
+    "production_bundle_seeds_generated": false,
+    "production_bundle_nonces_generated": false,
+    "repeat_reviewer_cards_released": false,
+    "repeat_observations_released": false,
+    "real_bundle_event_ledgers_initialized": false,
+    "real_bundle_unblinding_performed": false,
+    "real_bundle_stability_analysis_performed": false,
+    "aggregate_analysis_performed": false,
+    "judge_selection_performed": false,
+    "historical_evidence_modified": false,
+    "model_calls": 0,
+    "real_Gateway_executions": 0,
+    "credentials_accessed": 0
+  },
+  "validation_scope": "Local implementation and synthetic tests plus raw historical custody verification only. Mock provider/Gateway fixtures are not production operations. No live repeat evidence, mapping values, seed values, credentials, or model endpoints were consumed.",
+  "publication_gate": "Local gates PASS; publication success additionally requires the exact committed tree, remote HEAD, normal CI PASS, and post-publication continuity. No CI result is asserted by this precommit record.",
+  "operational_authority": "No repeat operational authorization. Bundle 1 initialization and all repeat scientific operations require a separate explicit human authorization."
+}
