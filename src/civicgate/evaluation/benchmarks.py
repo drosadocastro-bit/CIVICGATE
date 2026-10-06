@@ -200,7 +200,7 @@ async def _run_hybrid_case(case: dict[str, Any], *, judge: bool, agent_k: bool) 
     result = await gateway.call(case["request"], proposal)
     # Warm-up denials (case.get("repeated")) write their own "policy" events first;
     # take the most recent one so failure_accounting describes the reported call.
-    policy_event = next(
+    policy_event: dict[str, Any] = next(
         (event for event in reversed(gateway.trace.events) if event.get("stage") == "policy"), {}
     )
     return {

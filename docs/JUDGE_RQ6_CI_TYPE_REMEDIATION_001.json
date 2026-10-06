@@ -1,0 +1,95 @@
+{
+  "protocol_id": "CIVICGATE-JUDGE-COMPARISON-V1",
+  "amendment_id": "CIVICGATE-RQ6-AMENDMENT-001",
+  "package_id": "judge-comparison-blind-v1-20260928T002148956585Z",
+  "record_type": "CI_TYPE_REMEDIATION",
+  "classification": "PRE_EXISTING_CI_TYPE_COMPATIBILITY_FAILURE",
+  "state": "CIVICGATE_RQ6_CI_TYPE_REMEDIATION_LOCALLY_VALIDATED_PENDING_CI",
+  "generated_at": "2026-10-06T19:41:56.192406+00:00",
+  "parent_commit": "3ad6ebdb3e997f73ef764c15e1ed4c8192a51b46",
+  "baseline_direct_parent_commit": "71cababa7697fc85ad3d8ccfa0ddbcde6403bc7a",
+  "baseline_provenance_sha256": "a59ab5e3bea8cce4fbd4a01b02dd49c086cdaa0ccb086b7477c5ea63f33183ec",
+  "parent_sources": {
+    "docs/JUDGE_RQ6_AMENDMENT_001.json": "f44ead6460f7086965d4d54dccef9d32bf265ea7146ca12c313703963b5dd619",
+    "docs/JUDGE_RQ6_AMENDMENT_001.md": "5a19676158b299437652bc2ea4a94d4f9613a5b38568c8a96bc3c2799c09ae19",
+    "docs/JUDGE_RQ6_AMENDMENT_001_LOCK.json": "3ec06104daa780f5c76b62166c46fd9ff331c112d7b198cadda06c9edfa00e32"
+  },
+  "source_sha256": {
+    "src/civicgate/evaluation/benchmarks.py": "2d21dcac02c06dbd471393bb423f1342456841425313978aaa0a0b305dd92fb2"
+  },
+  "preserved_failure": {
+    "run_id": 37518539227,
+    "url": "https://github.com/drosadocastro-bit/CIVICGATE/actions/runs/37518539227",
+    "result": "FAIL",
+    "mypy_version": "2.4.0",
+    "diagnostic": "src/civicgate/evaluation/benchmarks.py:203: error: Need type annotation for \"policy_event\" [var-annotated]",
+    "failing_file_blob_at_baseline": "e295d4b5af057206664fa0c93fb54e2f35453a63",
+    "failing_file_blob_at_direct_parent": "e295d4b5af057206664fa0c93fb54e2f35453a63",
+    "publication_outcome_sha256": "d1c57775b4200354ab01d059773bf458ad380cb3019c12845e3be5c1d7b214b3",
+    "record_reinterpreted_or_overwritten": false
+  },
+  "correction": {
+    "file": "src/civicgate/evaluation/benchmarks.py",
+    "line": 203,
+    "before": "policy_event = next(",
+    "after": "policy_event: dict[str, Any] = next(",
+    "scope": "Single local-variable type annotation already implied by Trace.events; Any was already imported.",
+    "generator_event_selection_fallback_policy_and_failure_accounting_changed": false,
+    "runtime_AST_equivalence_verified": true,
+    "behavioral_change_intended": false,
+    "RQ6_scientific_implementation_changed": false,
+    "dependency_or_mypy_configuration_changed": false
+  },
+  "validation_results": {
+    "ruff_check": "PASS",
+    "ruff_format_check": "PASS",
+    "mypy_src_local_runtime": "PASS",
+    "mypy_src_2_4_0_isolated_checker": "PASS",
+    "full_pytest": "PASS",
+    "historical_continuity": "PASS",
+    "locked_amendment_bytes": "PASS",
+    "primary_closures": "PASS",
+    "baseline_provenance_preserved": "PASS",
+    "no_production_RQ6_artifacts": "PASS"
+  },
+  "tests": {
+    "passed": 926,
+    "skipped": 1,
+    "failed": 0,
+    "errors": 0,
+    "new_RQ6_passed": 272,
+    "existing_regression_passed": 654,
+    "original_test_cases_retained": true
+  },
+  "python": "3.13.7",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "checker_runtime": "mypy 2.4.0 installed only in an external temporary directory; repository and existing Python environment dependency declarations remain unchanged.",
+  "historical_continuity": {
+    "result": "PASS",
+    "historical_files_byte_identical": 524,
+    "primary_cases_closed": 27,
+    "sealed_repeat_bundles": 6,
+    "FIELD_NOT_PRESENT_IN_HISTORICAL_SCHEMA": 42,
+    "historical_fields_backfilled": false,
+    "diagnostics_and_audit_notes_preserved": true
+  },
+  "boundaries": {
+    "repeat_content_exposed": false,
+    "production_alias_mappings_created": false,
+    "production_bundle_seeds_generated": false,
+    "production_bundle_nonces_generated": false,
+    "repeat_reviewer_cards_released": false,
+    "repeat_observations_released": false,
+    "real_bundle_event_ledgers_initialized": false,
+    "real_bundle_unblinding_performed": false,
+    "real_bundle_stability_analysis_performed": false,
+    "aggregate_analysis_performed": false,
+    "judge_selection_performed": false,
+    "historical_evidence_modified": false,
+    "model_calls": 0,
+    "real_Gateway_executions": 0,
+    "credentials_accessed": 0
+  },
+  "publication_gate": "This additive record claims local validation only. Normal CI and post-CI continuity are required for publication success; failed run 37518539227 remains historical FAIL.",
+  "operational_authority": "No real RQ6 operation is authorized. Bundle 1 requires separate explicit human operational authorization."
+}
