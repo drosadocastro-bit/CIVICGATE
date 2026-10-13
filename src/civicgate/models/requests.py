@@ -1,4 +1,6 @@
+from collections.abc import Mapping
 from datetime import date
+from types import MappingProxyType
 from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
@@ -44,9 +46,11 @@ class Proposal(StrictModel):
     arguments: dict[str, Any]
 
 
-TOOLS: dict[str, type[Search] | type[Award] | type[Recipient]] = {
-    "find_federal_awards": Search,
-    "get_federal_award": Award,
-    "resolve_federal_recipient": Recipient,
-    "summarize_federal_spending": Search,
-}
+TOOLS: Mapping[str, type[Search] | type[Award] | type[Recipient]] = MappingProxyType(
+    {
+        "find_federal_awards": Search,
+        "get_federal_award": Award,
+        "resolve_federal_recipient": Recipient,
+        "summarize_federal_spending": Search,
+    }
+)

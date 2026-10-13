@@ -6,6 +6,10 @@ Sandbox and local stdio only. No public deployment, inbound HTTP listener, priva
 
 Agent proposals, user text, judge output and source strings are untrusted. Only server code supplies capability and transport configuration. MCP annotations are descriptive hints; the gateway enforces policy independently. Test adapters and mock judge require explicit construction/configuration; production configuration never falls back to them.
 
+Bounded discovery snapshots the four registered MCP wrappers and projects only static descriptions, input/output schemas and fixed descriptive hints. It returns independent metadata copies. Registration/schema drift, unregistered names and extra invocation fields are rejected. The agent, MCP wrappers and internal Gateway call path all meet the same pre-dispatch binding check. Low-level adapter methods are trusted library primitives; they are not exposed as alternate MCP tools.
+
+Envelope hashes establish binding integrity. Provenance comes from the Gateway's private record of the exact object issued by its own deterministic evaluation. The envelope is immutable, expires under a monotonic clock and is consumed before dispatch, including failed verification. It is never exported as a bearer credential. This does not authenticate remote users, sandbox hostile Python, or provide durable cross-process replay protection.
+
 The USAspending adapter uses a fixed HTTPS origin, bounded path identifiers, no redirects, no credentials, no ambient proxy/netrc configuration, 5-second connect / 15-second I/O timeout, 20-second total limit per attempt, three attempts maximum, and bounded exponential delays (0.2 / 0.4 seconds). Only timeouts, transport failures, HTTP 429 and 5xx are retried. Read-only POST searches are safe to retry. Responses are capped at 2 MB decompressed and validated before release.
 
 Model configuration is distinct from public-data access. Model credentials go only to the configured model origin. HTTPS is mandatory except loopback HTTP. Redirects and URL-embedded credentials are rejected. Model calls have a 30-second outer budget, bounded tokens and a 100 KB response cap. No model output is executed as code or used as a URL. Provider errors are converted to unavailable semantic state without exposing provider response bodies.
@@ -15,6 +19,8 @@ Milestone 2 separates `ConfigurationProvider` and `SecretProvider`; `.env` files
 ## Audit
 
 Audit appends before execution and after results. Failure to write the pre-execution audit prevents execution. Failure of final logging is surfaced as an invocation error; a previous public read cannot be undone. Files are append-only by application convention, not cryptographically tamper-proof. Use OS permissions and rotation outside the MVP. Retention/disk quotas are operator responsibilities.
+
+`execution_started` records dispatch intent with verification still pending and `NOT_DISPATCHED`; it is not proof of a backend call. The completed event records `pre_dispatch_verification`, any binding error, actual `tool_executed`, transport attempts and result verification. Pre-dispatch rejection and post-result filtering remain separate observations.
 
 Known token patterns and credential-named fields are redacted, and model configuration is never written. Arbitrary secrets pasted without recognizable labels cannot be reliably detected: supply only public research questions. Full user requests and public records otherwise appear in the local audit file. The in-memory diagnostic window is capped at 1000 events.
 
