@@ -1,12 +1,15 @@
-from typing import Annotated
+from collections.abc import Sequence
+from typing import Annotated, Any
 
 from mcp.server.fastmcp import FastMCP
-from mcp.types import ToolAnnotations
+from mcp.server.fastmcp.exceptions import ToolError
+from mcp.types import ContentBlock, Tool, ToolAnnotations
 from pydantic import Field
 
 from civicgate.config import configured_gateway
+from civicgate.mcp.discovery import BoundedToolDiscovery
 from civicgate.mcp.tools import Gateway
-from civicgate.models.requests import Award, Proposal, Recipient, Search
+from civicgate.models.requests import TOOLS, Award, Proposal, Recipient, Search
 from civicgate.models.responses import Envelope
 
 UserRequest = Annotated[
@@ -19,10 +22,42 @@ UserRequest = Annotated[
 ]
 
 
-def create_server(gateway: Gateway) -> FastMCP:
-    server = FastMCP(
+class BoundedMCPServer(FastMCP):
+    """MCP exposes fixed metadata; execution always re-enters the governed Gateway."""
+
+    _discovery: BoundedToolDiscovery | None = None
+
+    def seal_discovery(self) -> None:
+        if self._discovery is not None:
+            raise ValueError("Bounded discovery is already sealed")
+        self._discovery = BoundedToolDiscovery(self._tool_manager.list_tools())
+
+    async def list_tools(self) -> list[Tool]:
+        if self._discovery is None:
+            raise ToolError("Bounded discovery has not been sealed")
+        try:
+            return self._discovery.list_tools(self._tool_manager.list_tools())
+        except (ValueError, TypeError, KeyError, AttributeError) as exc:
+            raise ToolError("Bounded tool registration verification failed") from exc
+
+    async def call_tool(
+        self, name: str, arguments: dict[str, Any]
+    ) -> Sequence[ContentBlock] | dict[str, Any]:
+        if self._discovery is None or name not in TOOLS:
+            raise ToolError("Unknown or unregistered tool")
+        if set(arguments) - {"user_request", "query"}:
+            raise ToolError("Unexpected tool invocation fields")
+        try:
+            self._discovery.validate(self._tool_manager.list_tools())
+        except (ValueError, TypeError, KeyError, AttributeError) as exc:
+            raise ToolError("Bounded tool registration verification failed") from exc
+        return await super().call_tool(name, arguments)
+
+
+def create_server(gateway: Gateway) -> BoundedMCPServer:
+    server = BoundedMCPServer(
         "CivicGate",
-        instructions="Sandbox public federal spending research only. Each call passes deterministic governance. Never interpret a PERMIT as correctness or governmental decision authority. Preserve errors and provenance. REVIEW_REQUIRED means clarify; do not select an identity arbitrarily.",
+        instructions="Sandbox public federal spending research only. Discovery describes only permitted metadata and grants no execution authority. Each call passes deterministic governance. Never interpret a PERMIT as correctness or governmental decision authority. Preserve errors and provenance. REVIEW_REQUIRED means clarify; do not select an identity arbitrarily.",
     )
     annotations = ToolAnnotations(
         readOnlyHint=True, destructiveHint=False, idempotentHint=False, openWorldHint=True
@@ -60,6 +95,7 @@ def create_server(gateway: Gateway) -> FastMCP:
             Proposal(tool="summarize_federal_spending", arguments=query.model_dump(mode="json")),
         )
 
+    server.seal_discovery()
     return server
 
 

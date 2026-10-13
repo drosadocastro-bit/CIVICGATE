@@ -16,6 +16,7 @@ from civicgate.adapters.usaspending import (
 )
 from civicgate.audit.trace import Trace
 from civicgate.governance.agent_k import inspect
+from civicgate.governance.execution import ExecutionBoundary, ExecutionBoundaryError
 from civicgate.governance.judge import assess
 from civicgate.governance.policy import PolicyFacts, evaluate
 from civicgate.llm.base import JudgeModel
@@ -52,6 +53,10 @@ class Gateway:
         self.enable_agent_k = enable_agent_k
         self._denials = 0
         self._lock = asyncio.Lock()
+        self._execution_boundary = ExecutionBoundary(TOOLS)
+
+    def _policy_context(self) -> tuple[bool, bool, float, int]:
+        return (self.require_judge, self.enable_agent_k, self.threshold, self._denials)
 
     @staticmethod
     def _apply_attempt_summary(
@@ -94,10 +99,15 @@ class Gateway:
     async def call(
         self, request: str, proposal: Proposal, planning_failed: bool = False
     ) -> Envelope:
+        # The caller can retain and mutate its proposal while this call waits for the lock.
+        proposal = proposal.model_copy(deep=True)
         async with self._lock:
             return await self._call(request, proposal, planning_failed)
 
     async def _call(self, request: str, proposal: Proposal, planning_failed: bool) -> Envelope:
+        proposal = proposal.model_copy(deep=True)
+        policy_context = self._policy_context()
+        require_judge, enable_agent_k, threshold, denials = policy_context
         request_id = str(uuid4())
         text = request + "\n" + json.dumps(proposal.model_dump(), ensure_ascii=False)
         valid = 0 < len(request.strip()) <= 4000 and len(text) <= 16000
@@ -116,7 +126,7 @@ class Gateway:
             valid_input=valid,
             bounded=bounded,
             review_reason="PLANNER_FAILURE" if planning_failed else None,
-            semantic_required=self.require_judge,
+            semantic_required=require_judge,
         )
         # Audit must be writable BEFORE any model or public-data operation.
         self.trace.record(
@@ -128,25 +138,24 @@ class Gateway:
         # entirely rather than sending a request that was never going anywhere.
         probe_judge = JudgeSignal(available=False, provider="unavailable")
         preflight_k_signal = (
-            inspect(text, probe_judge, self._denials, proposal.tool in TOOLS)
-            if self.enable_agent_k
+            inspect(text, probe_judge, denials, proposal.tool in TOOLS)
+            if enable_agent_k
             else KSignal()
         )
-        preflight_policy = evaluate(facts, probe_judge, preflight_k_signal, self.threshold)
-        call_judge = valid and self.require_judge and preflight_policy.decision != "DENY"
-        judge_preflight_skipped = self.require_judge and preflight_policy.decision == "DENY"
+        preflight_policy = evaluate(facts, probe_judge, preflight_k_signal, threshold)
+        call_judge = valid and require_judge and preflight_policy.decision != "DENY"
+        judge_preflight_skipped = require_judge and preflight_policy.decision == "DENY"
         if call_judge:
-            judge = await assess(self._judge, request, proposal)
+            judge = await assess(self._judge, request, proposal.model_copy(deep=True))
             k_signal = (
-                inspect(text, judge, self._denials, proposal.tool in TOOLS)
-                if self.enable_agent_k
+                inspect(text, judge, denials, proposal.tool in TOOLS)
+                if enable_agent_k
                 else KSignal()
             )
-            policy = evaluate(facts, judge, k_signal, self.threshold)
         else:
             if not valid:
                 rationale = "Invalid input; semantic call skipped"
-            elif not self.require_judge:
+            elif not require_judge:
                 rationale = "Semantic judge disabled for this evaluation matrix"
             else:
                 rationale = (
@@ -154,10 +163,29 @@ class Gateway:
                 )
             judge = JudgeSignal(
                 rationale=rationale,
-                provider="disabled" if not self.require_judge else "unavailable",
+                provider="disabled" if not require_judge else "unavailable",
             )
             k_signal = preflight_k_signal
-            policy = preflight_policy
+        authority_envelope = None
+        issuance_error = None
+        try:
+            evaluation = self._execution_boundary.evaluate(
+                request_id=request_id,
+                facts=facts,
+                judge=judge,
+                agent_k=k_signal,
+                threshold=threshold,
+                arguments=args.model_dump(mode="json") if args is not None else None,
+                policy_context=policy_context,
+            )
+            policy = evaluation.policy
+            authority_envelope = evaluation.envelope
+        except ExecutionBoundaryError as exc:
+            # Preserve the policy decision separately from a failed issuance check.
+            policy = evaluate(facts, judge, k_signal, threshold)
+            issuance_error = exc.code
+        pre_dispatch_verification = "NOT_REQUIRED"
+        execution_boundary_error = issuance_error
         failure_accounting: list[str] = []
         if planning_failed:
             failure_accounting.append("PLANNER_FAILURE")
@@ -175,8 +203,10 @@ class Gateway:
             judge=judge.model_dump(),
             agent_k=k_signal.model_dump(),
             facts=facts.__dict__,
-            confidence_threshold=self.threshold,
+            confidence_threshold=threshold,
             policy=policy.model_dump(),
+            binding_issued=authority_envelope is not None,
+            binding_issuance_error=issuance_error,
             failure_accounting=failure_accounting,
             judge_preflight_skipped=judge_preflight_skipped,
         )
@@ -206,12 +236,30 @@ class Gateway:
                 "execution_started",
                 tool=proposal.tool,
                 execution_authority=policy.model_dump(),
+                execution_binding=(
+                    authority_envelope.binding.audit_record() if authority_envelope else None
+                ),
+                pre_dispatch_verification="PENDING_PRE_DISPATCH",
+                dispatch_state="NOT_DISPATCHED",
             )
-            envelope.tool_executed = True
             attempts: tuple[AttemptRecord, ...] = ()
             attempt_metadata_available = False
             retry_class = "UNKNOWN"
             try:
+                if issuance_error is not None:
+                    raise ExecutionBoundaryError(issuance_error)
+                binding = self._execution_boundary.consume(
+                    authority_envelope,
+                    request_id=request_id,
+                    tool=proposal.tool,
+                    arguments=args.model_dump(mode="json"),
+                    policy_context=self._policy_context(),
+                )
+                # Dispatch from the checked binding, never from caller-owned objects.
+                # No await or external callback occurs between this gate and dispatch.
+                args = TOOLS[binding.tool].model_validate_json(binding.arguments_json)
+                pre_dispatch_verification = "PASS"
+                envelope.tool_executed = True
                 if isinstance(args, Search):
                     adapter_result = await self._adapter.search(args)
                 elif isinstance(args, Award):
@@ -266,12 +314,12 @@ class Gateway:
                         envelope.next_action = "HUMAN_REVIEW_REQUIRED"
                 if review_reason:
                     post = evaluate(
-                        replace(facts, review_reason=review_reason), judge, k_signal, self.threshold
+                        replace(facts, review_reason=review_reason), judge, k_signal, threshold
                     )
                     envelope.decision = post.decision
                     envelope.governance.policy_reasons = post.reasons
                     envelope.status = "CLARIFICATION_REQUIRED"
-                elif proposal.tool == "summarize_federal_spending":
+                elif binding.tool == "summarize_federal_spending":
                     total = sum(
                         (Decimal(str(row["award_amount"])) for row in batch.records), Decimal(0)
                     )
@@ -284,6 +332,18 @@ class Gateway:
                     envelope.next_action = "NONE"
                 else:
                     envelope.next_action = "NONE"
+            except ExecutionBoundaryError as exc:
+                pre_dispatch_verification = "FAIL"
+                execution_boundary_error = exc.code
+                envelope.decision = "DENY"
+                envelope.governance.policy_reasons = ["EXECUTION_BINDING_INVALID"]
+                envelope.next_action = "STOP"
+                envelope.errors = [
+                    Error(
+                        code=exc.code,
+                        message="Pre-dispatch binding verification failed; no backend invoked.",
+                    )
+                ]
             except AdapterError as exc:
                 attempts = exc.attempts
                 attempt_metadata_available = bool(exc.attempts)
@@ -305,7 +365,7 @@ class Gateway:
                     envelope.next_action = "RETRY_ALLOWED" if exc.retryable else "RETRY_BLOCKED"
                 if exc.code in {"CONFLICTING_SOURCE_RESULTS", "PROVENANCE_UNAVAILABLE"}:
                     post = evaluate(
-                        replace(facts, review_reason=exc.code), judge, k_signal, self.threshold
+                        replace(facts, review_reason=exc.code), judge, k_signal, threshold
                     )
                     envelope.decision = post.decision
                     envelope.governance.policy_reasons = post.reasons
@@ -317,7 +377,7 @@ class Gateway:
                     replace(facts, review_reason="ADAPTER_SCHEMA_OR_PROVENANCE_INVALID"),
                     judge,
                     k_signal,
-                    self.threshold,
+                    threshold,
                 )
                 envelope.decision = post.decision
                 envelope.governance.policy_reasons = post.reasons
@@ -336,6 +396,8 @@ class Gateway:
             "completed",
             response=envelope.model_dump(mode="json"),
             tool_executed=envelope.tool_executed,
+            pre_dispatch_verification=pre_dispatch_verification,
+            execution_boundary_error=execution_boundary_error,
             attempts=[a.model_dump() for a in attempts] if "attempts" in locals() else [],
             attempt_metadata_available=envelope.attempt_metadata_available,
         )

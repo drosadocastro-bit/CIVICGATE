@@ -10,7 +10,9 @@ flowchart TD
  G --> K[Agent K]
  J --> D[Deterministic policy]
  K --> D
- D -->|PERMIT only| T[Registered tool dispatch]
+ D -->|PERMIT only| E[Private AuthorityEnvelope and exact ExecutionBinding]
+ E --> C[Single-use pre-dispatch verification]
+ C -->|Verified invocation only| T[Registered tool dispatch]
  D -->|DENY or REVIEW_REQUIRED| R[Structured response]
  T --> B[USAspending adapter]
  B --> S[Public API]
@@ -26,6 +28,10 @@ The CLI agent proposes one operation per request. It receives only an AgentModel
 `models/` defines strict input, signal, provenance and envelope contracts. Unknown input fields are rejected. `governance/policy.py` is the only module issuing authority decisions. Its inputs are normalized immutable facts, judge signal, K signal and configured confidence threshold. The gateway serializes calls to preserve denial counters. `adapters/usaspending.py` alone maps to the fixed government origin. Only code in the trusted composition root may select a provider or inject a test transport.
 
 Pre-execution policy runs before adapter dispatch. Post-execution policy can require clarification for ambiguous identity, incomplete provenance or conflicting source records. The trace retains the original PERMIT before an allowed factual lookup and the final REVIEW_REQUIRED when its results require clarification; `tool_executed=true` makes that distinction explicit.
+
+Channel A1 adds bounded discovery over the same four registered MCP tools. Listing returns fresh copies of permitted names, descriptions, schemas and descriptive annotations. It supplies no execution capability. Registration changes and unexpected wrapper fields are rejected. The Gateway snapshots caller proposals before waiting for its lock and gives the semantic judge a separate copy.
+
+`governance/execution.py` calls the existing deterministic policy and retains each issued AuthorityEnvelope privately. Its ExecutionBinding covers the request, exact tool, normalized arguments, input schema, public-research scope, policy decision, policy facts and server policy context. The Gateway consumes that exact issued object immediately before backend dispatch, checking integrity, current context, schema, expiry and single use. A reconstructed object with identical hashes has no issuance provenance. These are process-local controls, not external signatures or durable authority records. See [Channel A1 execution boundary](CHANNEL_A1_EXECUTION_BOUNDARY.md) for scope and limits.
 
 USAspending responses are validated and projected to an intentionally small record shape. One page is returned. Monetary totals use Decimal. Both query and parsed source response receive SHA-256 fingerprints using canonical JSON serialization. These identify observed data; they are not government signatures or evidence of source accuracy.
 

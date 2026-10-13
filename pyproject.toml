@@ -10,7 +10,8 @@ requires-python = ">=3.11"
 dependencies = ["mcp>=1.28,<2", "pydantic>=2.11,<3", "httpx>=0.28,<0.29"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.12", "mypy>=1.15", "pip-audit>=2.9"]
+orchestration = ["langgraph==1.2.15"]
+dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.12", "mypy>=1.15", "pip-audit>=2.9", "langgraph==1.2.15"]
 
 [project.scripts]
 civicgate = "civicgate.cli:main"
