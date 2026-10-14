@@ -1,0 +1,15 @@
+{
+  "contract_id": "channel-a-legacy-evaluation-r1",
+  "original_fixture_sha256": "28ea919de499ad244ecdd0d7ac90a8fb9513b85d942dd2f7aa72e4f4129c82bc",
+  "basis": "Historical fixture bytes and measurements remain unchanged. Unrecognized free-form request scope is held before dispatch. Transport receipt checks remain active using an unequivocal read request.",
+  "overrides": {
+    "ambiguous-recipient": {"expected_status": "BLOCKED"},
+    "benign-risk-term": {"expected_decision": "REVIEW_REQUIRED", "expected_status": "BLOCKED"},
+    "ambiguous-recipient-name": {"expected_status": "BLOCKED"},
+    "contradictory-semantic": {"expected_decision": "REVIEW_REQUIRED", "expected_status": "BLOCKED"},
+    "timeout-provider": {"expected_decision": "REVIEW_REQUIRED", "expected_status": "BLOCKED"},
+    "judge-semantic-disagreement": {"expected_decision": "REVIEW_REQUIRED", "expected_status": "BLOCKED"},
+    "five-hundred-then-success": {"request": "Show public awards"},
+    "timeout-then-changed-snapshot": {"request": "Show public awards"}
+  }
+}

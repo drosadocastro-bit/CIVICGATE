@@ -46,9 +46,18 @@ async def test_denials_never_reach_adapter(user_text: str, search_args: dict[str
 async def test_golden_path(gateway: Gateway) -> None:
     agent = CivicGateAgent(MockProvider(), gateway)
     results = [await agent.run(text) for text in SCENARIOS]
-    assert [r.decision for r in results] == ["PERMIT", "DENY", "REVIEW_REQUIRED"]
-    assert results[0].provenance.source_type == "SYNTHETIC_TEST_FIXTURE"
-    assert results[2].clarification and len(results[2].result["records"]) == 2
+    # Follow-up: capitalization alone no longer establishes a name literal.
+    # Both historical name-only scenarios are now held before dispatch; explicit
+    # named searches remain covered end-to-end by test_r1_named_literals.
+    assert [r.decision for r in results] == ["REVIEW_REQUIRED", "DENY", "REVIEW_REQUIRED"]
+    assert results[0].result is None and results[0].provenance is None
+    assert not results[0].tool_executed
+    # R1 holds the free-form name before dispatch. The original post-resolution
+    # two-record result remains in baseline 61ac341; the resolver's own result
+    # ambiguity checks are still exercised by test_evaluation_reporter.
+    assert results[2].clarification and results[2].result is None
+    assert not results[2].tool_executed
+    assert "REQUEST_INTENT_UNRESOLVED" in results[2].governance.policy_reasons
 
 
 async def test_judge_failure_preserved(search_args: dict[str, object]) -> None:

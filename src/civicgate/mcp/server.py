@@ -1,8 +1,10 @@
 from collections.abc import Sequence
-from typing import Annotated, Any
+from threading import Lock
+from typing import Annotated, Any, Literal, NoReturn
 
 from mcp.server.fastmcp import FastMCP
 from mcp.server.fastmcp.exceptions import ToolError
+from mcp.server.session import ServerSession
 from mcp.types import ContentBlock, Tool, ToolAnnotations
 from pydantic import Field
 
@@ -23,9 +25,63 @@ UserRequest = Annotated[
 
 
 class BoundedMCPServer(FastMCP):
-    """MCP exposes fixed metadata; execution always re-enters the governed Gateway."""
+    """One trusted stdio owner; execution always re-enters the governed Gateway.
 
-    _discovery: BoundedToolDiscovery | None = None
+    Shared clients and host-side multiplexing are prohibited. SDK session object
+    identity prevents accidental session reuse; it is not human authentication.
+    """
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        self._discovery: BoundedToolDiscovery | None = None
+        self._owner_lock = Lock()
+        self._session_owner: ServerSession | None = None
+        self._stdio_started = False
+        super().__init__(*args, **kwargs)
+
+    def run(
+        self,
+        transport: Literal["stdio", "sse", "streamable-http"] = "stdio",
+        mount_path: str | None = None,
+    ) -> None:
+        if transport != "stdio":
+            raise ValueError("CivicGate supports one trusted stdio owner only")
+        super().run(transport=transport, mount_path=mount_path)
+
+    async def run_stdio_async(self) -> None:
+        with self._owner_lock:
+            if self._stdio_started:
+                raise ValueError("CivicGate stdio ownership is permanent; re-entry is prohibited")
+            self._stdio_started = True
+        # Ownership survives normal exit, failure and cancellation. A new local
+        # owner requires a separately constructed Gateway and server process.
+        await super().run_stdio_async()
+
+    async def run_sse_async(self, mount_path: str | None = None) -> None:
+        raise ValueError("CivicGate supports one trusted stdio owner only")
+
+    async def run_streamable_http_async(self) -> None:
+        raise ValueError("CivicGate supports one trusted stdio owner only")
+
+    def sse_app(self, mount_path: str | None = None) -> NoReturn:
+        raise ValueError("CivicGate supports one trusted stdio owner only")
+
+    def streamable_http_app(self) -> NoReturn:
+        raise ValueError("CivicGate supports one trusted stdio owner only")
+
+    def _bind_request_session(self) -> None:
+        try:
+            session = self.get_context().session
+        except ValueError:
+            # Direct method calls remain a trusted internal test/composition
+            # interface. They do not establish a separately authenticated client.
+            return
+        if not isinstance(session, ServerSession):
+            raise ToolError("CivicGate requires a server-owned SDK session")
+        with self._owner_lock:
+            if self._session_owner is None:
+                self._session_owner = session
+            elif self._session_owner is not session:
+                raise ToolError("CivicGate MCP session sharing is prohibited")
 
     def seal_discovery(self) -> None:
         if self._discovery is not None:
@@ -33,6 +89,7 @@ class BoundedMCPServer(FastMCP):
         self._discovery = BoundedToolDiscovery(self._tool_manager.list_tools())
 
     async def list_tools(self) -> list[Tool]:
+        self._bind_request_session()
         if self._discovery is None:
             raise ToolError("Bounded discovery has not been sealed")
         try:
@@ -43,6 +100,7 @@ class BoundedMCPServer(FastMCP):
     async def call_tool(
         self, name: str, arguments: dict[str, Any]
     ) -> Sequence[ContentBlock] | dict[str, Any]:
+        self._bind_request_session()
         if self._discovery is None or name not in TOOLS:
             raise ToolError("Unknown or unregistered tool")
         if set(arguments) - {"user_request", "query"}:
@@ -59,6 +117,7 @@ def create_server(gateway: Gateway) -> BoundedMCPServer:
         "CivicGate",
         instructions="Sandbox public federal spending research only. Discovery describes only permitted metadata and grants no execution authority. Each call passes deterministic governance. Never interpret a PERMIT as correctness or governmental decision authority. Preserve errors and provenance. REVIEW_REQUIRED means clarify; do not select an identity arbitrarily.",
     )
+    gateway._claim_mcp_owner(server)
     annotations = ToolAnnotations(
         readOnlyHint=True, destructiveHint=False, idempotentHint=False, openWorldHint=True
     )

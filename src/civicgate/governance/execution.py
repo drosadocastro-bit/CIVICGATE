@@ -215,6 +215,18 @@ class ExecutionBoundary:
         if facts.capability != OPERATION_SCOPE:
             raise ExecutionBoundaryError("OPERATION_SCOPE_MISMATCH")
         arguments_json, schema_sha256 = self._arguments(facts.tool, arguments)
+        # Policy's effective proposal facts must describe the invocation being
+        # bound. A matching name in a separate facts copy cannot authorize a
+        # different actual filter. Legacy unnamed facts may omit this context.
+        if facts.arguments_json is not None:
+            try:
+                fact_arguments_json, _ = self._arguments(
+                    facts.tool, json.loads(facts.arguments_json)
+                )
+            except (ValueError, TypeError) as exc:
+                raise ExecutionBoundaryError("POLICY_ARGUMENTS_MISMATCH") from exc
+            if fact_arguments_json != arguments_json:
+                raise ExecutionBoundaryError("POLICY_ARGUMENTS_MISMATCH")
         binding = ExecutionBinding(
             request_id=request_id,
             tool=facts.tool,

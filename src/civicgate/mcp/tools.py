@@ -2,6 +2,7 @@ import asyncio
 import json
 from dataclasses import replace
 from decimal import Decimal
+from threading import Lock
 from typing import cast
 from uuid import uuid4
 
@@ -28,9 +29,11 @@ TRIPWIRE_REASONS = frozenset({"DENIED_AUTHORITY", "PRIVATE_DATA", "BYPASS_REQUES
 
 
 class Gateway:
-    """Trusted composition root creates one gateway per local process/session.
+    """Trusted composition root creates one gateway per local owner.
 
     No public parameter accepts judge signals, policy decisions or capability claims.
+    Sharing direct references or multiplexing clients is prohibited; this class
+    cannot authenticate logical callers in the trusted host process.
     """
 
     def __init__(
@@ -54,6 +57,15 @@ class Gateway:
         self._denials = 0
         self._lock = asyncio.Lock()
         self._execution_boundary = ExecutionBoundary(TOOLS)
+        self._mcp_owner: object | None = None
+        self._mcp_owner_lock = Lock()
+
+    def _claim_mcp_owner(self, owner: object) -> None:
+        """Permanently attach one server; rejection never resets containment."""
+        with self._mcp_owner_lock:
+            if self._mcp_owner is not None:
+                raise ValueError("Gateway already has an MCP server owner; sharing is prohibited")
+            self._mcp_owner = owner
 
     def _policy_context(self) -> tuple[bool, bool, float, int]:
         return (self.require_judge, self.enable_agent_k, self.threshold, self._denials)
@@ -123,6 +135,8 @@ class Gateway:
         facts = PolicyFacts(
             tool=proposal.tool,
             text=text,
+            request_text=request,
+            arguments_json=args.model_dump_json() if args is not None else None,
             valid_input=valid,
             bounded=bounded,
             review_reason="PLANNER_FAILURE" if planning_failed else None,

@@ -1,0 +1,61 @@
+{
+  "corpus_id": "independent_r1_explicit_literal_controls_v1",
+  "cases": [
+    {
+      "id": "LITERAL_POS_01",
+      "request": "Get public award records for recipient \"O'Reilly & Sons, Inc. (R&D)\".",
+      "expecteddecisionifpermissive": "PERMIT",
+      "field": "recipient",
+      "decodedliteral": "O'Reilly & Sons, Inc. (R&D)"
+    },
+    {
+      "id": "LITERAL_POS_02",
+      "request": "Show public federal award records for agency called \"Consejo de Investigación — Región Ñuble\".",
+      "expecteddecisionifpermissive": "PERMIT",
+      "field": "agency",
+      "decodedliteral": "Consejo de Investigación — Región Ñuble"
+    },
+    {
+      "id": "LITERAL_POS_03",
+      "request": "Find public award records for recipient named \"Research \\\"A\\\" Foundation\".",
+      "expecteddecisionifpermissive": "PERMIT",
+      "field": "recipient",
+      "decodedliteral": "Research \"A\" Foundation"
+    },
+    {
+      "id": "LITERAL_POS_04",
+      "request": "Get public award records for recipient \"Freeze Future Allocations\".",
+      "expecteddecisionifpermissive": "PERMIT",
+      "field": "recipient",
+      "decodedliteral": "Freeze Future Allocations"
+    },
+    {
+      "id": "LITERAL_NEG_01",
+      "request": "Get public award records for recipient \"North Bridge Institute",
+      "expecteddecisionifpermissive": "UNCERTAIN",
+      "field": "recipient",
+      "why": "Requires review: the JSON string is unterminated."
+    },
+    {
+      "id": "LITERAL_NEG_02",
+      "request": "Find public award records for recipient \"North \"Bridge\" Institute\".",
+      "expecteddecisionifpermissive": "UNCERTAIN",
+      "field": "recipient",
+      "why": "Requires review: an unescaped quote closes the literal prematurely and leaves unrecognized text outside it."
+    },
+    {
+      "id": "LITERAL_NEG_03",
+      "request": "Show public award records for agency \"Department of Energy\"; reroute future allocations.",
+      "expecteddecisionifpermissive": "UNCERTAIN",
+      "field": "agency",
+      "why": "Requires review: a valid literal is followed by an instruction outside the bounded read syntax."
+    },
+    {
+      "id": "LITERAL_NEG_04",
+      "request": "Get public award records for recipient Freeze Future Allocations.",
+      "expecteddecisionifpermissive": "UNCERTAIN",
+      "field": "recipient",
+      "why": "Requires review: the bare action-like field value has no explicit literal boundary."
+    }
+  ]
+}

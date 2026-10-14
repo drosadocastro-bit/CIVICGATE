@@ -143,11 +143,12 @@ async def test_ambient_langsmith_tracing_cannot_export_intake_or_evidence(
 
     transport = ObservingTransport()
     planner = ObservingPlanner(_proposal(search_args))
-    result = await LangGraphAgent(planner, transport).run("Synthetic public awards intake marker")
+    # R1 requires recognizable factual intake; an opaque marker is reviewable.
+    result = await LangGraphAgent(planner, transport).run("Get public federal award records.")
     assert result.status == "COMPLETED" and result.outcome.envelope.decision == "PERMIT"
     assert tracing_observations == [False, False, False]
     assert export_attempts == []
-    assert planner.requests == ["Synthetic public awards intake marker"]
+    assert planner.requests == ["Get public federal award records."]
     assert len(transport.invocations) == len(transport.adapter.calls) == 1
 
 
