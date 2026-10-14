@@ -21,7 +21,7 @@ jobs:
       - run: ruff format --check .
       - run: mypy src
       - run: pytest -q --junitxml=artifacts/tests.xml
-      - run: python scripts/evaluate.py
+      - run: python scripts/evaluate.py --projection channel-a-legacy-evaluation-r1
       - run: python scripts/run_m2_benchmarks.py
       - run: pip-audit
       - uses: actions/upload-artifact@v4

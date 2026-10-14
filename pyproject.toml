@@ -7,7 +7,7 @@ name = "civicgate"
 version = "0.1.0"
 description = "Sandbox governed MCP access to public federal spending data"
 requires-python = ">=3.11"
-dependencies = ["mcp>=1.28,<2", "pydantic>=2.11,<3", "httpx>=0.28,<0.29"]
+dependencies = ["mcp==1.30.0", "pydantic>=2.11,<3", "httpx>=0.28,<0.29"]
 
 [project.optional-dependencies]
 orchestration = ["langgraph==1.2.15"]

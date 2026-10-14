@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from civicgate.governance.authority import denied_reasons
+from civicgate.governance.request_risk import assess_request_risk, literal_proposal_reasons
 from civicgate.models.governance import JudgeSignal, KSignal, PolicyResult
 from civicgate.models.requests import TOOLS
 
@@ -17,6 +18,9 @@ class PolicyFacts:
     capability: str = "PUBLIC_SPENDING_RESEARCH"
     review_reason: str | None = None
     semantic_required: bool = True
+    request_text: str | None = None
+    # Immutable serialization of schema-validated effective invocation arguments.
+    arguments_json: str | None = None
 
 
 def evaluate(
@@ -40,6 +44,17 @@ def evaluate(
     if reasons:
         return PolicyResult(decision="DENY", reasons=reasons)
     review = []
+    # Independent of the Judge and Agent K. A permissive model cannot turn an
+    # unresolved/consequential request into execution authority.
+    request = facts.text if facts.request_text is None else facts.request_text
+    if (
+        facts.request_text is not None
+        and facts.text != request
+        and not facts.text.startswith(request + "\n")
+    ):
+        review.append("REQUEST_CONTEXT_INCONSISTENT")
+    review.extend(assess_request_risk(request).reasons)
+    review.extend(literal_proposal_reasons(request, facts.tool, facts.arguments_json))
     if not facts.bounded:
         review.append("QUERY_TOO_BROAD")
     if not facts.provenance_available:
