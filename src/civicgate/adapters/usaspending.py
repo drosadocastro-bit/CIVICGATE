@@ -155,13 +155,21 @@ class USAspending:
         transport: httpx.AsyncBaseTransport | None = None,
         fixture: bool = False,
         *,
-        max_attempts: int = MAX_ATTEMPTS,
+        max_attempts: int | None = None,
     ) -> None:
         self.transport = transport
         self.fixture = fixture
-        if type(max_attempts) is not int or not 1 <= max_attempts <= MAX_ATTEMPTS:
+        if max_attempts is not None and (
+            type(max_attempts) is not int or not 1 <= max_attempts <= MAX_ATTEMPTS
+        ):
             raise ValueError("Invalid bounded attempt limit")
-        self.max_attempts = max_attempts
+        self._max_attempts = max_attempts
+
+    @property
+    def max_attempts(self) -> int:
+        # Preserve Channel A's module default, including its existing test seam.
+        # Channel B passes an explicit immutable-per-call limit of one.
+        return MAX_ATTEMPTS if self._max_attempts is None else self._max_attempts
 
     @staticmethod
     def _retry_after(response: httpx.Response) -> float | None:
