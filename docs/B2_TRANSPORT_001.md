@@ -121,9 +121,21 @@ The following requirements are non-negotiable in any later implementation:
 1. Preserve schemas, the deterministic policy and its ordering, the existing
    Judge/Agent K roles, and `PUBLIC_SPENDING_RESEARCH` scope. Model signals are
    evidence inputs, not execution authority.
-2. DENY never reaches the tool adapter. REVIEW_REQUIRED produces a hold and
-   cannot be bypassed by caller consent, a transport claim, a service principal,
-   an observation score or an alternate channel.
+2. DENY never reaches the tool adapter. REVIEW_REQUIRED must be distinguished
+   by phase; its hold cannot be bypassed by caller consent, a transport claim,
+   a service principal, an observation score or an alternate channel.
+
+   - **Pre-dispatch REVIEW_REQUIRED:** no authority binding is issued and no
+     backend dispatch occurs. The request is held for clarification or human
+     review.
+   - **Post-dispatch REVIEW_REQUIRED:** an initial PERMIT and a valid, consumed
+     ExecutionBinding may already have authorized a read. Result validation or
+     recipient ambiguity may subsequently cause the Gateway to return
+     REVIEW_REQUIRED. The earlier authorized read is not retroactively classified
+     as unauthorized dispatch. Any further consequential action or identity
+     resolution remains subject to the existing policy and must not proceed
+     without the required review and fresh authorization.
+
 3. Preserve exact bindings for request, tool, canonical effective arguments,
    schema, policy decision/facts and server policy context. Only an envelope
    issued by the channel's own ExecutionBoundary may be consumed there.
@@ -138,6 +150,19 @@ The following requirements are non-negotiable in any later implementation:
 7. `DISPATCH_UNKNOWN` means **HOLD**. No automatic logical retry, replay or
    failover may resolve uncertainty by issuing another call. `tool_executed=True`
    does not prove provider receipt, success or a known transport outcome.
+
+Both review phases must remain distinguishable in audit evidence. Record the
+initial policy decision, binding issuance and pre-dispatch verification,
+consumption and dispatch, and final governance disposition and reason as separate
+facts. A final REVIEW_REQUIRED does not rewrite the initial authorization or
+erase an authorized read.
+
+Supporting reported observation for this correction: historical B1 scenario S7
+had an initial PERMIT, valid binding verification, an executed read and final
+REVIEW_REQUIRED with `RECIPIENT_IDENTITY_UNCONFIRMED`. This is a reported
+observation, not an independently rerun or newly recorded evaluation. The
+[historical B1 7×4 evaluation results](B2_TRANSPORT_001_REPORTED_EVIDENCE.md#b1-synthetic-mlflow-evaluation)
+remain unchanged, including their original outcome and provenance limitations.
 
 One consumed binding currently authorizes one logical adapter call; the baseline
 adapter has its own bounded read retry behavior. That existing behavior is not
@@ -223,7 +248,8 @@ These are review criteria, not newly implemented tests or reported passes.
 | --- | --- |
 | Missing, invalid, expired or wrong-context credentials | Rejected before Gateway; no tool dispatch |
 | Authenticated bypass request | DENY and `tool_executed=False` |
-| REVIEW_REQUIRED | No authority issuance or adapter dispatch; no caller override |
+| Pre-dispatch REVIEW | Initial REVIEW_REQUIRED; `binding_issued=False`, `tool_executed=False`, no dispatch; held for clarification or human review; no caller override |
+| Post-dispatch REVIEW | Initial PERMIT; `binding_issued=True`, `pre_dispatch_verification=PASS`, a consumed valid ExecutionBinding and `tool_executed=True`; final REVIEW_REQUIRED with an appropriate reason, such as `RECIPIENT_IDENTITY_UNCONFIRMED`; no unauthorized subsequent action, and required review plus fresh authorization before any further consequential action or identity resolution under the existing policy |
 | Argument, schema or policy-context tampering | Binding/context rejection before dispatch; exact failure retained |
 | Foreign session, instance or channel binding | Rejected; no authority, result or context leakage |
 | Replay or expiry | Consumed/expired envelope rejected, including after reconnect/restart |
