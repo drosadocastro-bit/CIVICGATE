@@ -1,7 +1,7 @@
 # B2a local authorization record — 2026-10-15
 
 This additive record transcribes the explicit human instruction in the current
-Codex chat on 2026-10-15 (America/La_Paz). It is a user declaration, not a
+Codex chat on 2026-10-15 (America/Puerto_Rico). It is a user declaration, not a
 signature, independent review, or an assistant-issued approval.
 
 - Repository: `drosadocastro-bit/CIVICGATE`.
