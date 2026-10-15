@@ -30,6 +30,21 @@ DOMAIN = TrustDomain(
 WORKER = Path(__file__).with_name("b2a_crash_worker.py")
 
 
+def assert_restart_hold(path, domain):
+    """Two fresh processes must refuse recovery without changing durable evidence."""
+    before = path.read_bytes()
+    for _ in range(2):
+        process = subprocess.run(
+            [sys.executable, str(WORKER), str(path), json.dumps(asdict(domain)), "recover_hold"],
+            capture_output=True,
+            text=True,
+            timeout=20,
+        )
+        assert process.returncode == 0, process.stderr
+        assert process.stdout.strip() == "RECOVERY_HOLD: no Gateway or authority constructed"
+        assert path.read_bytes() == before
+
+
 @pytest.mark.parametrize("point", ["begin", "intent", "dispatch", "before_finish"])
 def test_real_process_crash_recovers_hold_without_replay(tmp_path, point):
     path = tmp_path / "state.sqlite"
@@ -95,7 +110,7 @@ def test_unreadable_or_missing_recovery_never_creates_clear_store(tmp_path, dama
         LocalDispatchJournal(path, DOMAIN, REVISION)
 
 
-async def test_cancellation_after_intent_holds_and_does_not_retry(tmp_path):
+async def test_cancellation_after_intent_holds_and_does_not_retry(tmp_path, monkeypatch):
     path = tmp_path / "state.sqlite"
     provision_local_store(path, DOMAIN)
     journal = LocalDispatchJournal(path, DOMAIN, REVISION)
@@ -114,6 +129,15 @@ async def test_cancellation_after_intent_holds_and_does_not_retry(tmp_path):
         Trace(),
         dispatch_journal=journal,
     )
+    evaluations = []
+    original = gateway._execution_boundary.evaluate
+
+    def evaluate(*args, **kwargs):
+        evaluation = original(*args, **kwargs)
+        evaluations.append(evaluation)
+        return evaluation
+
+    monkeypatch.setattr(gateway._execution_boundary, "evaluate", evaluate)
     context = invocation_context.set(
         InvocationContext(
             DOMAIN.principal,
@@ -131,11 +155,28 @@ async def test_cancellation_after_intent_holds_and_does_not_retry(tmp_path):
         task.cancel()
         with pytest.raises(asyncio.CancelledError):
             await task
+        # Cancellation propagates: no Envelope is returned, so no result may be released.
+        assert task.cancelled()
+        assert journal.held
+        assert not gateway._execution_boundary._issued
         with pytest.raises(LocalHold, match="DURABLE_HOLD"):
             await gateway.call("Show public award", proposal)
+        assert len(evaluations) == 1
+        assert evaluations[0].policy.decision == "PERMIT"
+        with sqlite3.connect(path) as db:
+            records = [
+                json.loads(row[0]) for row in db.execute("SELECT payload FROM events ORDER BY seq")
+            ]
+        assert len([e for e in records if e["kind"] == "intent"]) == 1
+        assert not [e for e in records if e["kind"] == "finish"]
+        assert records[-1]["kind"] == "hold"
+        assert records[-1]["reason"] == "INCOMPLETE_CALL"
+        assert records[-1]["error_type"] == "CancelledError"
     finally:
         invocation_context.reset(context)
         journal.close()
     assert attempts == 1
     with pytest.raises(LocalHold, match="RECOVERY_HOLD"):
         LocalDispatchJournal(path, DOMAIN, REVISION)
+    assert_restart_hold(path, DOMAIN)
+    assert attempts == 1

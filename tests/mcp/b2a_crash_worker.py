@@ -15,7 +15,12 @@ from civicgate.audit.local_journal import LocalDispatchJournal
 from civicgate.audit.trace import Trace
 from civicgate.demo import fixture_transport
 from civicgate.llm.mock import MockProvider
-from civicgate.mcp.http_identity import InvocationContext, TrustDomain, invocation_context
+from civicgate.mcp.http_identity import (
+    InvocationContext,
+    LocalHold,
+    TrustDomain,
+    invocation_context,
+)
 from civicgate.mcp.tools import Gateway
 from civicgate.models.requests import Proposal
 
@@ -24,9 +29,18 @@ async def main() -> None:
     path = Path(sys.argv[1])
     domain = TrustDomain(**json.loads(sys.argv[2]))
     point = sys.argv[3]
-    journal = LocalDispatchJournal(
-        path, domain, subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-    )
+    try:
+        journal = LocalDispatchJournal(
+            path, domain, subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+        )
+    except LocalHold as exc:
+        if point == "recover_hold" and str(exc) == "RECOVERY_HOLD":
+            print("RECOVERY_HOLD: no Gateway or authority constructed", flush=True)
+            return
+        raise
+    if point == "recover_hold":
+        journal.close()
+        raise AssertionError("Uncertain store unexpectedly admitted a new generation")
     if point == "lock":
         print("LOCKED", flush=True)
         sys.stdin.readline()

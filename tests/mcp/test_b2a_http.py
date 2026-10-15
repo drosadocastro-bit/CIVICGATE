@@ -29,6 +29,8 @@ from civicgate.mcp.http_app import MAX_BODY, StreamableHTTPGatewayApp
 from civicgate.mcp.http_identity import LocalCredentialVerifier, LocalHold, TrustDomain
 from civicgate.mcp.server import create_server
 from civicgate.mcp.tools import Gateway
+from civicgate.models.responses import Envelope
+from tests.mcp.test_b2a_recovery import assert_restart_hold
 
 REVISION = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
 QUERY = {"start_date": "2025-01-01", "end_date": "2025-02-01", "state_code": "PR"}
@@ -328,8 +330,51 @@ async def test_host_origin_body_protocol_and_session_rejection(tmp_path):
     assert not h.calls
 
 
-@pytest.mark.parametrize("failure", ["timeout", "network", "status500"])
-async def test_no_retry_unknown_hold_and_restart(tmp_path, failure):
+def assert_unknown_envelope(result, dispatch_state):
+    assert not result.isError
+    envelope = Envelope.model_validate(result.structuredContent)
+    assert envelope.result is None
+    assert envelope.provenance is None
+    assert envelope.decision == "PERMIT"  # Original policy decision, not fresh authority.
+    assert envelope.status == "ERROR"
+    assert envelope.tool_executed
+    assert envelope.attempt_metadata_available
+    assert envelope.attempt_count == 1
+    assert envelope.dispatch_state == dispatch_state
+    assert envelope.response_state == "TRANSPORT_ERROR"
+    assert envelope.verification_state == "RESULT_UNKNOWN"
+    assert envelope.next_action == "HUMAN_REVIEW_REQUIRED"
+    assert "DISPATCH_UNKNOWN" in envelope.clarification
+    assert envelope.errors and all(not error.retryable for error in envelope.errors)
+
+
+async def assert_no_new_authority(h, client, monkeypatch):
+    records = events(h.store)
+    assert len([e for e in records if e["kind"] == "policy"]) == 1
+    assert len([e for e in records if e["kind"] == "intent"]) == 1
+    finish = records[-1]
+    assert finish["kind"] == "finish"
+    assert finish["hold"]
+    assert finish["final_decision"] == "PERMIT"
+    assert finish["binding_consumed"]
+    assert finish["pre_dispatch_verification"] == "PASS"
+    assert len(finish["attempts"]) == 1
+    assert finish["attempts"][0]["retry_decision"] == "RETRY_BLOCKED"
+    assert not h.app.gateway._execution_boundary._issued
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("HOLD must reject before any new authority evaluation")
+
+    monkeypatch.setattr(h.app.gateway._execution_boundary, "evaluate", forbidden)
+    assert (await client.call_tool("find_federal_awards", ARGS)).isError
+    async with h.client() as (fresh, _, _):
+        assert (await fresh.call_tool("find_federal_awards", ARGS)).isError
+    assert events(h.store) == records
+    assert len(h.calls) == 1
+
+
+@pytest.mark.parametrize("failure", ["timeout", "network", "read_error"])
+async def test_no_retry_unknown_hold_and_restart(tmp_path, failure, monkeypatch):
     attempts = []
 
     def respond(request):
@@ -338,21 +383,43 @@ async def test_no_retry_unknown_hold_and_restart(tmp_path, failure):
             raise httpx.ReadTimeout("synthetic uncertainty")
         if failure == "network":
             raise httpx.ConnectError("synthetic uncertainty")
-        return httpx.Response(500, json={})
+        raise httpx.ReadError("synthetic connection lost before response headers")
 
     h = Harness(tmp_path, transport=httpx.MockTransport(respond))
     async with h.running(), h.client() as (client, _, _):
         result = await client.call_tool("find_federal_awards", ARGS)
-        assert not result.isError
-        assert result.structuredContent["attempt_count"] == 1
-        assert not result.structuredContent["errors"][0]["retryable"]
-        if failure != "status500":
-            assert result.structuredContent["next_action"] == "HUMAN_REVIEW_REQUIRED"
-            assert (await client.call_tool("find_federal_awards", ARGS)).isError
+        assert_unknown_envelope(result, "DISPATCH_UNKNOWN")
+        await assert_no_new_authority(h, client, monkeypatch)
     assert len(attempts) == 1
-    if failure != "status500":
-        with pytest.raises(LocalHold, match="RECOVERY_HOLD"):
-            LocalDispatchJournal(h.store, h.domain, REVISION)
+    assert_restart_hold(h.store, h.domain)
+    assert len(attempts) == 1
+
+
+async def test_known_read_error_response_is_not_dispatch_uncertainty(tmp_path):
+    h = Harness(
+        tmp_path, transport=httpx.MockTransport(lambda request: httpx.Response(500, json={}))
+    )
+    async with h.running(), h.client() as (client, _, _):
+        result = await client.call_tool("find_federal_awards", ARGS)
+        assert not result.isError
+        envelope = Envelope.model_validate(result.structuredContent)
+        assert envelope.result is None
+        assert envelope.dispatch_state == "REQUEST_CONFIRMED"
+        assert envelope.response_state == "RESPONSE_RECEIVED"
+        assert envelope.attempt_count == 1
+        assert envelope.errors[0].code == "UPSTREAM_UNAVAILABLE"
+        assert not envelope.errors[0].retryable
+        assert envelope.next_action == "RETRY_BLOCKED"
+        assert not h.app.journal.held
+        assert not events(h.store)[-1]["hold"]
+    assert len(h.calls) == 1
+    # A completed error response permits clean startup, without replaying that read.
+    journal = LocalDispatchJournal(h.store, h.domain, REVISION)
+    try:
+        assert not journal.held
+    finally:
+        journal.close()
+    assert len(h.calls) == 1
 
 
 async def test_containment_survives_reconnect_and_restart(tmp_path):
@@ -462,11 +529,12 @@ def test_missing_store_wrong_domain_and_exclusive_ownership(tmp_path):
         h.sock.close()
 
 
-async def test_mid_response_failure_has_one_attempt_and_holds(tmp_path):
+@pytest.mark.parametrize("error", [httpx.ReadTimeout, httpx.ReadError, httpx.RemoteProtocolError])
+async def test_mid_response_failure_has_one_attempt_and_holds(tmp_path, monkeypatch, error):
     class BrokenStream(httpx.AsyncByteStream):
         async def __aiter__(self):
             yield b'{"results":'
-            raise httpx.ReadTimeout("synthetic partial response")
+            raise error("synthetic partial response")
 
     h = Harness(
         tmp_path,
@@ -478,13 +546,12 @@ async def test_mid_response_failure_has_one_attempt_and_holds(tmp_path):
     )
     async with h.running(), h.client() as (client, _, _):
         result = await client.call_tool("find_federal_awards", ARGS)
-        assert result.structuredContent["attempt_count"] == 1
-        assert result.structuredContent["response_state"] == "TRANSPORT_ERROR"
-        assert result.structuredContent["next_action"] == "HUMAN_REVIEW_REQUIRED"
-        assert (await client.call_tool("find_federal_awards", ARGS)).isError
+        # Headers confirm receipt; incomplete body still means an unknown result.
+        assert_unknown_envelope(result, "REQUEST_CONFIRMED")
+        await assert_no_new_authority(h, client, monkeypatch)
     assert len(h.calls) == 1
-    with pytest.raises(LocalHold, match="RECOVERY_HOLD"):
-        LocalDispatchJournal(h.store, h.domain, REVISION)
+    assert_restart_hold(h.store, h.domain)
+    assert len(h.calls) == 1
 
 
 async def test_cross_instance_sessions_and_credentials_are_not_transferable(tmp_path):
