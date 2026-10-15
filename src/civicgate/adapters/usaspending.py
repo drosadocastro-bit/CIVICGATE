@@ -151,10 +151,17 @@ class USAspending:
     """Fixed public origin; never accepts URLs, credentials, or arbitrary REST paths."""
 
     def __init__(
-        self, transport: httpx.AsyncBaseTransport | None = None, fixture: bool = False
+        self,
+        transport: httpx.AsyncBaseTransport | None = None,
+        fixture: bool = False,
+        *,
+        max_attempts: int = MAX_ATTEMPTS,
     ) -> None:
         self.transport = transport
         self.fixture = fixture
+        if type(max_attempts) is not int or not 1 <= max_attempts <= MAX_ATTEMPTS:
+            raise ValueError("Invalid bounded attempt limit")
+        self.max_attempts = max_attempts
 
     @staticmethod
     def _retry_after(response: httpx.Response) -> float | None:
@@ -179,6 +186,7 @@ class USAspending:
         method = "GET" if payload is None else "POST"
         query_hash = fingerprint({"method": method, "url": BASE_URL + path, "body": payload})
         started = monotonic()
+        max_attempts = self.max_attempts
         attempts: list[AttemptRecord] = []
         async with httpx.AsyncClient(
             transport=self.transport,
@@ -186,7 +194,7 @@ class USAspending:
             follow_redirects=False,
             trust_env=False,
         ) as client:
-            for attempt in range(1, MAX_ATTEMPTS + 1):
+            for attempt in range(1, max_attempts + 1):
                 response: httpx.Response | None = None
                 retry_after: float | None = None
                 remaining = DEFAULT_RETRY_BUDGET_SECONDS - (monotonic() - started)
@@ -232,7 +240,7 @@ class USAspending:
                                 attempts.append(
                                     AttemptRecord(
                                         attempt=attempt,
-                                        max_attempts=MAX_ATTEMPTS,
+                                        max_attempts=max_attempts,
                                         elapsed_ms=(monotonic() - started) * 1000,
                                         dispatch_state="REQUEST_CONFIRMED",
                                         response_state="RESPONSE_RECEIVED",
@@ -260,7 +268,7 @@ class USAspending:
                     attempts.append(
                         AttemptRecord(
                             attempt=attempt,
-                            max_attempts=MAX_ATTEMPTS,
+                            max_attempts=max_attempts,
                             elapsed_ms=(monotonic() - started) * 1000,
                             dispatch_state=dispatch_state,
                             response_state="TRANSPORT_ERROR",
@@ -269,12 +277,12 @@ class USAspending:
                             response_received=response is not None,
                             retry_after_seconds=retry_after,
                             retry_decision=(
-                                "RETRY_ALLOWED" if attempt < MAX_ATTEMPTS else "RETRY_BLOCKED"
+                                "RETRY_ALLOWED" if attempt < max_attempts else "RETRY_BLOCKED"
                             ),
                             retry_reason="timeout",
                         )
                     )
-                    if attempt == MAX_ATTEMPTS:
+                    if attempt == max_attempts:
                         error.retryable = False
                         error.attempts = tuple(attempts)
                         error.query_fingerprint = query_hash
@@ -301,7 +309,7 @@ class USAspending:
                     attempts.append(
                         AttemptRecord(
                             attempt=attempt,
-                            max_attempts=MAX_ATTEMPTS,
+                            max_attempts=max_attempts,
                             elapsed_ms=(monotonic() - started) * 1000,
                             dispatch_state=(
                                 "REQUEST_CONFIRMED" if response is not None else "DISPATCH_UNKNOWN"
@@ -312,12 +320,12 @@ class USAspending:
                             response_received=response is not None,
                             retry_after_seconds=None,
                             retry_decision=(
-                                "RETRY_ALLOWED" if attempt < MAX_ATTEMPTS else "RETRY_BLOCKED"
+                                "RETRY_ALLOWED" if attempt < max_attempts else "RETRY_BLOCKED"
                             ),
                             retry_reason="network error",
                         )
                     )
-                    if attempt == MAX_ATTEMPTS:
+                    if attempt == max_attempts:
                         error.retryable = False
                         error.attempts = tuple(attempts)
                         error.query_fingerprint = query_hash
@@ -339,7 +347,7 @@ class USAspending:
                         attempts.append(
                             AttemptRecord(
                                 attempt=attempt,
-                                max_attempts=MAX_ATTEMPTS,
+                                max_attempts=max_attempts,
                                 elapsed_ms=(monotonic() - started) * 1000,
                                 dispatch_state="REQUEST_CONFIRMED",
                                 response_state="RESPONSE_RECEIVED",
@@ -348,7 +356,7 @@ class USAspending:
                                 response_received=True,
                                 retry_after_seconds=retry_after,
                                 retry_decision=(
-                                    "RETRY_ALLOWED" if attempt < MAX_ATTEMPTS else "RETRY_BLOCKED"
+                                    "RETRY_ALLOWED" if attempt < max_attempts else "RETRY_BLOCKED"
                                 ),
                                 retry_reason="retryable upstream status",
                             )
@@ -359,7 +367,7 @@ class USAspending:
                         attempts.append(
                             AttemptRecord(
                                 attempt=attempt,
-                                max_attempts=MAX_ATTEMPTS,
+                                max_attempts=max_attempts,
                                 elapsed_ms=(monotonic() - started) * 1000,
                                 dispatch_state=(
                                     "REQUEST_CONFIRMED"
@@ -377,8 +385,8 @@ class USAspending:
                                 retry_reason=exc.code.lower(),
                             )
                         )
-                    if not exc.retryable or attempt == MAX_ATTEMPTS:
-                        exc.retryable = False if attempt == MAX_ATTEMPTS else exc.retryable
+                    if not exc.retryable or attempt == max_attempts:
+                        exc.retryable = False if attempt == max_attempts else exc.retryable
                         exc.attempts = tuple(attempts)
                         exc.query_fingerprint = query_hash
                         raise exc

@@ -15,6 +15,7 @@ from civicgate.adapters.usaspending import (
     DataBatch,
     USAspending,
 )
+from civicgate.audit.dispatch import DispatchJournal
 from civicgate.audit.trace import Trace
 from civicgate.governance.agent_k import inspect
 from civicgate.governance.execution import ExecutionBoundary, ExecutionBoundaryError
@@ -45,6 +46,7 @@ class Gateway:
         *,
         require_judge: bool = True,
         enable_agent_k: bool = True,
+        dispatch_journal: DispatchJournal | None = None,
     ) -> None:
         if not 0 <= threshold <= 1:
             raise ValueError("Invalid confidence threshold")
@@ -55,6 +57,7 @@ class Gateway:
         self.require_judge = require_judge
         self.enable_agent_k = enable_agent_k
         self._denials = 0
+        self._dispatch_journal = dispatch_journal
         self._lock = asyncio.Lock()
         self._execution_boundary = ExecutionBoundary(TOOLS)
         self._mcp_owner: object | None = None
@@ -114,13 +117,23 @@ class Gateway:
         # The caller can retain and mutate its proposal while this call waits for the lock.
         proposal = proposal.model_copy(deep=True)
         async with self._lock:
-            return await self._call(request, proposal, planning_failed)
+            journal = self._dispatch_journal
+            if journal is not None:
+                self._denials = journal.admit()
+            try:
+                return await self._call(request, proposal, planning_failed)
+            except BaseException as exc:
+                if journal is not None:
+                    journal.failed(exc)
+                raise
 
     async def _call(self, request: str, proposal: Proposal, planning_failed: bool) -> Envelope:
         proposal = proposal.model_copy(deep=True)
         policy_context = self._policy_context()
         require_judge, enable_agent_k, threshold, denials = policy_context
         request_id = str(uuid4())
+        if self._dispatch_journal is not None:
+            self._dispatch_journal.begin(request_id)
         text = request + "\n" + json.dumps(proposal.model_dump(), ensure_ascii=False)
         valid = 0 < len(request.strip()) <= 4000 and len(text) <= 16000
         args = None
@@ -233,6 +246,16 @@ class Gateway:
                 judge_signal=judge, agent_k_signal=k_signal, policy_reasons=policy.reasons
             ),
         )
+        if self._dispatch_journal is not None:
+            self._dispatch_journal.policy(
+                request_id,
+                {
+                    "initial_decision": policy.decision,
+                    "reasons": policy.reasons,
+                    "binding_issued": authority_envelope is not None,
+                    "binding_issuance_error": issuance_error,
+                },
+            )
         if policy.decision == "DENY":
             # Containment counts scope-escape attempts (tripwires), not protocol mistakes
             # such as unknown tools or invalid arguments.
@@ -240,6 +263,8 @@ class Gateway:
                 self._denials += 1
             if "SESSION_CONTAINMENT_ACTIVE" in policy.reasons:
                 envelope.clarification = "Session containment is active after repeated policy violations in this gateway process. Later calls are denied regardless of content; restart the gateway process to reset."
+                if self._dispatch_journal is not None:
+                    envelope.clarification = "Durable containment is active. Restart and reconnect do not clear it; human review is required."
             envelope.next_action = "STOP"
         elif policy.decision == "REVIEW_REQUIRED":
             envelope.clarification = "Clarify recipient, agency, date range or research intent; resolve the listed policy reasons."
@@ -262,6 +287,8 @@ class Gateway:
             try:
                 if issuance_error is not None:
                     raise ExecutionBoundaryError(issuance_error)
+                if self._dispatch_journal is not None:
+                    self._dispatch_journal.intent(authority_envelope)
                 binding = self._execution_boundary.consume(
                     authority_envelope,
                     request_id=request_id,
@@ -405,6 +432,18 @@ class Gateway:
                     )
                 ]
                 self._set_validation_state(envelope, "ADAPTER_SCHEMA_OR_PROVENANCE_INVALID")
+        if self._dispatch_journal is not None:
+            self._dispatch_journal.finish(
+                envelope,
+                self._denials,
+                {
+                    "pre_dispatch_verification": pre_dispatch_verification,
+                    "execution_boundary_error": execution_boundary_error,
+                    "attempts": [a.model_dump() for a in attempts]
+                    if "attempts" in locals()
+                    else [],
+                },
+            )
         self.trace.record(
             request_id,
             "completed",
