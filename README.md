@@ -2,9 +2,50 @@
 
 [![CI](https://github.com/drosadocastro-bit/CIVICGATE/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/drosadocastro-bit/CIVICGATE/actions/workflows/ci.yml?query=branch%3Amain)
 
-CivicGate is a governed MCP gateway that lets AI agents query public US federal spending data (USAspending) without ever letting the model authorize its own actions. The problem: as AI moves from chatbots to agents that call tools, whoever proposes the action cannot also be the one who approves it — yet most agent setups blur that line. CivicGate draws it sharply: models propose; a deterministic, versioned policy decides PERMIT, DENY, or REVIEW_REQUIRED. No model output — no matter how confident — can grant execution authority; semantic judges and safety signals are advisory only. Every PERMIT is bound to the exact tool, arguments, and policy context, and verified immediately before dispatch; denials fail closed. Channel A runs locally today (bounded MCP enforcement plus a five-step LangGraph workflow); Channel B is designed to enforce the same policy contract on Databricks for redundancy, with one hard rule: a DENY on one channel is never silently re-run on the other. Every decision lands in a tamper-evident audit trail, so each query is reproducible and each denial explainable. CivicGate is honest about its limits: judge confidence is uncalibrated, the evaluation harness is synthetic, and the nominal operating envelope — what "normal" looks like, measured — is published alongside the code. In short: trustworthy AI access to public spending data, where authority is bounded, measured, and never derived from capability.
+CivicGate is a governed MCP gateway that lets AI agents query public US federal spending data (USAspending) without ever letting the model authorize its own actions. The problem: as AI moves from chatbots to agents that call tools, whoever proposes the action cannot also be the one who approves it — yet most agent setups blur that line. CivicGate draws it sharply: models propose; a deterministic, versioned policy decides PERMIT, DENY, or REVIEW_REQUIRED. No model output — no matter how confident — can grant execution authority; semantic judges and safety signals are advisory only. Every PERMIT is bound to the exact tool, arguments, and policy context, and verified immediately before dispatch; denials fail closed. Channel A runs locally today (bounded MCP enforcement plus a five-step LangGraph workflow); Channel B is designed to enforce the same policy contract on Databricks for redundancy, with one hard rule: a DENY on one channel is never silently re-run on the other. Governance decisions are recorded in reviewable traces; experimental hash-chained journals provide additional integrity evidence only within tested local scopes, not a blanket production guarantee. CivicGate is honest about its limits: judge confidence is uncalibrated, the evaluation harness is synthetic, and the nominal operating envelope — what "normal" looks like, measured — is published alongside the code. In short: trustworthy AI access to public spending data, where authority is bounded, measured, and never derived from capability.
 
 Milestone 2 adds a real local Granite planner path, external Luna/Sonnet judge adapters, explicit configuration/secret providers, a four-cell hybrid evaluation, and a redacted trace viewer. USAspending is the only government source. No governmental decisions, private systems, payment execution or government writes.
+
+## Architecture at a glance
+
+```mermaid
+flowchart TB
+    HOST["MCP host / agent"]
+
+    subgraph A["CHANNEL A - Local (implemented)"]
+        direction TB
+        A_MCP["MCP stdio server<br/>bounded tool discovery"]
+        A_GW["Gateway A"]
+        A_POLICY["Deterministic policy A<br/>PERMIT / DENY / REVIEW_REQUIRED"]
+        A_BOUND["ExecutionBoundary A<br/>exact private single-use binding"]
+        A_API["USAspending adapter<br/>public read-only data"]
+        A_MCP --> A_GW
+        A_GW --> A_POLICY
+        A_POLICY -->|"PERMIT"| A_BOUND
+        A_BOUND --> A_API
+    end
+
+    subgraph B["CHANNEL B - Databricks (planned; NOT deployed)"]
+        direction TB
+        B_MCP["Authenticated MCP Streamable HTTP<br/>(planned)"]
+        B_GW["Gateway B<br/>(planned independent instance)"]
+        B_POLICY["Deterministic policy B<br/>same rules, separate decision"]
+        B_LEDGER["Durable intent ledger<br/>(local B2b experiment only)"]
+        B_BOUND["ExecutionBoundary B<br/>(planned cloud composition)"]
+        B_API["USAspending read-only adapter<br/>(cloud integration not tested)"]
+        B_MCP --> B_GW
+        B_GW --> B_POLICY
+        B_POLICY -->|"PERMIT: commit intent first"| B_LEDGER
+        B_LEDGER --> B_BOUND
+        B_BOUND --> B_API
+    end
+
+    HOST --> A_MCP
+```
+
+**Reading guide for judges:** Both channels are designed to use the **same deterministic policy code and tool contracts**, but each has its own Gateway, execution boundary, identity context and authorization decision. The diagram shows no transfer of bindings or authority between channels. **DENY stops**; a failure or uncertain dispatch never authorizes an automatic attempt on the other channel.
+
+**Evidence boundary:** Channel A's MCP stdio profile and optional LangGraph workflow have been tested locally. B2a Streamable HTTP and B2b PostgreSQL/fencing are bounded local experiments; **Channel B has not been deployed or validated in a Databricks App**. The proposed cloud ledger does not establish exactly-once execution or global fencing.
 
 ## Quickstart
 
@@ -95,6 +136,46 @@ From this checkout, using the development environment described in Quickstart:
 These commands demonstrate a permitted synthetic read, DENY, and REVIEW_REQUIRED. Each run writes to a fresh local evidence directory. Orchestration completion, policy decision, backend dispatch, response validation and provenance are separate observations; transport success does not imply verified results. No live model, API or production credential is needed.
 
 See [A1 execution boundary](docs/CHANNEL_A1_EXECUTION_BOUNDARY.md) and [A2 orchestration and trust limits](docs/CHANNEL_A2_ORCHESTRATION.md). Technical review and branch publication do not grant production approval or governmental authority.
+
+## Technical enforcement flow - Channel A
+
+```mermaid
+flowchart TB
+    HOST["MCP host / agent"]
+    A2["Optional A2 LangGraph workflow<br/>intake - discovery - planner - gateway - result"]
+
+    subgraph A["CHANNEL A - Local MCP stdio"]
+        MCP["MCP stdio server"]
+        DISC["Bounded Tool Discovery<br/>tool names, metadata and schemas only"]
+        GW["Gateway A<br/>validated tool invocation"]
+        JUDGE["Semantic Judge<br/>advisory only"]
+        K["Agent K<br/>advisory only"]
+        POLICY["Deterministic policy<br/>PERMIT / DENY / REVIEW_REQUIRED"]
+        BIND["ExecutionBoundary<br/>exact single-use binding verified before dispatch"]
+        STOP["STOP<br/>no adapter dispatch"]
+        ADAPTER["USAspending adapter<br/>read-only"]
+        TRACE["Decision trace (JSONL)<br/>reviewable, not inherently tamper-evident"]
+    end
+
+    HOST -->|"direct MCP client"| MCP
+    HOST -->|"optional orchestration"| A2
+    A2 -->|"MCP client invokes tools"| MCP
+    MCP -->|"tools/list"| DISC
+    MCP -->|"tools/call"| GW
+    GW --> POLICY
+    JUDGE -.->|"advisory signal"| POLICY
+    K -.->|"advisory signal"| POLICY
+    POLICY -->|"PERMIT"| BIND
+    POLICY -->|"DENY / pre-dispatch REVIEW_REQUIRED"| STOP
+    BIND --> ADAPTER
+    POLICY --> TRACE
+    STOP --> TRACE
+    ADAPTER --> TRACE
+```
+
+**Reading guide:** Solid arrows represent requests, decisions, execution or audit flow; **dotted arrows are advisory signals**, never grants of execution authority. Discovery exposes metadata and schemas, not permission to invoke a tool. The optional A2 workflow is a separate MCP client path, not a mandatory stage of every MCP invocation. A post-dispatch `REVIEW_REQUIRED` can follow an originally authorized read and does not retroactively revoke that initial PERMIT.
+
+Channel A's JSONL trace is **not** claimed to be tamper-evident by itself. Hash-linked, durable journals are separately scoped to experimental B2a/B2b components and their documented test conditions.
 
 ## Verification and evidence
 
