@@ -32,7 +32,7 @@ Prepared 2026-10-21. Historical observations below were read from preserved repo
 | 006F | Participant-reported diagnostic result | ROOT_CAUSE_NARROWED: Host rejection signature strongly supported | Original 006F response/log artifact not independently available in inspected reports; incoming Host/proxy trust UNKNOWN |
 | 006G | Historical local differential/security | 359 observer tests; combined scope 552 PASS including prior suites | Host decision preserved; fingerprint potentially guessable; cloud deployment HOLD |
 | 006H | Historical Linux 3.11 / local processes | 607 PASS / 0 FAIL / 0 SKIP: 359 + 56 + 74 + 63 prior cases + 55 custody cases | Subsumes 006G totals. Local capability/IPC behavior is not cloud identity, log ACL or durable cross-worker custody |
-| 006I | Deferred by human instruction | Source pending location | NOT VERIFIED; excluded from checkpoint conclusions |
+| 006I | User-supplied Genie report; local bytes verified | [Addendum](B2B_MVP_006I_LOG_ACCESS_AND_CUSTODY_ADDENDUM.md): access control PARTIAL, effective readers UNKNOWN, private custody PROPOSED_ONLY, worker attribution UNKNOWN; prior uncaptured logs reported lost | Source now available; no independent cloud remeasurement. Calendar date absent from supplied observation times. Deployment HOLD |
 
 ## Critical preserved identities
 

@@ -46,6 +46,6 @@ Existing A1/discovery/A2 stdio/orchestration/B2a HTTP/recovery checks pass 192 c
 - Real PostgreSQL harness and local receiver integration tests: not silently represented as exercised by synthetic tests.
 - FAA-C1 integration worktree: five shared-module edits and dependencies remain separate, requiring their own review.
 - Cloud deployment builders/entrypoints/locks: the approved Gate 2 ZIP remains untouched; this branch is not a replacement deployment package.
-- 006I: explicitly deferred pending its original evidence.
+- 006I: its subsequently supplied original remains private; the [sanitized documentary addendum](B2B_MVP_006I_LOG_ACCESS_AND_CUSTODY_ADDENDUM.md) reconciles its claims without adding a runtime candidate. The original 115-row inventory retains its first-checkpoint scope.
 
 The complete exact included-file list is the 22 rows marked `INCLUDE` in the inventory; the 93 other rows retain their individual exclusion rationale.

@@ -16,7 +16,7 @@ Status: **research checkpoint; cloud deployment HOLD**. Prepared 2026-10-21.
 | Diagnostic metadata | Host hash may be guessed; local budgets reset after restart and may be exhausted by other traffic | Treat metadata as sensitive; no public response fields or unauthenticated endpoint |
 | Snapshot provenance | Local digests match cloud-reported values, not independently fetched runtime bytes | Preserve cross-source limitation; require independent cloud/source or runtime evidence for stronger claims |
 | Cloud operational state | Earlier startup/shutdown observations are historical/reported; no cloud call in this task | Check current state only in separately authorized session; do not infer STOPPED from an unavailable endpoint |
-| 006I | Human explicitly deferred while source is located | Additive later reconciliation; no current log-access/custody conclusion |
+| 006I | [Supplied report reconciled](B2B_MVP_006I_LOG_ACCESS_AND_CUSTODY_ADDENDUM.md); local identity verified, cloud claims Genie-reported | Document-location gap closed; effective readers, private custody, permission semantics and worker attribution remain unresolved |
 | Public publication | Repository is public and main has no reported active protection rule | Exact-content human push approval; PR/merge remain separately gated |
 
 ## Verification limits

@@ -10,7 +10,7 @@ The checkpoint starts at verified remote main `360f30df8a4cb371233f1ef2b9e4e25b3
 
 The [candidate inventory](B2B_CANDIDATE_INVENTORY.json) accounts for **115 source-qualified files**: 22 INCLUDE, 58 EXCLUDE, and 35 PRIVATE_EVIDENCE_ONLY. It covers the 96 research candidates and 19 separate FAA-C1 integration candidates; identical paths in different checkouts remain separately identified. Included artifacts are byte-identical copies. Original reports remain private and unchanged; these documents are newly authored summaries.
 
-006I is **deferred by explicit human instruction while its original evidence is located**. It is excluded from this checkpoint's verified history. An absent source is not a passing log-access or custody result.
+006I was deferred in the first checkpoint. Danny subsequently supplied its report; the [006I addendum](B2B_MVP_006I_LOG_ACCESS_AND_CUSTODY_ADDENDUM.md) records its verified local identity and reconciles the findings as **Genie-reported**, without independent cloud remeasurement. The document is now available; effective log readers and private cloud custody remain unresolved.
 
 ## One governance core, separate execution compositions
 
