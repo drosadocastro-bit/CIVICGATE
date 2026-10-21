@@ -1,0 +1,268 @@
+{
+  "candidate": "FAA-C1-R5A LF publication identity amendment",
+  "base_head": "94692596503601bc53d0358faf659afb260c69be",
+  "status": "READY_FOR_HUMAN_REVIEW",
+  "git_publication": "HOLD",
+  "cloud_deployment": "HOLD",
+  "real_usaspending_compatibility": "NOT_VERIFIED",
+  "r3_inventory_sha256": "0d421c205e492a3ad94fd3096566ccda5ce228faff5a1ac7a31b972957ad8f66",
+  "source_test_files_unchanged": 15,
+  "sanitized_reports": 2,
+  "private_references_replaced": 6,
+  "archive_file_count": 20,
+  "manifest_self_hash": "MEASURED_EXTERNALLY_TO_AVOID_SELF_REFERENCE",
+  "files": [
+    {
+      "path": "docs/B2B_FAA_C1_GATEWAY_INTEGRATION_REPORT.md",
+      "bytes": 19514,
+      "sha256": "6f4e6fc8e2caf69d5523c6557c71b864fbb5cecc1f02e335cc55449fb9d9c5e4",
+      "class": "SANITIZED_HISTORICAL_REPORT",
+      "original_identity": {
+        "bytes": 19108,
+        "sha256": "f7a914b5f3de208ddbfc94590c529fc1ae1061a0c2868d1529974c9a818a6a97"
+      },
+      "redaction_count": 2,
+      "technical_content_unchanged": true
+    },
+    {
+      "path": "docs/B2B_FAA_C1_R2_NUMERIC_FIDELITY_REMEDIATION.md",
+      "bytes": 16991,
+      "sha256": "85ed21b55a301a4fe5ff843d3a3b6fc69f234bc7f4ad2ef60b399a34499109c9",
+      "class": "SANITIZED_HISTORICAL_REPORT",
+      "original_identity": {
+        "bytes": 16667,
+        "sha256": "c326291b34094ddcdbe33eaffd3032f960041b790eea3a949596645cff39d082"
+      },
+      "redaction_count": 4,
+      "technical_content_unchanged": true
+    },
+    {
+      "path": "src/civicgate/channel_b/faa_adapter_v1.py",
+      "bytes": 8296,
+      "sha256": "27313df420b6adca1b74a1d68a7ad6b70b6dd6a6d4a21b00de328f14b7d177cd",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "src/civicgate/channel_b/faa_http_v1.py",
+      "bytes": 5373,
+      "sha256": "e764ee526222ba862ef77d287e09627d09d3b8bad7d2599d48f13eeeb99ffd41",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "src/civicgate/channel_b/faa_money_v1.py",
+      "bytes": 3563,
+      "sha256": "146e6d65b0956a4a82e4c56ec5a4bcd9899b91f15cebfeaded6c0bfe77e6aa3b",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "src/civicgate/channel_b/faa_profile_v1.py",
+      "bytes": 12447,
+      "sha256": "0b5bfe87b06eb11c42716e5017bf37525fbbb726e65fb6dc36a2d542cf83cfe5",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "src/civicgate/channel_b/invocation_contract_v1.py",
+      "bytes": 2494,
+      "sha256": "a8862ac66c9e2c7adc61fe78a560121bb9c9b9ad3398a34311141e7c67a5f968",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "src/civicgate/governance/execution.py",
+      "bytes": 13332,
+      "sha256": "cd75f40bbc3addb343a4127c377b73b7ff90cb12972dca7d4cd9c881a08599fc",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "src/civicgate/governance/policy.py",
+      "bytes": 3681,
+      "sha256": "50204b8374528c2f902153d9d1be83c623152d1874a754663bd3d2399549ba24",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "src/civicgate/governance/request_risk.py",
+      "bytes": 9903,
+      "sha256": "242d51e5b674666cc7d8aa1c5115a74372b24afcd1fa3661c8d8ca3c893ae08f",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "src/civicgate/mcp/discovery.py",
+      "bytes": 5221,
+      "sha256": "18a618589bbf53543d1e21f51f4fcc1d2466d174ea8cb02b707c0aabcce2a686",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "src/civicgate/mcp/tools.py",
+      "bytes": 23424,
+      "sha256": "db025fda046a8dcd85f4af2ea37332f90a532740cdf7551b9a0e8c50603c0eb8",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "tests/mcp/faa_legacy_projection.py",
+      "bytes": 3126,
+      "sha256": "c916ba3748558bd239e58e10eb63cce0eb430c81807e299ec793b05121733263",
+      "class": "PUBLICATION_R5A_LF",
+      "historical_source_identity": {
+        "label": "ORIGINAL_R4_CRLF",
+        "bytes": 3207,
+        "sha256": "867a338330c8283105b7738523bc8abaf869d074f2403d9f53856f94d72af533",
+        "r3_inventory_sha256": "0d421c205e492a3ad94fd3096566ccda5ce228faff5a1ac7a31b972957ad8f66",
+        "r4_zip_sha256": "cf46d34d81277335c0394a59639ebb1e925a85462dab5dec500320812fa2f09e"
+      },
+      "eol_transformation": {
+        "from": "CRLF",
+        "to": "LF",
+        "count": 81,
+        "other_byte_changes": 0,
+        "encoding": "UTF-8_NO_BOM_UNCHANGED"
+      },
+      "git_serialization": {
+        "result": "PASS",
+        "raw_blob": "fb5fbfcf51ca7165b042e012381c6af8ceb73c0a",
+        "filtered_blob": "fb5fbfcf51ca7165b042e012381c6af8ceb73c0a",
+        "additional_normalization": false,
+        "attributes_unchanged": true,
+        "objects_written": false
+      }
+    },
+    {
+      "path": "tests/mcp/test_faa_c1.py",
+      "bytes": 19574,
+      "sha256": "0faa83bd1c3378c2f23a8becf8d0bebc8aa9e699c76f846e8c4cdb6d54ded239",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "tests/mcp/test_faa_c1_controlled_acceptance.py",
+      "bytes": 8087,
+      "sha256": "86fcc00764f0562bb57039e1b461922055c28283386bd6ccb94d5998ca0b2a43",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "tests/mcp/test_faa_c1_http.py",
+      "bytes": 8862,
+      "sha256": "f638dc73d2fe0dcb17564e6171b6bb9b960fe9161eb28396147e743c6fdddfc1",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "tests/mcp/test_faa_c1_r2_numeric.py",
+      "bytes": 10682,
+      "sha256": "06184e7cf8279d0fd20ab81270228d7046a9081dd1eec899a120b47402526d41",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "tests/mcp/test_faa_c1_r2_numeric_http.py",
+      "bytes": 1937,
+      "sha256": "ea2b28f0bb52a6a22ecbc56562834086ec053d3478e26a030a57adc3f9d5230c",
+      "class": "R3_IDENTICAL_SOURCE_OR_TEST"
+    },
+    {
+      "path": "review/EVIDENCE_BOUNDARIES.md",
+      "bytes": 5470,
+      "sha256": "8c77b2688ca5e2ebd089789948b913cb31c8373a8f3a095e9498156239fc0424",
+      "class": "R4_EVIDENCE_BOUNDARIES"
+    }
+  ],
+  "source_test_unchanged_basis": "Original R3/R4 source bytes",
+  "source_test_files_eol_equivalent": 1,
+  "publication_identity_amendment": {
+    "id": "FAA-C1-R5A",
+    "original_package": {
+      "label": "ORIGINAL_R4_CRLF",
+      "bytes": 65770,
+      "sha256": "cf46d34d81277335c0394a59639ebb1e925a85462dab5dec500320812fa2f09e"
+    },
+    "original_manifest_identity": {
+      "bytes": 5159,
+      "sha256": "8ff2c9a68ea86aba050be9c0dfc15fd2578e9efa13abe8a85cbf60d4af241753"
+    },
+    "current_label": "PUBLICATION_R5A_LF",
+    "changed_existing_files": [
+      "tests/mcp/faa_legacy_projection.py",
+      "review/PUBLICATION_MANIFEST.json"
+    ],
+    "other_candidate_files_byte_identical_to_R4": 18,
+    "source_tests": {
+      "total": 16,
+      "byte_identical_to_R3_R4": 15,
+      "eol_only_equivalent": 1
+    },
+    "historical_document_scope": "The retained Markdown documents describe the original integration, R2 and R4 candidates and executions. Their byte-identity statements and source tables apply to those historical candidates. Current R5A publication identities are specified by this manifest. One helper differs only by verified CRLF-to-LF conversion. Historical test counts remain historical and are not rewritten as fresh R5A results.",
+    "retained_historical_documents": [
+      {
+        "path": "docs/B2B_FAA_C1_GATEWAY_INTEGRATION_REPORT.md",
+        "bytes": 19514,
+        "sha256": "6f4e6fc8e2caf69d5523c6557c71b864fbb5cecc1f02e335cc55449fb9d9c5e4"
+      },
+      {
+        "path": "docs/B2B_FAA_C1_R2_NUMERIC_FIDELITY_REMEDIATION.md",
+        "bytes": 16991,
+        "sha256": "85ed21b55a301a4fe5ff843d3a3b6fc69f234bc7f4ad2ef60b399a34499109c9"
+      },
+      {
+        "path": "review/EVIDENCE_BOUNDARIES.md",
+        "bytes": 5470,
+        "sha256": "8c77b2688ca5e2ebd089789948b913cb31c8373a8f3a095e9498156239fc0424"
+      }
+    ],
+    "equivalence_verification": {
+      "normalized_byte_identity": "PASS",
+      "python_ast_including_attributes": "PASS",
+      "token_lexemes_comments_imports_identifiers_control_flow": "PASS",
+      "tokens_compared": 608,
+      "compiled_code_same_runtime": "PASS",
+      "fresh_crlf_lf_base_runtime_projection": "PASS",
+      "legacy_schemas": 4,
+      "legacy_discovery_entries": 4,
+      "legacy_behavior_cases": 10,
+      "volatile_projection_fields_excluded": [
+        "request_id",
+        "provenance.retrieved_at"
+      ]
+    },
+    "fresh_R5A_tests": {
+      "full": {
+        "total": 2769,
+        "passed": 2768,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 1
+      },
+      "focused": {
+        "total": 277,
+        "passed": 277,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "baseline-a1-b2a": {
+        "total": 126,
+        "passed": 126,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "candidate-a1-b2a": {
+        "total": 126,
+        "passed": 126,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "historical-negative-controls": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "full_test_node_outcomes_match_R3_R4": true,
+    "ruff": "PASS",
+    "format": "PASS",
+    "mypy": "PASS",
+    "dependency_consistency": "PASS",
+    "staging": "NOT_PERFORMED",
+    "commit": "NOT_PERFORMED",
+    "push_pr_merge": "HOLD",
+    "cloud_deployment": "HOLD"
+  }
+}

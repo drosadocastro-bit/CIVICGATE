@@ -14,6 +14,7 @@ from typing import Literal
 
 from pydantic import TypeAdapter
 
+from civicgate.channel_b.invocation_contract_v1 import InvocationContract
 from civicgate.governance.authority import denied_reasons
 from civicgate.models.requests import TOOLS, Search, Text
 
@@ -113,7 +114,11 @@ def _name_literal(match: re.Match[str]) -> str | None:
 
 
 def literal_proposal_reasons(
-    request: str, tool: str, arguments_json: str | None
+    request: str,
+    tool: str,
+    arguments_json: str | None,
+    *,
+    contract: InvocationContract | None = None,
 ) -> tuple[str, ...]:
     """Compare explicit names with effective Search filters, never rewrite them.
 
@@ -137,10 +142,16 @@ def literal_proposal_reasons(
     if arguments_json is None:
         return ("NAME_LITERAL_PROPOSAL_UNAVAILABLE",)
     try:
-        effective = TOOLS[tool].model_validate_json(arguments_json)
+        registry = TOOLS if contract is None else contract.registry
+        if contract is not None:
+            contract.validate()
+        effective = registry[tool].model_validate_json(arguments_json)
     except (ValueError, TypeError):
         return ("NAME_LITERAL_PROPOSAL_UNAVAILABLE",)
-    if not isinstance(effective, Search):
+    if contract is not None and tool == "find_federal_awards":
+        if any(field not in contract.find_literal_fields for field, _ in constraints):
+            return ("NAME_LITERAL_PROPOSAL_UNSUPPORTED",)
+    elif not isinstance(effective, Search):
         return ("NAME_LITERAL_PROPOSAL_UNSUPPORTED",)
     if any(getattr(effective, field) != value for field, value in constraints):
         return ("NAME_LITERAL_PROPOSAL_MISMATCH",)

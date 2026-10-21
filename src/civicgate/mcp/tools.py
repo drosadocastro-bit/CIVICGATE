@@ -17,12 +17,13 @@ from civicgate.adapters.usaspending import (
 )
 from civicgate.audit.dispatch import DispatchJournal
 from civicgate.audit.trace import Trace
+from civicgate.channel_b.invocation_contract_v1 import InvocationContract
 from civicgate.governance.agent_k import inspect
 from civicgate.governance.execution import ExecutionBoundary, ExecutionBoundaryError
 from civicgate.governance.judge import assess
 from civicgate.governance.policy import PolicyFacts, evaluate
 from civicgate.llm.base import JudgeModel
-from civicgate.models.governance import Governance, JudgeSignal, KSignal
+from civicgate.models.governance import Governance, JudgeSignal, KSignal, PolicyResult
 from civicgate.models.requests import TOOLS, Award, Proposal, Recipient, Search
 from civicgate.models.responses import Envelope, Error, RetryClass
 
@@ -47,6 +48,7 @@ class Gateway:
         require_judge: bool = True,
         enable_agent_k: bool = True,
         dispatch_journal: DispatchJournal | None = None,
+        contract: InvocationContract | None = None,
     ) -> None:
         if not 0 <= threshold <= 1:
             raise ValueError("Invalid confidence threshold")
@@ -59,7 +61,11 @@ class Gateway:
         self._denials = 0
         self._dispatch_journal = dispatch_journal
         self._lock = asyncio.Lock()
-        self._execution_boundary = ExecutionBoundary(TOOLS)
+        if contract is not None:
+            contract.validate()
+        self._contract = contract
+        self._registry = TOOLS if contract is None else contract.registry
+        self._execution_boundary = ExecutionBoundary(self._registry, contract=contract)
         self._mcp_owner: object | None = None
         self._mcp_owner_lock = Lock()
 
@@ -69,6 +75,17 @@ class Gateway:
             if self._mcp_owner is not None:
                 raise ValueError("Gateway already has an MCP server owner; sharing is prohibited")
             self._mcp_owner = owner
+
+    @property
+    def contract(self) -> InvocationContract | None:
+        return self._contract
+
+    def _evaluate(
+        self, facts: PolicyFacts, judge: JudgeSignal, agent_k: KSignal, threshold: float
+    ) -> PolicyResult:
+        if self._contract is None:
+            return evaluate(facts, judge, agent_k, threshold)
+        return evaluate(facts, judge, agent_k, threshold, contract=self._contract)
 
     def _policy_context(self) -> tuple[bool, bool, float, int]:
         return (self.require_judge, self.enable_agent_k, self.threshold, self._denials)
@@ -137,9 +154,9 @@ class Gateway:
         text = request + "\n" + json.dumps(proposal.model_dump(), ensure_ascii=False)
         valid = 0 < len(request.strip()) <= 4000 and len(text) <= 16000
         args = None
-        if proposal.tool in TOOLS:
+        if proposal.tool in self._registry:
             try:
-                args = TOOLS[proposal.tool].model_validate(proposal.arguments)
+                args = self._registry[proposal.tool].model_validate(proposal.arguments)
             except ValidationError:
                 valid = False
         bounded = not isinstance(args, Search) or bool(
@@ -165,17 +182,17 @@ class Gateway:
         # entirely rather than sending a request that was never going anywhere.
         probe_judge = JudgeSignal(available=False, provider="unavailable")
         preflight_k_signal = (
-            inspect(text, probe_judge, denials, proposal.tool in TOOLS)
+            inspect(text, probe_judge, denials, proposal.tool in self._registry)
             if enable_agent_k
             else KSignal()
         )
-        preflight_policy = evaluate(facts, probe_judge, preflight_k_signal, threshold)
+        preflight_policy = self._evaluate(facts, probe_judge, preflight_k_signal, threshold)
         call_judge = valid and require_judge and preflight_policy.decision != "DENY"
         judge_preflight_skipped = require_judge and preflight_policy.decision == "DENY"
         if call_judge:
             judge = await assess(self._judge, request, proposal.model_copy(deep=True))
             k_signal = (
-                inspect(text, judge, denials, proposal.tool in TOOLS)
+                inspect(text, judge, denials, proposal.tool in self._registry)
                 if enable_agent_k
                 else KSignal()
             )
@@ -209,7 +226,7 @@ class Gateway:
             authority_envelope = evaluation.envelope
         except ExecutionBoundaryError as exc:
             # Preserve the policy decision separately from a failed issuance check.
-            policy = evaluate(facts, judge, k_signal, threshold)
+            policy = self._evaluate(facts, judge, k_signal, threshold)
             issuance_error = exc.code
         pre_dispatch_verification = "NOT_REQUIRED"
         execution_boundary_error = issuance_error
@@ -298,15 +315,22 @@ class Gateway:
                 )
                 # Dispatch from the checked binding, never from caller-owned objects.
                 # No await or external callback occurs between this gate and dispatch.
-                args = TOOLS[binding.tool].model_validate_json(binding.arguments_json)
+                args = self._registry[binding.tool].model_validate_json(binding.arguments_json)
                 pre_dispatch_verification = "PASS"
-                envelope.tool_executed = True
-                if isinstance(args, Search):
+                if self._contract is not None and binding.tool == "find_federal_awards":
+                    envelope.tool_executed = True
+                    adapter_result = await self._contract.find_handler(self._adapter, args)
+                elif isinstance(args, Search):
+                    envelope.tool_executed = True
                     adapter_result = await self._adapter.search(args)
                 elif isinstance(args, Award):
+                    envelope.tool_executed = True
                     adapter_result = await self._adapter.detail(args)
-                else:
+                elif isinstance(args, Recipient):
+                    envelope.tool_executed = True
                     adapter_result = await self._adapter.recipients(args)
+                else:
+                    raise ExecutionBoundaryError("TOOL_ROUTE_INVALID")
                 if isinstance(adapter_result, AdapterCall):
                     batch = adapter_result.batch
                     attempts = adapter_result.outcome.attempts
@@ -334,6 +358,10 @@ class Gateway:
                         attempts=attempts,
                         retry_class=retry_class,
                     )
+                if self._contract is not None and binding.tool == "find_federal_awards":
+                    if not isinstance(adapter_result, AdapterCall):
+                        raise ValueError("FAA outcome evidence required")
+                    self._contract.validate_find_result(args, adapter_result)
                 envelope.provenance = batch.provenance
                 envelope.result = {"records": batch.records}
                 envelope.status = "OK"
@@ -354,7 +382,7 @@ class Gateway:
                         envelope.clarification = "These are search matches, not a resolved legal identity. Refine the recipient name using candidate resolution."
                         envelope.next_action = "HUMAN_REVIEW_REQUIRED"
                 if review_reason:
-                    post = evaluate(
+                    post = self._evaluate(
                         replace(facts, review_reason=review_reason), judge, k_signal, threshold
                     )
                     envelope.decision = post.decision
@@ -405,7 +433,7 @@ class Gateway:
                 if exc.code in {"TIMEOUT", "NETWORK_ERROR", "UPSTREAM_UNAVAILABLE"}:
                     envelope.next_action = "RETRY_ALLOWED" if exc.retryable else "RETRY_BLOCKED"
                 if exc.code in {"CONFLICTING_SOURCE_RESULTS", "PROVENANCE_UNAVAILABLE"}:
-                    post = evaluate(
+                    post = self._evaluate(
                         replace(facts, review_reason=exc.code), judge, k_signal, threshold
                     )
                     envelope.decision = post.decision
@@ -414,7 +442,7 @@ class Gateway:
                 self._apply_attempt_summary(
                     envelope, attempts, attempt_metadata_available, retry_class
                 )
-                post = evaluate(
+                post = self._evaluate(
                     replace(facts, review_reason="ADAPTER_SCHEMA_OR_PROVENANCE_INVALID"),
                     judge,
                     k_signal,

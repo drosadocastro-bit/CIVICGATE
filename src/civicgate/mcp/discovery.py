@@ -7,6 +7,7 @@ from typing import Any
 from mcp.server.fastmcp.tools.base import Tool as RegisteredTool
 from mcp.types import Tool, ToolAnnotations
 
+from civicgate.channel_b.invocation_contract_v1 import InvocationContract
 from civicgate.models.requests import TOOLS
 
 
@@ -51,12 +52,18 @@ class BoundedToolDiscovery:
     This protects supported MCP entry points, not hostile Python in the server process.
     """
 
-    def __init__(self, registrations: list[RegisteredTool]) -> None:
+    def __init__(
+        self, registrations: list[RegisteredTool], *, contract: InvocationContract | None = None
+    ) -> None:
+        self._contract = contract
+        if contract is not None:
+            contract.validate()
+        self._registry = TOOLS if contract is None else contract.registry
         by_name = {tool.name: tool for tool in registrations}
-        if len(by_name) != len(registrations) or set(by_name) != set(TOOLS):
+        if len(by_name) != len(registrations) or set(by_name) != set(self._registry):
             raise ValueError("Bounded tool registry mismatch")
         entries = []
-        for name in TOOLS:
+        for name in self._registry:
             tool = by_name[name]
             parameters = json.loads(_canonical(tool.parameters))
             if set(parameters.get("properties", {})) != {"user_request", "query"}:
@@ -67,7 +74,7 @@ class BoundedToolDiscovery:
                 if "$ref" in query
                 else query
             )
-            if query_schema != TOOLS[name].model_json_schema():
+            if query_schema != self._registry[name].model_json_schema():
                 raise ValueError("Bounded tool query schema mismatch")
             # FastMCP's generated wrapper model ignores extras by default. The
             # server rejects them explicitly, and discovery describes that gate.
@@ -98,8 +105,10 @@ class BoundedToolDiscovery:
         self._entries = tuple(entries)
 
     def validate(self, registrations: list[RegisteredTool]) -> None:
+        if self._contract is not None:
+            self._contract.validate()
         by_name = {tool.name: tool for tool in registrations}
-        if len(by_name) != len(registrations) or set(by_name) != set(TOOLS):
+        if len(by_name) != len(registrations) or set(by_name) != set(self._registry):
             raise ValueError("Bounded tool registry mismatch")
         for entry in self._entries:
             tool = by_name[entry.registration.name]
