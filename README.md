@@ -25,7 +25,7 @@ flowchart TB
         A_BOUND --> A_API
     end
 
-    subgraph B["CHANNEL B - Databricks (planned; NOT deployed)"]
+    subgraph B["CHANNEL B - governed path (planned; smoke App deployed separately)"]
         direction TB
         B_MCP["Authenticated MCP Streamable HTTP<br/>(planned)"]
         B_GW["Gateway B<br/>(planned independent instance)"]
@@ -45,7 +45,9 @@ flowchart TB
 
 **Reading guide for judges:** Both channels are designed to use the **same deterministic policy code and tool contracts**, but each has its own Gateway, execution boundary, identity context and authorization decision. The diagram shows no transfer of bindings or authority between channels. **DENY stops**; a failure or uncertain dispatch never authorizes an automatic attempt on the other channel.
 
-**Evidence boundary:** Channel A's MCP stdio profile and optional LangGraph workflow have been tested locally. B2a Streamable HTTP and B2b PostgreSQL/fencing are bounded local experiments; **Channel B has not been deployed or validated in a Databricks App**. The proposed cloud ledger does not establish exactly-once execution or global fencing.
+**Evidence boundary:** Channel A's MCP stdio profile and optional LangGraph workflow have been tested locally. B2a Streamable HTTP and B2b PostgreSQL/fencing remain bounded local experiments. In October 2026, a **separate, synthetic, execution-disabled Databricks Apps smoke candidate** was deployed, reached `RUNNING`, and was then stopped under controlled test cycles. This was **not** a deployment of the governed Channel B path shown above: the smoke candidate contains no active Gateway, adapter, or durable execution journal.
+
+The OAuth U2M client smoke received **HTTP 403** at `/api/health`. A subsequent single-request diagnostic matched the candidate's `Host rejected` response signature, **narrowing but not independently confirming** the rejecting layer or the actual incoming Host. **Cloud MCP initialization, `tools/list`, `tools/call`, governed Channel B execution, and automatic A-to-B failover have not been demonstrated.** Cloud caller identity, durable intent custody, and proxy-header trust guarantees remain unresolved; the proposed ledger does not establish exactly-once execution or global fencing. See the [B2b evidence matrix](docs/research/B2B_EVIDENCE_MATRIX.md) and [open risks](docs/research/B2B_OPEN_RISKS_AND_BLOCKERS.md).
 
 ## Quickstart
 
