@@ -1,0 +1,327 @@
+{
+  "checkpoint": "B2B-007",
+  "date": "2026-10-21",
+  "base_commit": "360f30df8a4cb371233f1ef2b9e4e25b3ec08384",
+  "scope": "Exact curated files on base; no full repository or live/cloud validation",
+  "windows": {
+    "python": "3.13.7",
+    "platform": "Windows",
+    "packages": {
+      "mcp": "1.30.0",
+      "pydantic": "2.13.5",
+      "httpx": "0.28.1",
+      "pytest": "9.1.1",
+      "pytest-asyncio": "1.4.0",
+      "PyJWT": "2.15.1",
+      "cryptography": "50.0.2",
+      "uvicorn": "0.54.0",
+      "ruff": "0.16.8",
+      "mypy": "2.3.1"
+    }
+  },
+  "linux": {
+    "python": "3.11.17",
+    "platform": "Debian Bookworm x86_64",
+    "image_identity": "sha256:e2ba71a30941a2df449bc674565ac3078dae60007dc72628e0f6ba0730c9c77d",
+    "network": "none; loopback only",
+    "source_mount": "read-only",
+    "root_fs": "read-only; temporary scratch",
+    "packages": {
+      "mcp": "1.30.0",
+      "pydantic": "2.13.5",
+      "httpx": "0.28.1",
+      "pytest": "9.1.1",
+      "pytest-asyncio": "1.4.0",
+      "PyJWT": "2.15.1",
+      "cryptography": "50.0.2",
+      "uvicorn": "0.54.0"
+    }
+  },
+  "verification_notes": [
+    "Ruff/format: 21 Python files. Mypy: strict 9 implementation/helper files with silent imported-module diagnostics; not a whole-project typecheck.",
+    "Private basetemp/cache locations omitted from public commands; original stdout logs retained byte-identically in external custody.",
+    "Linux initial collection ERROR: test_b2b_p02_stateless imports Git; no tests executed in that run.",
+    "Linux cached image lacks Git. P0.2 70 cases and ledger 54 cases not executed in Linux; all 124 passed in Windows. No tests modified or skipped internally.",
+    "Negative controls are ordinary FAIL, not xfail. Successful characterization tests do not repair the failing properties.",
+    "Windows/Linux and legacy/current scopes overlap; do not sum runs as independent trials.",
+    "No full repository, SDK 2.3, real PostgreSQL or live API/cloud run performed."
+  ],
+  "runs": [
+    {
+      "name": "windows_selected",
+      "exit_code": 0,
+      "passed": 682,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 3,
+      "command": [
+        "python",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/mcp/test_b2b_postgres_ledger.py",
+        "tests/unit/test_postgres_history.py",
+        "tests/unit/test_postgres_transport_guard_v1.py",
+        "tests/unit/test_fencing_receiver_experiment_v1.py",
+        "tests/adversarial/test_b2b_p01_admission.py",
+        "tests/mcp/test_b2b_p02_stateless.py",
+        "experiments/b2b_faa_001/test_contract_characterization.py",
+        "experiments/b2b_faa_002/test_contract_v1.py",
+        "experiments/b2b_faa_002/test_integration_blockers.py",
+        "experiments/b2b_mvp_002/test_smoke.py"
+      ],
+      "raw_log": {
+        "name": "02-windows-targeted.txt",
+        "bytes": 1871,
+        "sha256": "8c66717e5d824810509bfc8cd2f69cd8d0021ddb2954aeecb0bb7c76141728f4"
+      }
+    },
+    {
+      "name": "ruff",
+      "exit_code": 0,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "warnings": null,
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "--no-cache",
+        "src/civicgate/audit/postgres_journal.py",
+        "src/civicgate/audit/postgres_history.py",
+        "src/civicgate/audit/postgres_transport_guard_v1.py",
+        "src/civicgate/audit/fencing_receiver_experiment_v1.py",
+        "tests/mcp/b2b_synthetic_postgres.py",
+        "tests/mcp/test_b2b_postgres_ledger.py",
+        "tests/unit/test_postgres_history.py",
+        "tests/unit/test_postgres_transport_guard_v1.py",
+        "tests/unit/test_fencing_receiver_experiment_v1.py",
+        "experiments/b2b_p01_admission_v1.py",
+        "tests/adversarial/test_b2b_p01_admission.py",
+        "experiments/b2b_p02_stateless_v1.py",
+        "tests/mcp/test_b2b_p02_stateless.py",
+        "experiments/b2b_faa_001/contract_gap_counterexample.py",
+        "experiments/b2b_faa_001/test_contract_characterization.py",
+        "experiments/b2b_faa_002/contract_v1.py",
+        "experiments/b2b_faa_002/test_contract_v1.py",
+        "experiments/b2b_faa_002/test_integration_blockers.py",
+        "src/civicgate/channel_b/cloud_smoke_v1.py",
+        "experiments/b2b_mvp_002/synthetic_identity.py",
+        "experiments/b2b_mvp_002/test_smoke.py"
+      ],
+      "raw_log": {
+        "name": "03-ruff.txt",
+        "bytes": 19,
+        "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      }
+    },
+    {
+      "name": "format",
+      "exit_code": 0,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "warnings": null,
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "format",
+        "--check",
+        "--no-cache",
+        "src/civicgate/audit/postgres_journal.py",
+        "src/civicgate/audit/postgres_history.py",
+        "src/civicgate/audit/postgres_transport_guard_v1.py",
+        "src/civicgate/audit/fencing_receiver_experiment_v1.py",
+        "tests/mcp/b2b_synthetic_postgres.py",
+        "tests/mcp/test_b2b_postgres_ledger.py",
+        "tests/unit/test_postgres_history.py",
+        "tests/unit/test_postgres_transport_guard_v1.py",
+        "tests/unit/test_fencing_receiver_experiment_v1.py",
+        "experiments/b2b_p01_admission_v1.py",
+        "tests/adversarial/test_b2b_p01_admission.py",
+        "experiments/b2b_p02_stateless_v1.py",
+        "tests/mcp/test_b2b_p02_stateless.py",
+        "experiments/b2b_faa_001/contract_gap_counterexample.py",
+        "experiments/b2b_faa_001/test_contract_characterization.py",
+        "experiments/b2b_faa_002/contract_v1.py",
+        "experiments/b2b_faa_002/test_contract_v1.py",
+        "experiments/b2b_faa_002/test_integration_blockers.py",
+        "src/civicgate/channel_b/cloud_smoke_v1.py",
+        "experiments/b2b_mvp_002/synthetic_identity.py",
+        "experiments/b2b_mvp_002/test_smoke.py"
+      ],
+      "raw_log": {
+        "name": "04-format.txt",
+        "bytes": 27,
+        "sha256": "ba72d5ff990b6755459efa6266bf58b9f38733d193f2c3339b32245e476e5994"
+      }
+    },
+    {
+      "name": "mypy",
+      "exit_code": 0,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "warnings": null,
+      "command": [
+        "python",
+        "-m",
+        "mypy",
+        "--explicit-package-bases",
+        "--follow-imports=silent",
+        "src/civicgate/audit/postgres_journal.py",
+        "src/civicgate/audit/postgres_history.py",
+        "src/civicgate/audit/postgres_transport_guard_v1.py",
+        "src/civicgate/audit/fencing_receiver_experiment_v1.py",
+        "experiments/b2b_p01_admission_v1.py",
+        "experiments/b2b_p02_stateless_v1.py",
+        "experiments/b2b_faa_002/contract_v1.py",
+        "src/civicgate/channel_b/cloud_smoke_v1.py",
+        "experiments/b2b_mvp_002/synthetic_identity.py"
+      ],
+      "raw_log": {
+        "name": "05-mypy.txt",
+        "bytes": 44,
+        "sha256": "f645b10e21546f038559fbaaffb91f957d61ada15bed410cfd1fd85e15524598"
+      }
+    },
+    {
+      "name": "linux_initial_collection_error",
+      "exit_code": 2,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": null,
+      "command": [
+        "python",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/unit/test_postgres_history.py",
+        "tests/unit/test_postgres_transport_guard_v1.py",
+        "tests/unit/test_fencing_receiver_experiment_v1.py",
+        "tests/adversarial/test_b2b_p01_admission.py",
+        "tests/mcp/test_b2b_p02_stateless.py",
+        "experiments/b2b_faa_001/test_contract_characterization.py",
+        "experiments/b2b_faa_002/test_contract_v1.py",
+        "experiments/b2b_faa_002/test_integration_blockers.py",
+        "experiments/b2b_mvp_002/test_smoke.py"
+      ],
+      "raw_log": {
+        "name": "06-linux-targeted.txt",
+        "bytes": 1219,
+        "sha256": "cd3247d18672e6a922736532858b4224b51a6b68cdd3d68a2884350369f93fa8"
+      },
+      "collection_errors": 1
+    },
+    {
+      "name": "faa_required_property_negative_controls",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "warnings": 0,
+      "command": [
+        "python",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "experiments/b2b_faa_001/contract_gap_counterexample.py"
+      ],
+      "raw_log": {
+        "name": "07-faa-negative-controls.txt",
+        "bytes": 2459,
+        "sha256": "560b76dbc3aa9af2c1058e7b1b2cef45390b42f921f732e6e4668cde178ad175"
+      }
+    },
+    {
+      "name": "dependency_consistency",
+      "exit_code": 0,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "warnings": null,
+      "command": [
+        "python",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "raw_log": {
+        "name": "08-dependency-consistency.txt",
+        "bytes": 31,
+        "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+      }
+    },
+    {
+      "name": "linux_supported_subset",
+      "exit_code": 0,
+      "passed": 558,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 3,
+      "command": [
+        "python",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/unit/test_postgres_history.py",
+        "tests/unit/test_postgres_transport_guard_v1.py",
+        "tests/unit/test_fencing_receiver_experiment_v1.py",
+        "tests/adversarial/test_b2b_p01_admission.py",
+        "experiments/b2b_faa_001/test_contract_characterization.py",
+        "experiments/b2b_faa_002/test_contract_v1.py",
+        "experiments/b2b_faa_002/test_integration_blockers.py",
+        "experiments/b2b_mvp_002/test_smoke.py"
+      ],
+      "raw_log": {
+        "name": "09-linux-supported-subset.txt",
+        "bytes": 1619,
+        "sha256": "c30d0956e19608f154a4aaf9ec029e595c9a3cdcd2f6aa9903104cb789dbf140"
+      }
+    },
+    {
+      "name": "legacy_compatibility",
+      "exit_code": 0,
+      "passed": 192,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 2,
+      "command": [
+        "python",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/adversarial/test_a1_execution_boundary.py",
+        "tests/mcp/test_discovery.py",
+        "tests/adversarial/test_a2_orchestration.py",
+        "tests/mcp/test_a2_stdio.py",
+        "tests/mcp/test_b2a_http.py",
+        "tests/mcp/test_b2a_recovery.py"
+      ],
+      "raw_log": {
+        "name": "10-legacy-compatibility.txt",
+        "bytes": 1384,
+        "sha256": "1d162c707a5869914c7e0230f892fc75733aac9557c6fb34286ed7954f6a640c"
+      }
+    }
+  ]
+}
