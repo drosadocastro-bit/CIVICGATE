@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from civicgate.channel_b.invocation_contract_v1 import InvocationContract
 from civicgate.governance.authority import denied_reasons
 from civicgate.governance.request_risk import assess_request_risk, literal_proposal_reasons
 from civicgate.models.governance import JudgeSignal, KSignal, PolicyResult
@@ -24,10 +25,23 @@ class PolicyFacts:
 
 
 def evaluate(
-    facts: PolicyFacts, judge: JudgeSignal, agent_k: KSignal, threshold: float = 0.85
+    facts: PolicyFacts,
+    judge: JudgeSignal,
+    agent_k: KSignal,
+    threshold: float = 0.85,
+    *,
+    contract: InvocationContract | None = None,
 ) -> PolicyResult:
     """Sole authority issuer. Ordered checks make denials non-annulable."""
     reasons = denied_reasons(facts.text)
+    if contract is not None:
+        try:
+            contract.validate()
+            if facts.arguments_json is None:
+                raise ValueError("Full effective arguments required")
+            contract.registry[facts.tool].model_validate_json(facts.arguments_json)
+        except (ValueError, TypeError, KeyError):
+            reasons.append("INVALID_CONTRACT_SCOPE")
     if facts.tool not in TOOLS:
         reasons.append("UNKNOWN_TOOL")
     if facts.capability != "PUBLIC_SPENDING_RESEARCH":
@@ -54,7 +68,9 @@ def evaluate(
     ):
         review.append("REQUEST_CONTEXT_INCONSISTENT")
     review.extend(assess_request_risk(request).reasons)
-    review.extend(literal_proposal_reasons(request, facts.tool, facts.arguments_json))
+    review.extend(
+        literal_proposal_reasons(request, facts.tool, facts.arguments_json, contract=contract)
+    )
     if not facts.bounded:
         review.append("QUERY_TOO_BROAD")
     if not facts.provenance_available:

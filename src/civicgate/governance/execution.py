@@ -17,6 +17,7 @@ from typing import Any
 
 from pydantic import BaseModel, ValidationError
 
+from civicgate.channel_b.invocation_contract_v1 import InvocationContract
 from civicgate.governance.policy import PolicyFacts, evaluate
 from civicgate.models.governance import Decision, JudgeSignal, KSignal, PolicyResult
 from civicgate.models.requests import TOOLS
@@ -114,6 +115,7 @@ class ExecutionBoundary:
         self,
         registry: Mapping[str, type[BaseModel]] = TOOLS,
         *,
+        contract: InvocationContract | None = None,
         clock: Callable[[], float] = monotonic,
         max_age_seconds: float = 30,
     ) -> None:
@@ -123,6 +125,11 @@ class ExecutionBoundary:
             or max_age_seconds <= 0
         ):
             raise ValueError("Envelope lifetime must be finite and positive")
+        if contract is not None:
+            contract.validate()
+            if registry is not contract.registry:
+                raise ValueError("Contract and boundary registry differ")
+        self._contract = contract
         self._registry = registry
         self._models = dict(registry)
         self._schemas = {
@@ -209,7 +216,11 @@ class ExecutionBoundary:
             raise ExecutionBoundaryError("POLICY_CONTEXT_INVALID")
         # No decision, approval, envelope or expected digest is accepted here.
         # Only the existing policy evaluates the actual invocation facts/signals.
-        policy = evaluate(facts, judge, agent_k, threshold)
+        policy = (
+            evaluate(facts, judge, agent_k, threshold)
+            if self._contract is None
+            else evaluate(facts, judge, agent_k, threshold, contract=self._contract)
+        )
         if policy.decision != "PERMIT":
             return PolicyEvaluation(policy=policy.model_copy(deep=True), envelope=None)
         if facts.capability != OPERATION_SCOPE:
