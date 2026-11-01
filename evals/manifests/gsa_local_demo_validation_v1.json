@@ -1,0 +1,340 @@
+{
+  "authority_granted": false,
+  "counts_overlap_do_not_sum": true,
+  "environment": {
+    "httpx": "0.28.1",
+    "langgraph": "1.2.15",
+    "mcp": "1.30.0",
+    "platform": "Windows",
+    "python": "3.13.7"
+  },
+  "evidence_disclosure": "Public digest references identify privately retained primary artifacts. Raw traces, paths, databases and logs are excluded. This receipt is not independent human or model-quality acceptance.",
+  "full_repository_suite_rerun": false,
+  "historical_runs_not_reclassified": true,
+  "holds": {
+    "EVAL002_EXECUTION_AUTHORIZATION": "HOLD",
+    "FAA_FULL_CONTRACT": "BLOCKED",
+    "LIVE_PROVIDER_TRANSPORT": "NOT_AUTHORIZED",
+    "P2_02_DURABLE_STOP": "PARTIAL",
+    "PRODUCTION_DEPLOYMENT": "NOT_AUTHORIZED",
+    "USASPENDING_INTEGRATION": "HOLD"
+  },
+  "preserved_development_failure": {
+    "cause": "Case-sensitive environment iteration omitted Windows SYSTEMROOT before a socket guard probe. The new test harness was corrected using known-key environment lookup; guard assertions retained. Original failure retained privately.",
+    "fail": 1,
+    "pass": 10,
+    "selection": "portability"
+  },
+  "preserved_lint_format_findings": true,
+  "record_type": "OFFLINE_CHECKPOINT_VERIFICATION_RECEIPT_V1",
+  "scope": "LOCAL_OFFLINE_SYNTHETIC_ONLY",
+  "selections": [
+    {
+      "command": [
+        "python",
+        "-B",
+        "scripts/run_local_governance_demo.py",
+        "--execute-synthetic",
+        "--suite",
+        "a2"
+      ],
+      "completed_at_utc": "2026-11-01T19:45:49.290213+00:00",
+      "counts": {
+        "ERROR": 0,
+        "FAIL": 0,
+        "PASS": 89,
+        "SKIP": 0
+      },
+      "outcome": "REGRESSION_PASS",
+      "primary_evidence_retained_privately": [
+        {
+          "artifact": "execution/junit.xml",
+          "bytes": 17291,
+          "sha256": "4ed2707ba58f08a84fef8891398d73b11a7d52d138792a902ac95399c7c08fb1"
+        },
+        {
+          "artifact": "run-result.json",
+          "bytes": 20560,
+          "sha256": "18bd225680539caba6406538b11302cdfda5f0d10b8076ee2f26ab12f5e8b2ef"
+        },
+        {
+          "artifact": "RUN_SHA256_MANIFEST.json",
+          "bytes": 32317,
+          "sha256": "2901755b606af89acb1c02b390c1309af3e97c9bfe0d6aebef1e832398442926"
+        }
+      ],
+      "selection": "a2",
+      "source_copy_unchanged": true,
+      "started_at_utc": "2026-11-01T19:45:04.239210+00:00"
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "scripts/run_local_governance_demo.py",
+        "--execute-synthetic",
+        "--suite",
+        "budget"
+      ],
+      "completed_at_utc": "2026-11-01T19:45:52.877637+00:00",
+      "counts": {
+        "ERROR": 0,
+        "FAIL": 0,
+        "PASS": 10,
+        "SKIP": 0
+      },
+      "outcome": "REGRESSION_PASS",
+      "primary_evidence_retained_privately": [
+        {
+          "artifact": "execution/junit.xml",
+          "bytes": 1673,
+          "sha256": "d33f70896ef881a0726edb7c65a138737d124ea7ab39ec34e656db988543220d"
+        },
+        {
+          "artifact": "run-result.json",
+          "bytes": 2423,
+          "sha256": "034a6f39c73196226eeeea9ba8a901a95cf71267ee9c3a6d686c924cc077a314"
+        },
+        {
+          "artifact": "RUN_SHA256_MANIFEST.json",
+          "bytes": 22857,
+          "sha256": "355b5c8d46b745d507a08c8a2fa1e15dba152cd24c23024b1e8ea6f0d76e7a51"
+        }
+      ],
+      "selection": "budget",
+      "source_copy_unchanged": true,
+      "started_at_utc": "2026-11-01T19:45:49.988650+00:00"
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "scripts/run_local_governance_demo.py",
+        "--execute-synthetic",
+        "--suite",
+        "mini071"
+      ],
+      "completed_at_utc": "2026-11-01T19:45:18.131541+00:00",
+      "counts": {
+        "ERROR": 0,
+        "FAIL": 0,
+        "PASS": 3,
+        "SKIP": 0
+      },
+      "outcome": "DEMO_READY_OFFLINE_SYNTHETIC",
+      "primary_evidence_retained_privately": [
+        {
+          "artifact": "execution/junit.xml",
+          "bytes": 583,
+          "sha256": "8371dfec7efb896543c3f37a5d97c361042d67583e827b69f9815cb13ec8528e"
+        },
+        {
+          "artifact": "run-result.json",
+          "bytes": 5848,
+          "sha256": "0b7a3a865509d5aa7c8591c392b8d391b2b05699b8c4409b87abab5b60f258ca"
+        },
+        {
+          "artifact": "RUN_SHA256_MANIFEST.json",
+          "bytes": 34063,
+          "sha256": "5985d9918aa931050bcebbbfd996e1e0698fb766db3571edb127cf6338b16669"
+        }
+      ],
+      "selection": "mini071",
+      "source_copy_unchanged": true,
+      "started_at_utc": "2026-11-01T19:45:01.917884+00:00"
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "scripts/run_local_governance_demo.py",
+        "--execute-synthetic",
+        "--suite",
+        "mini072"
+      ],
+      "completed_at_utc": "2026-11-01T19:45:03.833617+00:00",
+      "counts": {
+        "ERROR": 0,
+        "FAIL": 0,
+        "PASS": 3,
+        "SKIP": 0
+      },
+      "outcome": "A2_INTEGRATED_DEMO_READY",
+      "primary_evidence_retained_privately": [
+        {
+          "artifact": "execution/junit.xml",
+          "bytes": 583,
+          "sha256": "c5580637091c9eb7214de2a07de3b6e41fbd1c77bd728f0f6e13e4ab5bea616e"
+        },
+        {
+          "artifact": "run-result.json",
+          "bytes": 6722,
+          "sha256": "70ec98abd4e6beb57d2f50b49a3d014f5b5f41a6cce460e31f73e38a7d85e5e7"
+        },
+        {
+          "artifact": "RUN_SHA256_MANIFEST.json",
+          "bytes": 37329,
+          "sha256": "d15b2aa14074f66b1fdabf08364ebcbdfeb9333096a323d155cb06d5b73ffde2"
+        }
+      ],
+      "selection": "mini072",
+      "source_copy_unchanged": true,
+      "started_at_utc": "2026-11-01T19:44:47.127957+00:00"
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "scripts/run_local_governance_demo.py",
+        "--execute-synthetic",
+        "--suite",
+        "portability"
+      ],
+      "completed_at_utc": "2026-11-01T19:45:57.407126+00:00",
+      "counts": {
+        "ERROR": 0,
+        "FAIL": 0,
+        "PASS": 11,
+        "SKIP": 0
+      },
+      "outcome": "REGRESSION_PASS",
+      "primary_evidence_retained_privately": [
+        {
+          "artifact": "execution/junit.xml",
+          "bytes": 1984,
+          "sha256": "aaac23201e4f82519bf292f755a7f3200e1eabc4be9d2831db431a464f44c1f8"
+        },
+        {
+          "artifact": "run-result.json",
+          "bytes": 2776,
+          "sha256": "4aa21fe37d1d589c1a783f43fa05400af1d3f54fdf804d7eaa22988f779f8b85"
+        },
+        {
+          "artifact": "RUN_SHA256_MANIFEST.json",
+          "bytes": 31772,
+          "sha256": "16b2a77fa00dab81f7c45e6663c9d2e6a4ab6d4de210572005a200d71ce474c6"
+        }
+      ],
+      "selection": "portability",
+      "source_copy_unchanged": true,
+      "started_at_utc": "2026-11-01T19:45:53.233763+00:00"
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "scripts/run_local_governance_demo.py",
+        "--execute-synthetic",
+        "--suite",
+        "r32"
+      ],
+      "completed_at_utc": "2026-11-01T19:44:58.353336+00:00",
+      "counts": {
+        "ERROR": 0,
+        "FAIL": 0,
+        "PASS": 314,
+        "SKIP": 0
+      },
+      "outcome": "REGRESSION_PASS",
+      "primary_evidence_retained_privately": [
+        {
+          "artifact": "execution/junit.xml",
+          "bytes": 54275,
+          "sha256": "53f53e59bbb7502b1296ed7c16bd6b72a3ec1b4a2f9d68e29d40a3bb5f597bcb"
+        },
+        {
+          "artifact": "run-result.json",
+          "bytes": 64587,
+          "sha256": "14d6a1ff5ec4cb19011d6328595a7bb25cd892d5d6f3ce1a2d5dfdd6244442f3"
+        },
+        {
+          "artifact": "RUN_SHA256_MANIFEST.json",
+          "bytes": 254041,
+          "sha256": "5614d3bdf30edab736a4d9eac9ceee53b6cd65ff0f4e6dc9154dc8e48f6858c1"
+        }
+      ],
+      "selection": "r32",
+      "source_copy_unchanged": true,
+      "started_at_utc": "2026-11-01T19:41:27.925988+00:00"
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "scripts/run_local_governance_demo.py",
+        "--execute-synthetic",
+        "--suite",
+        "r32-ab"
+      ],
+      "completed_at_utc": "2026-11-01T19:46:06.262267+00:00",
+      "counts": {
+        "ERROR": 0,
+        "FAIL": 0,
+        "PASS": 11,
+        "SKIP": 0
+      },
+      "outcome": "REGRESSION_PASS",
+      "primary_evidence_retained_privately": [
+        {
+          "artifact": "execution/junit.xml",
+          "bytes": 1762,
+          "sha256": "8e3f3a1202999574398860ff1561667a06bcc4f502e0ae6c5cac011273ecd989"
+        },
+        {
+          "artifact": "run-result.json",
+          "bytes": 2543,
+          "sha256": "559fe807309ad0128c5c19de524913119fd78f2d3bdea5a1f057df01e66fa98c"
+        },
+        {
+          "artifact": "RUN_SHA256_MANIFEST.json",
+          "bytes": 89883,
+          "sha256": "0efc3161f05b72707038267e3a41d28dc0d5d340029d8a6dbb2a51452d877036"
+        }
+      ],
+      "selection": "r32-ab",
+      "source_copy_unchanged": true,
+      "started_at_utc": "2026-11-01T19:45:18.674964+00:00"
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "scripts/run_local_governance_demo.py",
+        "--execute-synthetic",
+        "--suite",
+        "r32-terminal"
+      ],
+      "completed_at_utc": "2026-11-01T19:44:43.566504+00:00",
+      "counts": {
+        "ERROR": 0,
+        "FAIL": 0,
+        "PASS": 48,
+        "SKIP": 0
+      },
+      "outcome": "REGRESSION_PASS",
+      "primary_evidence_retained_privately": [
+        {
+          "artifact": "execution/junit.xml",
+          "bytes": 7731,
+          "sha256": "dfc6b4b9c3c33b117b1bc205b692c7edebfadc8d0601388ca959a42f0e7e3c50"
+        },
+        {
+          "artifact": "run-result.json",
+          "bytes": 9707,
+          "sha256": "c26558c908c17518de3ad2cd1fdbb22d81fb63aef5271c476cc4dea41f05e6aa"
+        },
+        {
+          "artifact": "RUN_SHA256_MANIFEST.json",
+          "bytes": 325909,
+          "sha256": "944753ef8fa04c4bdb3e5dcbeb504d96661a2a1530f31f446a60a0bf4bafb84c"
+        }
+      ],
+      "selection": "r32-terminal",
+      "source_copy_unchanged": true,
+      "started_at_utc": "2026-11-01T19:41:27.926015+00:00"
+    }
+  ],
+  "source_count": 110,
+  "source_records_canonical_sha256": "9a3e66d3296c2aacbb61a988319de3d7cda8468c587822240e7549066d5188f6",
+  "source_records_canonicalization": "UTF-8 JSON; recursively sorted keys; compact separators; no newline"
+}
