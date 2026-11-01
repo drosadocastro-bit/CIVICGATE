@@ -36,3 +36,6 @@ artifacts/environment-*.txt
 artifacts/dependency-audit.json
 artifacts/files-created.txt
 *.ndjson
+
+# EVAL-001 raw evidence stays private; public reports use explicit safe projections.
+/evals/private/
