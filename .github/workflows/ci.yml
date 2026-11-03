@@ -90,7 +90,7 @@ jobs:
               [
                   env["CIVICGATE_CI_CONSOLE_PYTHON"], "-B", "-m", "pytest", "-q",
                   "--confcutdir=tests/evidence_console", "tests/evidence_console",
-                  "--basetemp=artifacts/console-tmp",
+                  "--basetemp=" + os.path.join(env["RUNNER_TEMP"], "civicgate-console"),
                   "--junitxml=artifacts/tests-console.xml",
               ],
               env=env,
@@ -106,7 +106,8 @@ jobs:
           from pathlib import Path
 
           captures = {}
-          for manifest in Path("artifacts/console-tmp").rglob("fresh-output/jobs/exec-*/capture-*/RUN_SHA256_MANIFEST.json"):
+          captured = Path(os.environ["RUNNER_TEMP"]) / "civicgate-console"
+          for manifest in captured.rglob("fresh-output/jobs/exec-*/capture-*/RUN_SHA256_MANIFEST.json"):
               root = manifest.parent.resolve()
               receipt = json.loads((root / "run-result.json").read_bytes())
               scenario = receipt.get("scenario")
@@ -141,7 +142,8 @@ jobs:
                "--confcutdir=tests/evidence_console",
                "tests/evidence_console/test_interactive_http_v1.py",
                "tests/evidence_console/test_advisor_http_v1.py",
-               "--basetemp=artifacts/console-http-tmp", "--junitxml=artifacts/tests-console-http.xml"],
+               "--basetemp=" + os.path.join(env["RUNNER_TEMP"], "civicgate-console-http"),
+               "--junitxml=artifacts/tests-console-http.xml"],
               env=env,
               check=True,
           )
@@ -173,7 +175,10 @@ jobs:
         if: always()
         with:
           name: evidence-${{ matrix.os }}-${{ matrix.python }}
-          path: artifacts/
+          path: |
+            artifacts/
+            ${{ runner.temp }}/civicgate-console
+            ${{ runner.temp }}/civicgate-console-http
   container:
     runs-on: ubuntu-latest
     steps:
