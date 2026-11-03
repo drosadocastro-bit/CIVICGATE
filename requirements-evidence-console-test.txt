@@ -1,4 +1,4 @@
 # Optional console tests run separately from the pinned MCP worker environment.
 -r requirements-evidence-console.txt
-pytest==9.0.2
+pytest==9.0.3
 jsonschema==4.26.0

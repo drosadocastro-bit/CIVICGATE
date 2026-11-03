@@ -15,11 +15,29 @@ import stat
 import threading
 import time
 import uuid
+from collections.abc import Callable, Iterable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any, Protocol
 
 from .reader import SHA_RE, EvidenceStore, SafeEvidenceError, safe_text, valid_id
+
+if TYPE_CHECKING:
+    from .anthropic_advisor_v1 import ProviderConfig, ProviderReply
+
+
+class _AdvisorProvider(Protocol):
+    @property
+    def mode(self) -> str: ...
+
+    @property
+    def model(self) -> str: ...
+
+    @property
+    def config(self) -> ProviderConfig: ...
+
+    def analyze(self, payload: dict[str, Any]) -> ProviderReply: ...
+
 
 CATEGORIES = {
     "DECISION_CONSISTENCY",
@@ -83,13 +101,17 @@ def _count(value: Any) -> int | None:
     return value if type(value) is int and 0 <= value <= 1000 else None
 
 
-def build_payload(run: dict, observation: dict) -> tuple[dict, list[dict]]:
+def build_payload(
+    run: dict[str, Any], observation: dict[str, Any]
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """No free-form source string is copied into the outbound request."""
     if run.get("integrity") not in {"VERIFIED", "PARTIAL"}:
         raise AdvisorError("ADVISOR_EVIDENCE_UNAVAILABLE", 409)
     if observation.get("integrity") not in {"VERIFIED", "PARTIAL", "UNKNOWN"}:
         raise AdvisorError("ADVISOR_EVIDENCE_UNAVAILABLE", 409)
-    sources, local_sources, names = [], [], {}
+    sources: list[dict[str, Any]] = []
+    local_sources: list[dict[str, Any]] = []
+    names: dict[str, str] = {}
     for row in sorted(observation.get("artifacts", []), key=lambda row: row["path"]):
         path = row.get("path")
         if not isinstance(path, str) or path.rsplit("/", 1)[-1] not in SOURCE_NAMES:
@@ -109,16 +131,16 @@ def build_payload(run: dict, observation: dict) -> tuple[dict, list[dict]]:
         name = path.rsplit("/", 1)[-1]
         if name in names:
             raise AdvisorError("ADVISOR_SOURCE_REFERENCE_INVALID", 409)
-        source = {"id": f"S{len(sources) + 1:03d}", "bytes": size, "sha256": sha}
+        source: dict[str, Any] = {"id": f"S{len(sources) + 1:03d}", "bytes": size, "sha256": sha}
         sources.append(source)
         names[name] = source["id"]
         # Local-only reference. This path never enters a provider request.
         local_sources.append({**source, "path": path})
     if not sources:
         raise AdvisorError("ADVISOR_EVIDENCE_UNAVAILABLE", 409)
-    facts: list[dict] = []
+    facts: list[dict[str, Any]] = []
 
-    def add(name, value, *source_names):
+    def add(name: str, value: object, *source_names: str) -> None:
         ids = [names[n] for n in source_names if n in names]
         # A missing source is uncertainty, never an unreferenced verified value.
         facts.append(
@@ -262,7 +284,7 @@ def _text(value: Any, *, nullable: bool = False, maximum: int = 1500) -> str | N
     return value
 
 
-def validate_report(report: Any, payload: dict) -> dict:
+def validate_report(report: Any, payload: dict[str, Any]) -> dict[str, Any]:
     """Resolve citations exactly, without claiming narrative truth or authority."""
     if (
         not isinstance(report, dict)
@@ -338,7 +360,10 @@ def validate_report(report: Any, payload: dict) -> dict:
             _text(finding[key])
         _text(finding["investigation"], nullable=True)
     # Return a detached canonical value; providers cannot mutate a published view.
-    return json.loads(canonical(report))
+    detached = json.loads(canonical(report))
+    # The report above is an object; canonical JSON preserves that outer shape.
+    assert isinstance(detached, dict)
+    return detached
 
 
 def _now() -> str:
@@ -373,8 +398,14 @@ class AdvisorService:
     """
 
     def __init__(
-        self, store_factory, provider, output_root: Path, *, max_jobs: int = 8, protected_roots=()
-    ):
+        self,
+        store_factory: Callable[[], EvidenceStore],
+        provider: _AdvisorProvider,
+        output_root: Path,
+        *,
+        max_jobs: int = 8,
+        protected_roots: Iterable[Path | str] = (),
+    ) -> None:
         if type(max_jobs) is not int or not 1 <= max_jobs <= 32:
             raise AdvisorError("ADVISOR_LIMIT_INVALID", 503)
         if getattr(provider, "mode", None) != "MOCK_ONLY":
@@ -392,7 +423,7 @@ class AdvisorService:
         self._store_factory = store_factory
         self.max_jobs = max_jobs
         self._lock = threading.RLock()
-        self._jobs: dict[str, dict] = {}
+        self._jobs: dict[str, dict[str, Any]] = {}
         self._requests: dict[str, str] = {}
         self._active = self._blocked = self._closed = False
         self._thread: threading.Thread | None = None
@@ -412,7 +443,7 @@ class AdvisorService:
         except OSError:
             raise AdvisorError("ADVISOR_CUSTODY_UNCONFIRMED", 503) from None
 
-    def capabilities(self) -> dict:
+    def capabilities(self) -> dict[str, Any]:
         with self._lock:
             return {
                 "enabled": not self._blocked and not self._closed,
@@ -426,16 +457,20 @@ class AdvisorService:
             }
 
     @staticmethod
-    def _public(job: dict) -> dict:
-        return json.loads(canonical({k: v for k, v in job.items() if not k.startswith("_")}))
+    def _public(job: dict[str, Any]) -> dict[str, Any]:
+        detached = json.loads(canonical({k: v for k, v in job.items() if not k.startswith("_")}))
+        assert isinstance(detached, dict)
+        return detached
 
-    def get_job(self, job_id: str) -> dict:
+    def get_job(self, job_id: str) -> dict[str, Any]:
         with self._lock:
             if job_id not in self._jobs:
                 raise AdvisorError("ADVISOR_UNKNOWN_ANALYSIS", 404)
             return self._public(self._jobs[job_id])
 
-    def _selection(self, run_id: str, observation_id: str) -> tuple[dict, list[dict], str]:
+    def _selection(
+        self, run_id: str, observation_id: str
+    ) -> tuple[dict[str, Any], list[dict[str, Any]], str]:
         try:
             store: EvidenceStore = self._store_factory()
             run = store.get_run(run_id)
@@ -447,7 +482,7 @@ class AdvisorService:
         except SafeEvidenceError:
             raise AdvisorError("ADVISOR_OBSERVATION_UNAVAILABLE", 404) from None
 
-    def submit(self, run_id: str, observation_id: str, idempotency_key: str) -> dict:
+    def submit(self, run_id: str, observation_id: str, idempotency_key: str) -> dict[str, Any]:
         if not valid_id(run_id) or not valid_id(observation_id):
             raise AdvisorError("ADVISOR_OBSERVATION_UNAVAILABLE", 404)
         try:
@@ -528,7 +563,11 @@ class AdvisorService:
             return self._public(job)
 
     def _analyze(
-        self, identity: str, payload: dict, local_sources: list[dict], binding: str
+        self,
+        identity: str,
+        payload: dict[str, Any],
+        local_sources: list[dict[str, Any]],
+        binding: str,
     ) -> None:
         started = time.monotonic()
         try:

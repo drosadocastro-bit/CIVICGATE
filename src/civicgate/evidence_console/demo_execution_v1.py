@@ -12,6 +12,7 @@ import os
 import signal
 import stat
 import subprocess
+import sys
 import threading
 import time
 import uuid
@@ -68,11 +69,11 @@ def _write_new(path: Path, value: Any) -> None:
         os.fsync(stream.fileno())
 
 
-def _terminate_tree(process: subprocess.Popen) -> bool:
+def _terminate_tree(process: subprocess.Popen[bytes]) -> bool:
     if process.poll() is not None:
         return False  # Parent exit alone does not establish descendant cleanup.
     try:
-        if os.name == "nt":
+        if sys.platform == "win32":
             executable = Path(os.environ.get("SystemRoot", r"C:\Windows")) / "System32/taskkill.exe"
             result = subprocess.run(
                 [str(executable), "/PID", str(process.pid), "/T", "/F"],
@@ -132,7 +133,7 @@ class DemoExecutor:
         self._requests: dict[str, str] = {}
         self._active = False
         self._blocked = False
-        self._process: subprocess.Popen | None = None
+        self._process: subprocess.Popen[bytes] | None = None
         self._thread: threading.Thread | None = None
         self._verify_worker_environment()
         try:
@@ -374,13 +375,17 @@ class DemoExecutor:
                 with self._lock:
                     if self._blocked or time.monotonic() >= deadline:
                         raise DemoError("EXECUTION_DEADLINE_BEFORE_SEND", 503)
+                    if sys.platform == "win32":
+                        creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP
+                    else:
+                        creation_flags = 0
                     process = subprocess.Popen(
                         command,
                         cwd=self.source_root,
                         env=self._environment(),
                         stdout=out,
                         stderr=err,
-                        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0,
+                        creationflags=creation_flags,
                         start_new_session=os.name != "nt",
                     )
                     self._process = process
@@ -454,10 +459,12 @@ class DemoExecutor:
             DemoError,
             subprocess.SubprocessError,
         ) as exc:
-            code = exc.code if isinstance(exc, DemoError) else "EXECUTION_OR_CUSTODY_UNCONFIRMED"
+            error_code = (
+                exc.code if isinstance(exc, DemoError) else "EXECUTION_OR_CUSTODY_UNCONFIRMED"
+            )
             if process is not None and process.poll() is None:
                 _terminate_tree(process)
-            self._fail_job(job, code, unknown=True)
+            self._fail_job(job, error_code, unknown=True)
         finally:
             with self._lock:
                 self._active = False

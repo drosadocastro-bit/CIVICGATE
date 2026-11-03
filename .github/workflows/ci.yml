@@ -16,14 +16,156 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - run: python -m pip install --upgrade "pip>=26.2" "setuptools>=83.0.0"
-      - run: python -m pip install -e ".[dev]"
-      - run: ruff check .
-      - run: ruff format --check .
-      - run: mypy src
-      - run: pytest -q --junitxml=artifacts/tests.xml
-      - run: python scripts/evaluate.py --projection channel-a-legacy-evaluation-r1
-      - run: python scripts/run_m2_benchmarks.py
-      - run: pip-audit
+      - name: Prepare separate worker, console and typing environments
+        shell: python
+        run: |
+          import os
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          Path("artifacts").mkdir(exist_ok=True)
+          for role in ("worker", "console", "types"):
+              root = Path(".build") / ("ci-" + role)
+              # The trusted worker rejects symlinked interpreters. Copies also
+              # keep resolve() inside the intended environment on Linux.
+              subprocess.run([sys.executable, "-m", "venv", "--copies", str(root)], check=True)
+              python = root / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+              installer = (
+                  ["pip==26.2.1", "setuptools==84.1.0"]
+                  if role == "worker"
+                  else ["pip>=26.2", "setuptools>=84.1.0"]
+              )
+              subprocess.run([str(python), "-m", "pip", "install", "--upgrade", *installer], check=True)
+              requirements = {
+                  "worker": ["-e", ".[dev]", "-c", "requirements-evidence-worker-constraints.txt"],
+                  "console": ["-r", "requirements-evidence-console-test.txt", "mypy", "ruff", "pip-audit"],
+                  # This union is for static analysis only, never either runtime.
+                  "types": ["-e", ".[dev]", "-r", "requirements-evidence-console-test.txt", "pydantic==2.13.5"],
+              }[role]
+              subprocess.run(
+                  [str(python), "-m", "pip", "install", "--report", "artifacts/install-" + role + ".json", *requirements],
+                  check=True,
+              )
+              subprocess.run([str(python), "-m", "pip", "check"], check=True)
+              with open("artifacts/packages-" + role + ".json", "wb") as output:
+                  subprocess.run([str(python), "-m", "pip", "inspect"], stdout=output, check=True)
+              with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as output:
+                  output.write("CIVICGATE_CI_" + role.upper() + "_PYTHON=" + str(python.resolve()) + "\n")
+      - name: Ruff and complete source type checks
+        shell: python
+        run: |
+          import os
+          import subprocess
+
+          python = os.environ["CIVICGATE_CI_TYPES_PYTHON"]
+          for args in (["ruff", "check", "."], ["ruff", "format", "--check", "."], ["mypy", "src"]):
+              subprocess.run([python, "-m", *args], check=True)
+      # Complete complementary selections: the console verifies that its own
+      # process has not imported the Gateway through the core conftest.
+      - name: Core repository tests
+        shell: python
+        run: |
+          import os
+          import subprocess
+
+          subprocess.run(
+              [os.environ["CIVICGATE_CI_WORKER_PYTHON"], "-B", "-m", "pytest", "-q",
+               "--ignore=tests/evidence_console", "--junitxml=artifacts/tests.xml"],
+              check=True,
+          )
+      - name: Console and Advisor tests with fresh synthetic scenarios
+        shell: python
+        run: |
+          import os
+          import subprocess
+
+          env = dict(os.environ)
+          env["PYTHONPATH"] = os.path.abspath("src")
+          env["CIVICGATE_SYNTHETIC_WORKER_PYTHON"] = env["CIVICGATE_CI_WORKER_PYTHON"]
+          subprocess.run(
+              [
+                  env["CIVICGATE_CI_CONSOLE_PYTHON"], "-B", "-m", "pytest", "-q",
+                  "--confcutdir=tests/evidence_console", "tests/evidence_console",
+                  "--basetemp=artifacts/console-tmp",
+                  "--junitxml=artifacts/tests-console.xml",
+              ],
+              env=env,
+              check=True,
+          )
+      - name: Loopback HTTP controls using newly captured synthetic evidence
+        shell: python
+        run: |
+          import hashlib
+          import json
+          import os
+          import subprocess
+          from pathlib import Path
+
+          captures = {}
+          for manifest in Path("artifacts/console-tmp").rglob("fresh-output/jobs/exec-*/capture-*/RUN_SHA256_MANIFEST.json"):
+              root = manifest.parent.resolve()
+              receipt = json.loads((root / "run-result.json").read_bytes())
+              scenario = receipt.get("scenario")
+              if (
+                  scenario not in {"permit", "deny", "review"}
+                  or scenario in captures
+                  or receipt.get("final_status") != "A2_INTEGRATED_DEMO_READY"
+                  or receipt.get("counts") != {"PASS": 1, "FAIL": 0, "ERROR": 0, "SKIP": 0}
+                  or receipt.get("source_copy_unchanged") is not True
+                  or receipt.get("guard_primary_evidence_verified") is not True
+              ):
+                  raise SystemExit("Fresh synthetic receipt is missing or inconsistent")
+              captures[scenario] = {
+                  "id": "ci-fresh-" + scenario,
+                  "root": str(root),
+                  "manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
+              }
+          if set(captures) != {"permit", "deny", "review"}:
+              raise SystemExit("All three actual synthetic captures are required")
+          # These are measured synthetic-viewer catalog identities, not authority pins.
+          advisor = Path("artifacts/fresh-advisor-catalog.json")
+          console = Path("artifacts/fresh-console-catalog.json")
+          advisor.write_text(json.dumps({"version": 1, "runs": list(captures.values())}), encoding="utf-8")
+          console.write_text(json.dumps({"version": 1, "runs": [captures["permit"]]}), encoding="utf-8")
+          env = dict(os.environ)
+          env["PYTHONPATH"] = os.path.abspath("src")
+          env["CIVICGATE_SYNTHETIC_WORKER"] = env["CIVICGATE_CI_WORKER_PYTHON"]
+          env["CIVICGATE_CONSOLE_TEST_CATALOG"] = str(console.resolve())
+          env["CIVICGATE_ADVISOR_TEST_CATALOG"] = str(advisor.resolve())
+          subprocess.run(
+              [env["CIVICGATE_CI_CONSOLE_PYTHON"], "-B", "-m", "pytest", "-q",
+               "--confcutdir=tests/evidence_console",
+               "tests/evidence_console/test_interactive_http_v1.py",
+               "tests/evidence_console/test_advisor_http_v1.py",
+               "--basetemp=artifacts/console-http-tmp", "--junitxml=artifacts/tests-console-http.xml"],
+              env=env,
+              check=True,
+          )
+      - name: Synthetic evaluations and benchmarks
+        shell: python
+        run: |
+          import os
+          import subprocess
+
+          python = os.environ["CIVICGATE_CI_WORKER_PYTHON"]
+          subprocess.run([python, "scripts/evaluate.py", "--projection", "channel-a-legacy-evaluation-r1"], check=True)
+          subprocess.run([python, "scripts/run_m2_benchmarks.py"], check=True)
+      - name: Audit every installed environment
+        shell: python
+        run: |
+          import os
+          import subprocess
+
+          results = []
+          for role in ("worker", "console", "types"):
+              result = subprocess.run(
+                  [os.environ["CIVICGATE_CI_" + role.upper() + "_PYTHON"], "-m", "pip_audit",
+                   "--format=json", "--output", "artifacts/audit-" + role + ".json"],
+              )
+              results.append(result.returncode)
+          if any(results):
+              raise SystemExit(1)
       - uses: actions/upload-artifact@v4
         if: always()
         with:
