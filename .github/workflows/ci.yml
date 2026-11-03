@@ -28,8 +28,12 @@ jobs:
           from pathlib import Path
 
           Path("artifacts").mkdir(exist_ok=True)
+          temporary = Path(os.environ["RUNNER_TEMP"]).resolve()
+          if temporary.is_relative_to(Path.cwd().resolve()):
+              raise SystemExit("CI environments and execution data must be outside source")
           for role in ("worker", "console", "types"):
-              root = Path(".build") / ("ci-" + role)
+              # Runtime dependency reads must also remain outside protected source.
+              root = temporary / ("civicgate-ci-" + role)
               # The trusted worker rejects symlinked interpreters. Copies also
               # keep resolve() inside the intended environment on Linux.
               subprocess.run([sys.executable, "-m", "venv", "--copies", str(root)], check=True)
