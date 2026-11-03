@@ -147,6 +147,18 @@ jobs:
               env=env,
               check=True,
           )
+      - name: Pinned R3.2 synthetic governance regression
+        shell: python
+        run: |
+          import os
+          import subprocess
+
+          subprocess.run(
+              [os.environ["CIVICGATE_CI_WORKER_PYTHON"], "-B", "scripts/run_cp11_regressions.py",
+               "--execute-synthetic", "--suite", "r32", "--evidence-root",
+               os.path.join(os.environ["RUNNER_TEMP"], "civicgate-r32")],
+              check=True,
+          )
       - name: Synthetic evaluations and benchmarks
         shell: python
         run: |
@@ -179,6 +191,7 @@ jobs:
             artifacts/
             ${{ runner.temp }}/civicgate-console
             ${{ runner.temp }}/civicgate-console-http
+            ${{ runner.temp }}/civicgate-r32
   container:
     runs-on: ubuntu-latest
     steps:
