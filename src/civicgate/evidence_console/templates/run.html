@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ run.id }}{% endblock %}
+{% block content %}
+<a class="back-link" href="/">← All demonstration runs</a>
+<div class="page-heading"><div><div class="eyebrow">PRESERVED CAPTURE</div><h1>{{ run.id }}</h1><p class="lede">Inspect each observation across policy, execution and custody.</p></div><span class="mode-pill">OFFLINE · SYNTHETIC</span></div>
+{% if run.integrity != 'VERIFIED' %}<div class="warning"><strong>Evidence incomplete or inconsistent.</strong><p>Unverified fields remain UNKNOWN. No missing channel is interpreted as zero execution or CLOSED custody.</p>{% for issue in run.issues %}<code>{{ issue }}</code> {% endfor %}</div>{% endif %}
+<div class="summary-row">
+  {% for key, label, color in [('PERMIT','PERMIT','permit'),('DENY','DENY','deny'),('REVIEW_REQUIRED','REVIEW_REQUIRED','review')] %}
+    <div class="metric"><span class="decision-label {{ color }}">{{ label }}</span><strong>{{ run.distribution[key] if run.distribution[key] is not none else 'UNKNOWN' }}</strong><small>Recorded final dispositions</small></div>
+  {% endfor %}
+</div>
+<div class="section-heading"><h2>Observation ledger</h2><span class="count-label">Select an observation to inspect</span></div>
+<div class="observations">
+{% for item in run.observations %}
+  <a class="observation-row" href="/runs/{{ run.id }}/observations/{{ item.id }}">
+    <div class="observation-icon {{ item.case }}" aria-hidden="true">{{ '✓' if item.case == 'permit' else '×' if item.case == 'deny' else '?' }}</div>
+    <div class="observation-copy"><h3>{{ 'Compatible public-record read' if item.case == 'permit' else 'Unauthorized consequential operation' if item.case == 'deny' else 'Unresolved FAA contract request' if item.case == 'review' else 'Observation' }}</h3><code>{{ item.id }}</code><small>{{ item.integrity }} · Open detailed primary-evidence view</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+  </a>
+{% else %}<div class="panel empty">No complete observation identifiers are available.</div>{% endfor %}
+</div>
+<div class="panel source-note"><div class="kicker">CONFIGURED MANIFEST IDENTITY</div><code class="hash">{{ run.manifest_sha256 }}</code><p>A matching digest establishes byte identity within this configured capture. It does not authenticate human origin or prove semantic correctness.</p></div>
+{% endblock %}

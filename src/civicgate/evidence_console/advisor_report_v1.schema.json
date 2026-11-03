@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:civicgate:mini082:advisor-report:v1",
+  "title": "Untrusted Evidence Advisor report v1",
+  "description": "Static shape only. Runtime validate_report MUST also resolve observation/fact/source associations against the selected pinned evidence and reject unsafe freeform output. Matching schema or citations does not verify narrative truth or grant authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "summary",
+    "findings",
+    "limitations"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "summary": {
+      "$ref": "#/$defs/text"
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "findings": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1500,
+      "pattern": "^[^\\u0000-\\u001f<>]+$"
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "category",
+        "severity",
+        "kind",
+        "observation_id",
+        "fact_ids",
+        "source_ids",
+        "explanation",
+        "uncertainty",
+        "investigation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^A[0-9]{3}$"
+        },
+        "category": {
+          "enum": [
+            "DECISION_CONSISTENCY",
+            "BINDING_INTEGRITY",
+            "EXECUTION_EVIDENCE",
+            "CUSTODY",
+            "EVIDENCE_GAP",
+            "SCOPE_LIMITATION"
+          ]
+        },
+        "severity": {
+          "enum": [
+            "INFO",
+            "LOW",
+            "MEDIUM",
+            "HIGH"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "OBSERVED_FACT",
+            "MODEL_INFERENCE",
+            "UNKNOWN"
+          ]
+        },
+        "observation_id": {
+          "const": "obs-1"
+        },
+        "fact_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 25,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^F[0-9]{3}$"
+          }
+        },
+        "source_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^S[0-9]{3}$"
+          }
+        },
+        "explanation": {
+          "$ref": "#/$defs/text"
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/text"
+        },
+        "investigation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

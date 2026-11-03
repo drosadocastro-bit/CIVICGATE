@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Demonstration runs{% endblock %}
+{% block content %}
+<div class="eyebrow">PRESERVED OBSERVATIONS</div>
+<div class="page-heading"><div><h1>Evidence, before narrative.</h1><p class="lede">Explore genuine local demonstrations of bounded tool execution.</p></div>{% if interactive %}<a class="primary-action" href="/demonstrations">Run demonstration <span aria-hidden="true">↗</span></a>{% else %}<span class="mode-pill">OFFLINE · SYNTHETIC</span>{% endif %}</div>
+<div class="scope-banner"><span class="scope-icon" aria-hidden="true">i</span><div><strong>Observation is not authorization.</strong><p>{% if interactive %}Evidence views remain read-only. Fresh allowlisted synthetic runs require an explicit Run Demonstration request; deterministic Gateway policy still decides authority.{% else %}This console reads preserved evidence. It cannot execute tools, retry requests, issue bindings or record human acceptance.{% endif %}</p></div></div>
+<section aria-labelledby="runs-heading">
+  <div class="section-heading"><h2 id="runs-heading">Demonstration runs</h2><span class="count-label">{{ runs | length }} configured captures</span></div>
+  <div class="run-grid">
+  {% for run in runs %}
+    <a class="run-card" href="/runs/{{ run.id }}">
+      <div class="card-top"><span class="kicker">CHANNEL A / {{ run.id }}</span><span class="integrity {{ 'good' if run.integrity == 'VERIFIED' else 'unknown' }}">{{ 'Integrity checked' if run.integrity == 'VERIFIED' else 'Evidence incomplete' }}</span></div>
+      <h3>Local governance demonstration</h3>
+      <p class="card-description">Preserved MCP observations · synthetic providers and backend</p>
+      <div class="distribution">
+        <div><span class="decision-dot permit"></span><strong>{{ run.distribution.PERMIT if run.distribution.PERMIT is not none else 'UNKNOWN' }}</strong><small>PERMIT</small></div>
+        <div><span class="decision-dot deny"></span><strong>{{ run.distribution.DENY if run.distribution.DENY is not none else 'UNKNOWN' }}</strong><small>DENY</small></div>
+        <div><span class="decision-dot review"></span><strong>{{ run.distribution.REVIEW_REQUIRED if run.distribution.REVIEW_REQUIRED is not none else 'UNKNOWN' }}</strong><small>REVIEW</small></div>
+        {% if run.distribution.UNKNOWN %}<div><strong>{{ run.distribution.UNKNOWN }}</strong><small>UNKNOWN</small></div>{% endif %}
+      </div>
+      <div class="card-bottom"><span>{{ run.artifact_count if run.artifact_count is not none else 'Unknown' }} manifest artifacts</span><span class="arrow" aria-hidden="true">↗</span></div>
+    </a>
+  {% else %}
+    <div class="panel empty"><h3>No configured evidence</h3><p>An operator must select a local synthetic capture and its preserved manifest identity. The console does not search the filesystem.</p></div>
+  {% endfor %}
+  </div>
+</section>
+<section class="principles" aria-label="Evidence boundaries">
+  <div><span class="number">01</span><h3>Proposal ≠ permission</h3><p>Planner and Judge signals are distinct from deterministic policy.</p></div>
+  <div><span class="number">02</span><h3>Dispatch ≠ verification</h3><p>Bindings, adapter entry, HTTP attempts and results remain separate facts.</p></div>
+  <div><span class="number">03</span><h3>Custody ≠ acceptance</h3><p>CLOSED describes documentary custody. It does not grant human approval.</p></div>
+</section>
+<div class="limits-strip"><span class="kicker">RETAINED BOUNDARIES</span><p>Live providers not authorized · EVAL-002 HOLD · USAspending integration HOLD · Durable STOP PARTIAL · Full FAA contract BLOCKED</p></div>
+{% endblock %}
