@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Run demonstration{% endblock %}
+{% block content %}
+<meta name="civicgate-csrf" content="{{ csrf_token }}">
+<script src="/assets/demo.js" defer></script>
+<div class="eyebrow">EXPLICIT LOCAL EXECUTION</div>
+<div class="page-heading"><div><h1>Run a governed demonstration.</h1><p class="lede">Real integration. Synthetic providers and backend. Fresh evidence.</p></div><span class="mode-pill">SYNTHETIC E2E ONLY</span></div>
+<div class="scope-banner"><span class="scope-icon" aria-hidden="true">i</span><div><strong>FastAPI requests execution; the Gateway determines authority.</strong><p>Every selected scenario traverses actual LangGraph A2, MCP stdio, deterministic policy and the existing execution boundary. External providers and USAspending remain disabled.</p></div></div>
+<div class="execution-layout">
+  <section class="panel execution-form-panel" aria-labelledby="scenario-heading">
+    <div class="panel-heading"><h2 id="scenario-heading">Choose a bounded scenario</h2><span class="neutral-badge">THREE ALLOWLISTED CASES</span></div>
+    <label class="input-label" for="demo-scenario">Demonstration scenario</label>
+    <select id="demo-scenario" name="scenario">
+      <option value="permit">PERMIT · Compatible public-record read</option>
+      <option value="deny">DENY · Unauthorized consequential request</option>
+      <option value="review">REVIEW_REQUIRED · Unresolved FAA scope</option>
+    </select>
+    <div class="scenario-expectation"><span class="kicker">EXPECTED BEHAVIOR — NOT AN OBSERVED RESULT</span><p id="scenario-description">A compatible synthetic read should receive deterministic PERMIT, one issued and consumed binding, and one synthetic backend invocation.</p></div>
+    <button id="run-demo" class="primary-action" type="button" disabled>Run Demonstration <span aria-hidden="true">→</span></button>
+    <p class="explanation">One explicit request starts one fresh scenario. No arbitrary request text, tools, endpoints, model IDs or credentials are accepted. No automatic retry occurs.</p>
+    <div class="execution-contract"><span class="kicker">TRUSTED LOCAL CONFIGURATION</span><p>Single concurrent demonstration · {{ capabilities.deadline_seconds if capabilities.deadline_seconds is defined else 'UNKNOWN' }}s deadline<br><span id="remaining-jobs">Capacity checked by the local controller</span><br>Provider-neutral interfaces preserved · no live fallback</p></div>
+  </section>
+  <section class="panel live-status-panel" aria-labelledby="execution-heading">
+    <div class="panel-heading"><h2 id="execution-heading">Execution status</h2><span id="demo-status" class="neutral-badge" role="status" aria-live="polite">IDLE</span></div>
+    <p id="execution-message" class="explanation">No execution has been requested from this page.</p>
+    <dl id="job-details">
+      <div class="field"><dt>Execution request</dt><dd id="job-id">Not requested</dd></div>
+      <div class="field"><dt>Fresh run</dt><dd id="job-run">Not generated</dd></div>
+      <div class="field"><dt>Fresh observation</dt><dd id="job-observation">Not generated</dd></div>
+      <div class="field"><dt>Started at UTC</dt><dd id="job-started">Not started</dd></div>
+    </dl>
+    <p id="job-error" class="warning" hidden></p>
+    <a id="open-fresh-evidence" class="primary-action execution-link" href="/" hidden>Inspect fresh evidence <span aria-hidden="true">↗</span></a>
+    <p class="custody-meaning">COMPLETE means evidence collection passed. CLOSED means documentary custody. Neither is human approval.</p>
+  </section>
+</div>
+<section class="panel path-panel"><span class="kicker">ACTUAL EXECUTION PATH</span><p>FastAPI <span>→</span> LangGraph A2 <span>→</span> MCP stdio <span>→</span> Gateway / Policy <span>→</span> ExecutionBinding when permitted <span>→</span> Synthetic adapter <span>→</span> Evidence & custody</p><small>The observed node history, policy decision and execution counts appear only in the resulting evidence. This diagram is the intended composition, not a fabricated progress trace.</small></section>
+<div class="section-heading"><h2>Execution requests in this session</h2><span class="count-label">GET status reads never dispatch</span></div>
+<div id="recent-jobs" class="observations"><div class="panel empty">Loading request records…</div></div>
+<div class="limits-strip"><span class="kicker">SEPARATE CAPABILITIES</span><p>Synthetic E2E is authorized for local testing. API-backed Planner/Judge execution and the future Evidence Advisor require separate authorization and are not implemented or activated here.</p></div>
+{% endblock %}

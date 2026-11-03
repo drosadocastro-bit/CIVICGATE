@@ -41,7 +41,30 @@ flowchart TB
 
 **Reading guide:** Direct MCP clients and optional LangGraph orchestration enter the same local Gateway. Discovery grants no execution authority. Pre-dispatch DENY or REVIEW_REQUIRED produces no binding or backend dispatch. The Judge cannot override a deterministic hold or issue its own binding. The local host and installed code are trusted; `user_request` is not independently authenticated human intent.
 
-**Current scope:** Channel A is a local stdio implementation. FastAPI, an Evidence Console, an AI Evidence Advisor and the separate TDLS Write research concept are not implemented components of this composition. The evidence described below consists of captured files and evaluation receipts, not a deployed evidence UI.
+**Current scope:** Channel A is a local stdio implementation. MINI08.1/08.2 add an optional local FastAPI Evidence Console, explicit synthetic demonstration requests and a separately bounded mock Evidence Advisor. They do not add execution authority. The TDLS Write research concept remains unimplemented. The original MINI08-CP1 attempt was held because its historical observer did not recognize the current Gateway policy wrapper. CP1.1 repaired that observational compatibility in a versioned candidate; CP1.2 checkpoints the restored local synthetic integration. Earlier results retain their original source identities and are not relabeled as new execution evidence.
+
+## MINI08-CP1: console consolidation and Claude preflight
+
+The proposed console presents manifest-checked evidence, the five LangGraph transitions, deterministic decisions, separately observed binding issuance/consumption, backend attempts and SQLite custody. GET views never dispatch. Only an explicit protected synthetic POST can start a demonstration; a separate manual **Analyze Evidence** request runs the mock Messages adapter. The Advisor cannot call MCP tools, issue bindings, change policy or close execution custody.
+
+The original CP1 checkpoint was not published after its failed validation gate. Its source inventory, failures and original observer bytes remain preserved. The subsequent V3 observer and separately pinned CP1.1 worker restore phase/request correlation without changing deterministic policy, bindings or the strict evidence-admission validator.
+
+See [checkpoint status and reproduction boundaries](docs/MINI08_CP1_CHECKPOINT.md), [interactive synthetic console](docs/GSA_MINI081_INTERACTIVE_SYNTHETIC_E2E.md), [mock Evidence Advisor](docs/GSA_MINI082_EVIDENCE_ADVISOR.md), and [Claude API preflight](docs/MINI08_CP1_CLAUDE_API_PREFLIGHT.md). These are local research capabilities, not cloud deployment or live-provider acceptance. The historical evidence and limitations below remain intact.
+
+**MINI08-CP1.2 research checkpoint:** see the [three exact queries, proposed arguments and observed outcomes](docs/GSA_THREE_CASE_EVALUATION.md), including links to a small sanitized derivative of CP1.1's primary evidence. That derivative is not a redistribution of the private traces or SQLite captures. CP1.2 separately checks reproduction from an isolated publication snapshot; it does not claim real Granite/Luna inference, real Claude analysis or the complete FAA FY2026 contract. See [observer compatibility repair and prior verification](docs/MINI08_CP11_OBSERVER_COMPATIBILITY.md). CLOSED means documentary custody, not human acceptance.
+
+For the restored interactive path, use separate existing compatible console and MCP worker environments. The optional console dependencies are listed in `requirements-evidence-console.txt`; its test dependencies are in `requirements-evidence-console-test.txt`. No live credentials are required. Choose **new**, disjoint output directories outside the checkout:
+
+```powershell
+$worker = Read-Host "Existing verified MCP 1.30.0 / LangGraph 1.2.15 worker Python"
+$executions = Read-Host "NEW private synthetic execution directory"
+$analyses = Read-Host "NEW private mock analysis directory"
+python -B scripts/serve_evidence_console.py --catalog docs/examples/evidence_console_empty_catalog_v1.json --enable-synthetic-e2e --worker-python $worker --execution-root $executions --advisor-mode mock --advisor-output-root $analyses
+```
+
+Open the loopback address printed by the server. Explicitly select PERMIT, DENY and REVIEW_REQUIRED; Analyze Evidence is a separate mock-only action. GET viewing/refreshing does not execute a demonstration. Keep unsuccessful or uncertain attempts; there is no automatic retry or fallback.
+
+**Static/CI limitation:** strict `mypy src` retains 160 classified diagnostics in five optional console files. This is not a Mypy PASS or a green-CI claim. The unchanged standard CI runs Mypy before tests and does not install the separate optional console environment. Research checkpoint publication does not resolve those limitations or certify production readiness. CP1/CP1.1 status documents above record their historical gates, not a new execution authorization.
 
 ## MINI07.1: offline synthetic hackathon demonstration
 
@@ -61,7 +84,7 @@ Logical MCP calls, provider requests, binding consumption, adapter entries and b
 
 ### Reproduce the local demonstration checkpoint
 
-The checked-in entrypoint executes the three MINI07.2 scenarios through the existing A2/MCP/Gateway path. It uses only synthetic providers and MockTransport; no private evidence ZIP or live credentials are required.
+The original checked-in entrypoint below is preserved with MINI07.3's historical source inventory. Its inventory is intentionally not repinned to the newer main/CP1.1 sources: a mismatch must stop, not silently replay an old acceptance. Use the restored CP1.2 console command above for the current snapshot. The historical command uses only synthetic providers and MockTransport; no private evidence ZIP or live credentials are required.
 
 Use an existing verified environment with the repository development dependencies. The recorded environment is **Windows/Python 3.13.7, MCP 1.30.0 and LangGraph 1.2.15**. From this checkout:
 
