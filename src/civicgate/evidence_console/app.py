@@ -8,17 +8,25 @@ import ipaddress
 import re
 import secrets
 import uuid
+from collections.abc import AsyncIterator, Iterable
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
 from urllib.parse import urlsplit
 
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.responses import Response
+from starlette.types import ASGIApp
 
 from .reader import EvidenceStore, SafeEvidenceError, strict_json
+
+if TYPE_CHECKING:
+    from .demo_execution_v1 import DemoExecutor
+    from .evidence_advisor_v1 import AdvisorService
 
 HERE = Path(__file__).resolve().parent
 ID_PATTERN = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,127}\Z")
@@ -39,13 +47,19 @@ HEADERS = {
 
 
 class LocalReadBoundary(BaseHTTPMiddleware):
-    def __init__(self, app, *, csrf_token=None, post_paths=()):
+    def __init__(
+        self,
+        app: ASGIApp,
+        *,
+        csrf_token: str | None = None,
+        post_paths: Iterable[str] = (),
+    ) -> None:
         super().__init__(app)
         self.csrf_token = csrf_token
         self.post_paths = frozenset(post_paths)
 
-    async def dispatch(self, request: Request, call_next):
-        response = None
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
+        response: Response | None = None
         raw_hosts = [v for k, v in request.scope["headers"] if k.lower() == b"host"]
         host = raw_hosts[0].decode("ascii", errors="replace") if len(raw_hosts) == 1 else ""
         client = request.client.host if request.client else ""
@@ -127,13 +141,18 @@ class LocalReadBoundary(BaseHTTPMiddleware):
         return response
 
 
-def create_app(entries: list[dict], *, executor=None, advisor=None) -> FastAPI:
+def create_app(
+    entries: list[dict[str, Any]],
+    *,
+    executor: DemoExecutor | None = None,
+    advisor: AdvisorService | None = None,
+) -> FastAPI:
     historical_entries = tuple(dict(entry) for entry in entries)
     EvidenceStore(list(historical_entries))
     csrf_token = secrets.token_urlsafe(32) if executor is not None or advisor is not None else None
 
     @asynccontextmanager
-    async def lifespan(_app):
+    async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
         try:
             yield
         finally:
@@ -149,7 +168,7 @@ def create_app(entries: list[dict], *, executor=None, advisor=None) -> FastAPI:
         openapi_url=None,
         lifespan=lifespan,
     )
-    post_paths = []
+    post_paths: list[str] = []
     if executor is not None:
         post_paths.append("/api/demo/executions")
     if advisor is not None:
@@ -163,11 +182,11 @@ def create_app(entries: list[dict], *, executor=None, advisor=None) -> FastAPI:
             raise SafeEvidenceError("NOT_FOUND")
         return value
 
-    def store():
+    def store() -> EvidenceStore:
         fresh = executor.evidence_entries() if executor is not None else []
         return EvidenceStore([*historical_entries, *fresh])
 
-    def render(request, template, **context):
+    def render(request: Request, template: str, **context: Any) -> HTMLResponse:
         return templates.TemplateResponse(
             request=request,
             name=template,
@@ -180,7 +199,7 @@ def create_app(entries: list[dict], *, executor=None, advisor=None) -> FastAPI:
         )
 
     @app.exception_handler(SafeEvidenceError)
-    async def safe_error(request: Request, exc: SafeEvidenceError):
+    async def safe_error(request: Request, exc: SafeEvidenceError) -> Response:
         status = 404 if exc.code in {"NOT_FOUND", "UNKNOWN_RUN", "UNKNOWN_OBSERVATION"} else 503
         if request.url.path.startswith("/api/"):
             return JSONResponse(
@@ -194,8 +213,8 @@ def create_app(entries: list[dict], *, executor=None, advisor=None) -> FastAPI:
             status_code=status,
         )
 
-    @app.get("/health")
-    def health():
+    @app.get("/health", response_model=None)
+    def health() -> dict[str, str | bool]:
         return {
             "service": "evidence-console",
             "mode": "SYNTHETIC_E2E_LOCAL" if executor is not None else "READ_ONLY",
@@ -203,20 +222,20 @@ def create_app(entries: list[dict], *, executor=None, advisor=None) -> FastAPI:
         }
 
     @app.get("/", response_class=HTMLResponse)
-    def overview(request: Request):
+    def overview(request: Request) -> HTMLResponse:
         return render(request, "overview.html", runs=store().list_runs())
 
     @app.get("/runs/{run_id}", response_class=HTMLResponse)
-    def run_page(request: Request, run_id: str):
+    def run_page(request: Request, run_id: str) -> HTMLResponse:
         return render(request, "run.html", run=store().get_run(checked_id(run_id)))
 
     @app.get("/runs/{run_id}/observations/{observation_id}", response_class=HTMLResponse)
-    def observation_page(request: Request, run_id: str, observation_id: str):
+    def observation_page(request: Request, run_id: str, observation_id: str) -> HTMLResponse:
         observation = store().get_observation(checked_id(run_id), checked_id(observation_id))
         response = render(
             request, "observation.html", observation=observation, csrf_token=csrf_token
         )
-        if advisor is not None:
+        if advisor is not None and csrf_token is not None:
             response.set_cookie(
                 "civicgate_demo_csrf",
                 csrf_token,
@@ -227,58 +246,60 @@ def create_app(entries: list[dict], *, executor=None, advisor=None) -> FastAPI:
             )
         return response
 
-    @app.get("/api/runs")
-    def runs_api():
+    @app.get("/api/runs", response_model=None)
+    def runs_api() -> dict[str, Any]:
         return {"runs": store().list_runs(), "mode": "READ_ONLY"}
 
-    @app.get("/api/runs/{run_id}")
-    def run_api(run_id: str):
+    @app.get("/api/runs/{run_id}", response_model=None)
+    def run_api(run_id: str) -> dict[str, Any]:
         return store().get_run(checked_id(run_id))
 
-    @app.get("/api/runs/{run_id}/observations/{observation_id}")
-    def observation_api(run_id: str, observation_id: str):
+    @app.get("/api/runs/{run_id}/observations/{observation_id}", response_model=None)
+    def observation_api(run_id: str, observation_id: str) -> dict[str, Any]:
         return store().get_observation(checked_id(run_id), checked_id(observation_id))
 
     if executor is not None:
+        active_executor = executor
 
         @app.get("/demonstrations", response_class=HTMLResponse)
-        def demonstration_page(request: Request):
+        def demonstration_page(request: Request) -> HTMLResponse:
             response = render(
                 request,
                 "interactive.html",
                 active="execute",
                 csrf_token=csrf_token,
-                capabilities=executor.capabilities(),
+                capabilities=active_executor.capabilities(),
             )
-            response.set_cookie(
-                "civicgate_demo_csrf",
-                csrf_token,
-                httponly=True,
-                samesite="strict",
-                secure=False,  # Fixed loopback HTTP; no remote deployment claim.
-                path="/",
-            )
+            if csrf_token is not None:
+                response.set_cookie(
+                    "civicgate_demo_csrf",
+                    csrf_token,
+                    httponly=True,
+                    samesite="strict",
+                    secure=False,  # Fixed loopback HTTP; no remote deployment claim.
+                    path="/",
+                )
             return response
 
-        @app.get("/api/demo/capabilities")
-        def demo_capabilities():
-            return executor.capabilities()
+        @app.get("/api/demo/capabilities", response_model=None)
+        def demo_capabilities() -> dict[str, Any]:
+            return active_executor.capabilities()
 
-        @app.get("/api/demo/executions")
-        def demo_jobs():
-            return {"jobs": executor.list_jobs(), "mode": "SYNTHETIC_E2E_ONLY"}
+        @app.get("/api/demo/executions", response_model=None)
+        def demo_jobs() -> dict[str, Any]:
+            return {"jobs": active_executor.list_jobs(), "mode": "SYNTHETIC_E2E_ONLY"}
 
-        @app.get("/api/demo/executions/{job_id}")
-        def demo_job(job_id: str):
+        @app.get("/api/demo/executions/{job_id}", response_model=None)
+        def demo_job(job_id: str) -> dict[str, Any] | JSONResponse:
             from .demo_execution_v1 import DemoError
 
             try:
-                return executor.get_job(checked_id(job_id))
+                return active_executor.get_job(checked_id(job_id))
             except DemoError as exc:
                 return JSONResponse({"error": exc.code}, status_code=exc.status_code)
 
         @app.post("/api/demo/executions")
-        async def execute_demonstration(request: Request):
+        async def execute_demonstration(request: Request) -> JSONResponse:
             from .demo_execution_v1 import DemoError
 
             raw_keys = [
@@ -314,28 +335,29 @@ def create_app(entries: list[dict], *, executor=None, advisor=None) -> FastAPI:
             ):
                 return JSONResponse({"error": "INVALID_SCENARIO_REQUEST"}, status_code=400)
             try:
-                job = executor.submit(value["scenario"], key)
+                job = active_executor.submit(value["scenario"], key)
             except DemoError as exc:
                 return JSONResponse({"error": exc.code}, status_code=exc.status_code)
             return JSONResponse(job, status_code=202)
 
     if advisor is not None:
+        active_advisor = advisor
 
-        @app.get("/api/advisor/capabilities")
-        def advisor_capabilities():
-            return advisor.capabilities()
+        @app.get("/api/advisor/capabilities", response_model=None)
+        def advisor_capabilities() -> dict[str, Any]:
+            return active_advisor.capabilities()
 
-        @app.get("/api/advisor/analyses/{analysis_id}")
-        def advisor_analysis(analysis_id: str):
+        @app.get("/api/advisor/analyses/{analysis_id}", response_model=None)
+        def advisor_analysis(analysis_id: str) -> dict[str, Any] | JSONResponse:
             from .evidence_advisor_v1 import AdvisorError
 
             try:
-                return advisor.get_job(checked_id(analysis_id))
+                return active_advisor.get_job(checked_id(analysis_id))
             except AdvisorError as exc:
                 return JSONResponse({"error": exc.code}, status_code=exc.status_code)
 
         @app.post("/api/advisor/analyses")
-        async def analyze_evidence(request: Request):
+        async def analyze_evidence(request: Request) -> JSONResponse:
             from .evidence_advisor_v1 import AdvisorError
 
             keys = [v for k, v in request.scope["headers"] if k.lower() == b"idempotency-key"]
@@ -365,7 +387,7 @@ def create_app(entries: list[dict], *, executor=None, advisor=None) -> FastAPI:
             ):
                 return JSONResponse({"error": "INVALID_ANALYSIS_REQUEST"}, status_code=400)
             try:
-                job = advisor.submit(value["run_id"], value["observation_id"], key)
+                job = active_advisor.submit(value["run_id"], value["observation_id"], key)
             except AdvisorError as exc:
                 return JSONResponse({"error": exc.code}, status_code=exc.status_code)
             return JSONResponse(job, status_code=202)

@@ -16,7 +16,7 @@ import threading
 import time
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import Any
+from typing import Any, NoReturn
 
 import httpx
 
@@ -63,7 +63,7 @@ class ProviderConfig:
     session_limit_usd: Decimal = Decimal("0")
     mock_request_cost_usd: Decimal = Decimal("0")
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if (
             not isinstance(self.model, str)
             or re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}", self.model) is None
@@ -79,12 +79,16 @@ class ProviderConfig:
                 raise AdvisorProviderError("ADVISOR_CONFIGURATION_INVALID")
         if type(self.timeout_seconds) not in (int, float) or not 0.01 <= self.timeout_seconds <= 60:
             raise AdvisorProviderError("ADVISOR_CONFIGURATION_INVALID")
-        for value in (
+        for monetary_value in (
             self.per_request_limit_usd,
             self.session_limit_usd,
             self.mock_request_cost_usd,
         ):
-            if not isinstance(value, Decimal) or not value.is_finite() or value < 0:
+            if (
+                not isinstance(monetary_value, Decimal)
+                or not monetary_value.is_finite()
+                or monetary_value < 0
+            ):
                 raise AdvisorProviderError("ADVISOR_CONFIGURATION_INVALID")
 
 
@@ -96,18 +100,18 @@ class ProviderReply:
 
 
 def _strict_json(raw: bytes) -> Any:
-    def pairs(items):
-        result = {}
+    def pairs(items: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
         for key, value in items:
             if key in result:
                 raise ValueError("duplicate")
             result[key] = value
         return result
 
-    def constant(_):
+    def constant(_: str) -> NoReturn:
         raise ValueError("constant")
 
-    def number(value):
+    def number(value: str) -> float:
         result = float(value)
         if not math.isfinite(result):
             raise ValueError("non-finite")
@@ -135,7 +139,7 @@ class AnthropicAdvisor:
         *,
         transport: httpx.MockTransport | None = None,
         secrets: SecretProvider | None = None,
-    ):
+    ) -> None:
         # Check before accessing a secret source. This candidate cannot be enabled
         # by merely supplying a real token, changing an URL or enabling a flag.
         if type(transport) is not httpx.MockTransport:
@@ -181,7 +185,7 @@ class AnthropicAdvisor:
     def analyze(self, payload: dict[str, Any]) -> ProviderReply:
         deadline = time.monotonic() + self.config.timeout_seconds
 
-        def within_deadline():
+        def within_deadline() -> None:
             if time.monotonic() >= deadline:
                 raise AdvisorProviderError("ADVISOR_TIMEOUT_DELIVERY_UNKNOWN")
 
@@ -303,7 +307,7 @@ class AnthropicAdvisor:
 class MockAdvisor(AnthropicAdvisor):
     """Deterministic synthetic response through the actual Messages parser."""
 
-    def __init__(self, config: ProviderConfig | None = None):
+    def __init__(self, config: ProviderConfig | None = None) -> None:
         config = config or ProviderConfig(model=MOCK_MODEL)
         if config.model != MOCK_MODEL:
             raise AdvisorProviderError("ADVISOR_CONFIGURATION_INVALID")
@@ -313,15 +317,15 @@ class MockAdvisor(AnthropicAdvisor):
             evidence = _strict_json(wire["messages"][0]["content"].encode())
             facts = evidence.get("facts", [])
             by_name = {fact["name"]: fact for fact in facts}
-            findings = []
+            findings: list[dict[str, Any]] = []
 
-            def value(name):
+            def value(name: str) -> str:
                 item = by_name.get(name, {}).get("value")
                 if type(item) is int and 0 <= item <= 1000:
                     return str(item)
                 if type(item) is bool:
                     return "TRUE" if item else "FALSE"
-                if item in (
+                if isinstance(item, str) and item in (
                     "PERMIT",
                     "DENY",
                     "REVIEW_REQUIRED",
@@ -348,7 +352,9 @@ class MockAdvisor(AnthropicAdvisor):
                     return item
                 return "UNKNOWN"
 
-            def finding(category, names, explanation, uncertainty):
+            def finding(
+                category: str, names: list[str], explanation: str, uncertainty: str
+            ) -> None:
                 selected = [by_name[name] for name in names if name in by_name]
                 if not selected:
                     return

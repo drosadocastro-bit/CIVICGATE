@@ -132,7 +132,7 @@ def safe_text(value: Any, limit: int = 1000) -> str | None:
     """Defense in depth; only selected fields reach this function."""
     if not isinstance(value, str):
         return None
-    value = value[: max(limit * 4, 4096)]
+    text = value[: max(limit * 4, 4096)]
     patterns = (
         r"-----BEGIN [^-]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-]*PRIVATE KEY-----|$)",
         r"(?i)\bBearer\s+[^\s,;\"<>]+",
@@ -147,9 +147,9 @@ def safe_text(value: Any, limit: int = 1000) -> str | None:
         r"https?://[^\s\"<>]+",
     )
     for pattern in patterns:
-        value = re.sub(pattern, "[REDACTED]", value)
-    value = "".join(c for c in value if c in "\n\t" or ord(c) >= 32)
-    return value[:limit] + ("…" if len(value) > limit else "")
+        text = re.sub(pattern, "[REDACTED]", text)
+    text = "".join(c for c in text if c in "\n\t" or ord(c) >= 32)
+    return text[:limit] + ("…" if len(text) > limit else "")
 
 
 def _safe_value(value: Any, depth: int = 0) -> Any:
@@ -457,6 +457,7 @@ def _project(
         isinstance(envelope, dict) and envelope == returned.get("observed_envelope"),
         "ENVELOPE_CONTRADICTION",
     )
+    assert isinstance(envelope, dict)
     request_id = envelope.get("request_id")
     _require(
         envelope.get("governance", {}).get("authority_source") == "DETERMINISTIC_POLICY_GATE",
@@ -472,6 +473,7 @@ def _project(
         isinstance(request, str) and request == scenario.get("scenario", {}).get("request"),
         "ORIGINAL_REQUEST_CONTRADICTION",
     )
+    assert isinstance(request, str)
     request_hash = sha256(request.encode())
     view["request"] = {
         "state": "VERIFIED",
@@ -486,6 +488,7 @@ def _project(
         and envelope.get("tool") == effective.get("tool"),
         "TOOL_CORRELATION_MISMATCH",
     )
+    assert isinstance(effective, dict)
     initial = policy.get("policy", {}).get("decision")
     final = envelope.get("decision")
     _require(
@@ -733,6 +736,7 @@ def _project(
         )
         attempts = completed.get("attempts")
         _require(isinstance(attempts, list) and len(attempts) == 1, "TERMINAL_ATTEMPT_UNKNOWN")
+        assert isinstance(attempts, list)
         attempt = attempts[0]
         _require(
             isinstance(attempt, dict)
@@ -780,6 +784,8 @@ def _project(
             and provenance.get("source_system") == "CIVICGATE_TEST_FIXTURE",
             "RESULT_SOURCE_CONTRADICTION",
         )
+        assert isinstance(value, dict)
+        assert isinstance(provenance, dict)
         result_value = {
             "records": [
                 {k: _safe_value(v) for k, v in row.items() if k in RECORD_KEYS}
@@ -837,6 +843,7 @@ def _project(
         _require(len(judge_attempts) <= 1, "JUDGE_ATTEMPT_CONTRADICTION")
         judge = policy.get("judge")
         _require(isinstance(judge, dict), "MISSING_JUDGE_RECORD")
+        assert isinstance(judge, dict)
         judge_capture = snapshot.json(prefix + "evidence/worker-http-evidence.json")
         judge_receipts = judge_capture.get("server_receipts")
         _require(
@@ -1007,4 +1014,7 @@ class EvidenceStore:
         run = self._run(run_id)
         if observation_id not in run["_details"]:
             raise SafeEvidenceError("UNKNOWN_OBSERVATION")
-        return run["_details"][observation_id]
+        observation = run["_details"][observation_id]
+        # _run builds every detail from _unknown_observation or _project dicts.
+        assert isinstance(observation, dict)
+        return observation

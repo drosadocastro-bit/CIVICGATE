@@ -541,10 +541,8 @@ def test_late_final_ack_and_failed_unknown_write_never_persist_complete(make_exe
     assert value["status"] == "UNKNOWN"
     assert value["error_code"] == "TERMINAL_CUSTODY_UNKNOWN", diagnostics
     assert executor.evidence_entries() == [] and executor.capabilities()["enabled"] is False
-    records = [
-        json.loads(path.read_bytes())
-        for path in (executor.output_root / "jobs" / requested["id"] / "states").glob("*.json")
-    ]
+    journal = executor.output_root / "jobs" / requested["id"] / "states"
+    records = [json.loads(path.read_bytes()) for path in sorted(journal.glob("*.json"))]
     assert records[-1]["status"] == "EVIDENCE_CANDIDATE"
     assert not any(record["status"] == "COMPLETE" for record in records)
 
