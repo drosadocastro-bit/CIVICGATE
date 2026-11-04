@@ -18,6 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCENARIOS = ("permit", "deny", "review")
+ACTIVE_GUARD = "evals/demos/guarded_pytest_v2.py"
 
 
 def manifest_sources():
@@ -63,6 +64,17 @@ def manifest_sources():
     return rows
 
 
+def verify_guard_identity(facts, expected_sha256: str) -> bool:
+    """Measured guard identity; not external authority or a historical pin."""
+    return (
+        isinstance(facts, dict)
+        and type(facts.get("guard_version")) is int
+        and facts["guard_version"] == 2
+        and type(facts.get("guard_sha256")) is str
+        and facts["guard_sha256"] == expected_sha256
+    )
+
+
 def verify_guard_facts(facts, copy: Path, sources) -> bool:
     """Known guard decisions only; unexpected denied external attempts hold."""
     if not isinstance(facts, dict):
@@ -86,6 +98,24 @@ def verify_guard_facts(facts, copy: Path, sources) -> bool:
                 event.get("event") == "socket.bind"
                 and event.get("kind") == "denied"
                 and address in (("::1", 0), ("127.0.0.1", 0))
+            ):
+                return False
+        elif event.get("event") == "socketpair.call":
+            if (
+                type(facts.get("guard_version")) is not int
+                or facts["guard_version"] != 2
+                or event.get("api") not in {"public", "native"}
+                or event.get("kind") != "asyncio_socketpair"
+            ):
+                return False
+        elif event.get("event") == "socketpair.result":
+            if (
+                type(facts.get("guard_version")) is not int
+                or facts["guard_version"] != 2
+                or event.get("kind") != "asyncio_socketpair"
+                or event.get("peer_verified") is not True
+                or type(event.get("family")) is not int
+                or event["family"] not in {1, 2}
             ):
                 return False
         elif event.get("event") in {"socket.bind", "socket.connect", "socket.connect_ex"}:
@@ -183,7 +213,8 @@ def main() -> int:
             stream.write((ROOT / row["path"]).read_bytes())
     (copy / "isolated-pytest.ini").write_bytes(b"[pytest]\n")
     guard = execution / "guarded_run.py"
-    guard.write_bytes((ROOT / "evals/demos/guarded_pytest_v1.py").read_bytes())
+    guard.write_bytes((ROOT / ACTIVE_GUARD).read_bytes())
+    guard_sha256 = runner.sha(guard.read_bytes())
     runner.save(execution / "guard-config.json", {"version": 1, "source_root": str(ROOT)})
     env = {key: os.environ[key] for key in ("SystemRoot", "WINDIR", "COMSPEC") if key in os.environ}
     env.update(
@@ -215,7 +246,9 @@ def main() -> int:
             "environment": env,
             "selection": [selection],
             "source_files": sources,
-            "guard_sha256": runner.sha(guard.read_bytes()),
+            "guard_source": ACTIVE_GUARD,
+            "guard_version": 2,
+            "guard_sha256": guard_sha256,
             "no_live_configuration": True,
             "no_automatic_retry": True,
             "scenario": args.scenario,
@@ -269,7 +302,9 @@ def main() -> int:
     guard_verified = False
     if guard_evidence.is_file():
         facts = json.loads(guard_evidence.read_bytes())
-        guard_verified = verify_guard_facts(facts, copy, sources)
+        guard_verified = verify_guard_identity(facts, guard_sha256) and verify_guard_facts(
+            facts, copy, sources
+        )
     card = execution / "cases" / args.scenario / "verified-demo-card.json"
     ready = (
         code == 0
@@ -296,6 +331,9 @@ def main() -> int:
             "cases": cases,
             "source_copy_unchanged": preserved,
             "guard_primary_evidence_verified": guard_verified,
+            "guard_source": ACTIVE_GUARD,
+            "guard_version": 2,
+            "guard_sha256": guard_sha256,
             "automatic_retry": False,
             "human_acceptance": "NOT_GRANTED",
             "external_provider_execution": "NOT_AUTHORIZED",
