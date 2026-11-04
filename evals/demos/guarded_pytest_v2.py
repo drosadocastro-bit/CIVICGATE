@@ -366,6 +366,20 @@ sys.addaudithook(audit)
 socket.socketpair = public_socketpair_guard
 if NATIVE_PAIR is not None:
     _socket.socketpair = native_socketpair_guard
+LEGACY_ALIAS_INSTALLED = False
+if (
+    os.name == "nt"
+    and sys.version_info[:2] == (3, 11)
+    and not hasattr(socket, "_fallback_socketpair")
+):
+    if PUBLIC_PAIR.__code__.co_name != "socketpair":
+        raise RuntimeError("UNKNOWN_WINDOWS311_SOCKETPAIR_IMPLEMENTATION")
+    # Frozen compositions recognize this stdlib code by its newer attribute
+    # name. Expose the genuine original function, never a fabricated frame or a
+    # replacement hook. The independent V2 audit gate still constrains every
+    # bind/connect; directly calling this alias cannot borrow its allowance.
+    socket._fallback_socketpair = PUBLIC_PAIR
+    LEGACY_ALIAS_INSTALLED = True
 
 
 def save(path, value):
@@ -417,6 +431,13 @@ finally:
             "guard_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "stdlib_sources": STDLIB_SOURCES,
             "stdlib_callables": STDLIB_CALLABLES,
+            "compatibility_alias": {
+                "installed": LEGACY_ALIAS_INSTALLED,
+                "name": "socket._fallback_socketpair",
+                "target_code_sha256": STDLIB_CALLABLES[0]["code_sha256"]
+                if LEGACY_ALIAS_INSTALLED
+                else None,
+            },
             "network_events": events,
             "loaded_project_modules": loaded,
             "environment_keys": sorted(os.environ),

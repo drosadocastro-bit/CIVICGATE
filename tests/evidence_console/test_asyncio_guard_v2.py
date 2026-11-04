@@ -8,6 +8,7 @@ import json
 import os
 import subprocess
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pytest
@@ -17,7 +18,7 @@ GUARD = ROOT / "evals/demos/guarded_pytest_v2.py"
 V1_SHA256 = "113b390680a4ec710c7cf44917441e86a73977f4b80b5cfd18af99a0f796f505"
 
 
-def run_guard(tmp_path, body, *, configuration="valid", fixture=False):
+def run_guard(tmp_path, body, *, configuration="valid", fixture=False, historical_hook=False):
     """Run the actual guard before importing the bounded synthetic test module."""
     layout = tmp_path / "s"
     copy = layout / "pinned-copy"
@@ -51,6 +52,16 @@ def run_guard(tmp_path, body, *, configuration="valid", fixture=False):
             target = copy / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes((ROOT / name).read_bytes())
+    if historical_hook:
+        name = "evals/harness/eval_002b_composition_v4.py"
+        raw = (ROOT / name).read_bytes()
+        manifest = json.loads(
+            (ROOT / "evals/manifests/mini08_cp11_console_sources_v1.json").read_bytes()
+        )
+        expected = next(row for row in manifest["source_files"] if row["path"] == name)
+        assert len(raw) == expected["bytes"]
+        assert hashlib.sha256(raw).hexdigest() == expected["sha256"]
+        (copy / "frozen_hook_source.py").write_bytes(raw)
     script = execution / "guarded_run.py"
     script.write_bytes(GUARD.read_bytes())
     prelude = (
@@ -522,3 +533,125 @@ def test_current_worker_rejects_unknown_or_malformed_socketpair_receipt(
         },
     }
     assert current_worker().verify_guard_facts(facts, copy, sources) is expected
+
+
+ALIAS_CAPABILITY = (
+    "import hashlib, marshal\n"
+    "alias = getattr(socket, '_fallback_socketpair', None)\n"
+    "alias_capability = {'available':alias is not None, 'code_sha256':hashlib.sha256(marshal.dumps(alias.__code__)).hexdigest() if alias is not None else None}\n"
+    "Path('alias-capability.json').write_text(json.dumps(alias_capability), encoding='utf-8')\n"
+)
+
+
+def require_alias_probe(result, facts, execution):
+    """An unavailable API remains an explicit SKIP, never an invented PASS."""
+    require_pass(result)
+    capability = json.loads((execution.parent / "pinned-copy/alias-capability.json").read_bytes())
+    cases = ET.parse(execution / "junit.xml").getroot().findall(".//testcase")
+    assert len(cases) == 1
+    if cases[0].find("skipped") is not None:
+        assert capability["available"] is False
+        pytest.skip("Actual stdlib fallback alias unavailable on this runtime; capability recorded")
+    assert capability["available"] is True
+    assert any(row.get("allowed") is False for row in facts["network_events"])
+
+
+@pytest.mark.parametrize("within_coroutine", [False, True], ids=["synchronous", "coroutine"])
+def test_direct_fallback_alias_cannot_borrow_self_pipe_allowance(tmp_path, within_coroutine):
+    prefix = ALIAS_CAPABILITY + (
+        "def check_alias():\n"
+        "    if alias is None: pytest.skip('No stdlib fallback alias on this runtime')\n"
+        "    with pytest.raises(PermissionError): alias()\n"
+    )
+    if within_coroutine:
+        body = prefix + (
+            "async def operation():\n"
+            "    check_alias()\n"
+            "def test_probe():\n"
+            "    asyncio.run(operation())\n"
+        )
+    else:
+        body = prefix + "def test_probe():\n    check_alias()\n"
+    result, facts, execution = run_guard(tmp_path, body)
+    require_alias_probe(result, facts, execution)
+
+
+FROZEN_HOOK_SETUP = (
+    "import ast, __future__, hashlib\n"
+    "from types import FrameType, SimpleNamespace\n"
+    "from typing import Any\n"
+    "frozen_raw = Path('frozen_hook_source.py').read_bytes()\n"
+    "frozen_tree = ast.parse(frozen_raw)\n"
+    "frozen_function = next(node for node in frozen_tree.body if isinstance(node, ast.FunctionDef) and node.name == 'install_fixture_network_guard')\n"
+    "original_ast = ast.dump(frozen_function, include_attributes=True)\n"
+    "hook_namespace = {'__name__':'cp15_isolated_frozen_hook', '_NETWORK_GUARD_INSTALLED':False, 'socket':socket, 'asyncio':asyncio, 'sys':sys, 'fixtures':SimpleNamespace(_OWNED_ENDPOINTS={}), 'Any':Any, 'FrameType':FrameType}\n"
+    "exec(compile(ast.Module(body=[frozen_function], type_ignores=[]), 'frozen_hook_source.py', 'exec', flags=__future__.annotations.compiler_flag), hook_namespace)\n"
+    "assert ast.dump(frozen_function, include_attributes=True) == original_ast\n"
+    "Path('frozen-hook-identity.json').write_text(json.dumps({'source_sha256':hashlib.sha256(frozen_raw).hexdigest(), 'function_ast_sha256':hashlib.sha256(original_ast.encode()).hexdigest(), 'function_ast_unchanged':True, 'scope':'ISOLATED_FROZEN_HOOK_COEXISTENCE_NOT_FULL_COMPOSITION'}), encoding='utf-8')\n"
+    "hook_namespace['install_fixture_network_guard']()\n"
+)
+
+
+@pytest.mark.parametrize("operation", ["initialize", "direct_alias", "direct_connect"])
+def test_unchanged_frozen_hook_coexists_with_versioned_guard(tmp_path, operation):
+    body = FROZEN_HOOK_SETUP + ALIAS_CAPABILITY
+    if operation == "initialize":
+        body += (
+            "async def operation():\n"
+            "    await asyncio.sleep(0)\n"
+            "    return 'FROZEN_HOOK_AND_CURRENT_GUARD'\n"
+            "def test_probe():\n"
+            "    assert asyncio.run(operation()) == 'FROZEN_HOOK_AND_CURRENT_GUARD'\n"
+        )
+    elif operation == "direct_alias":
+        body += (
+            "def test_probe():\n"
+            "    if alias is None: pytest.skip('No stdlib fallback alias on this runtime')\n"
+            "    with pytest.raises(PermissionError): alias()\n"
+        )
+    else:
+        body += (
+            "def test_probe():\n"
+            "    with pytest.raises(PermissionError):\n"
+            "        with socket.socket() as connection: connection.connect(('127.0.0.1', 1))\n"
+        )
+    result, facts, execution = run_guard(tmp_path, body, historical_hook=True)
+    require_pass(result)
+    identity = json.loads((execution.parent / "pinned-copy/frozen-hook-identity.json").read_bytes())
+    assert identity["function_ast_unchanged"] is True
+    assert identity["scope"] == "ISOLATED_FROZEN_HOOK_COEXISTENCE_NOT_FULL_COMPOSITION"
+    assert (
+        identity["source_sha256"]
+        == hashlib.sha256(
+            (ROOT / "evals/harness/eval_002b_composition_v4.py").read_bytes()
+        ).hexdigest()
+    )
+    if operation == "direct_alias":
+        require_alias_probe(result, facts, execution)
+    elif operation == "direct_connect":
+        assert any(row.get("allowed") is False for row in facts["network_events"])
+
+
+def test_compatibility_alias_identity_is_explicit_and_version_bounded(tmp_path):
+    body = (
+        ALIAS_CAPABILITY
+        + "def test_probe():\n    assert type(alias_capability['available']) is bool\n"
+    )
+    result, facts, execution = run_guard(tmp_path, body)
+    require_pass(result)
+    metadata = facts["compatibility_alias"]
+    assert type(metadata["installed"]) is bool
+    capability = json.loads((execution.parent / "pinned-copy/alias-capability.json").read_bytes())
+    if os.name == "nt" and sys.version_info[:2] == (3, 11):
+        assert metadata["installed"] is True
+        assert metadata["name"] == "socket._fallback_socketpair"
+        assert capability["available"] is True
+        assert metadata["target_code_sha256"] == capability["code_sha256"]
+        assert any(
+            row["module"] == "socket"
+            and row["code_name"] == "socketpair"
+            and row["code_sha256"] == capability["code_sha256"]
+            for row in facts["stdlib_callables"]
+        )
+    else:
+        assert metadata["installed"] is False
