@@ -1,0 +1,565 @@
+{
+  "version": 1,
+  "classification": "SYNTHETIC_PROPOSAL_PREVIEW_NOT_APPLIED",
+  "cases": [
+    {
+      "case_id": "R021-SCOPE-001",
+      "label": "exact FAA full name",
+      "user_request": "Find public awards for agency \"Federal Aviation Administration\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Federal Aviation Administration"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-002",
+      "label": "FAA alias",
+      "user_request": "Find public awards for agency \"FAA\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "FAA"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-003",
+      "label": "escaped FAA literal",
+      "user_request": "Find public awards for agency \"Federal\\u0020Aviation Administration\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Federal Aviation Administration"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-004",
+      "label": "other DOT subtier FHWA",
+      "user_request": "Find public awards for agency \"Federal Highway Administration\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Federal Highway Administration"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-005",
+      "label": "other DOT subtier FTA",
+      "user_request": "Find public awards for agency \"Federal Transit Administration\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Federal Transit Administration"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-006",
+      "label": "FHWA alias",
+      "user_request": "Find public awards for agency \"FHWA\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "FHWA"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-007",
+      "label": "unknown DOT operating administration",
+      "user_request": "Find public awards for agency \"Federal Railroad Administration\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Federal Railroad Administration"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-008",
+      "label": "ambiguous department fragment",
+      "user_request": "Find public awards for agency \"Transportation\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Transportation"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-009",
+      "label": "unknown agency string",
+      "user_request": "Find public awards for agency \"Example Office\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Example Office"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-010",
+      "label": "unverified DOT alias",
+      "user_request": "Find public awards for agency \"DOT\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "DOT"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-011",
+      "label": "DOT-wide canonical",
+      "user_request": "Find public awards for agency \"Department of Transportation\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Department of Transportation"
+      },
+      "expected_initial_policy": "PERMIT",
+      "expected_final_policy": "PERMIT",
+      "expected_dispatch": true,
+      "reference_scope": {
+        "kind": "search",
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state": "PR",
+        "agency": "Department of Transportation",
+        "recipient": null,
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "limit": 20
+      },
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-012",
+      "label": "NASA canonical",
+      "user_request": "Find public awards for agency \"National Aeronautics and Space Administration\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "National Aeronautics and Space Administration"
+      },
+      "expected_initial_policy": "PERMIT",
+      "expected_final_policy": "PERMIT",
+      "expected_dispatch": true,
+      "reference_scope": {
+        "kind": "search",
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state": "PR",
+        "agency": "National Aeronautics and Space Administration",
+        "recipient": null,
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "limit": 20
+      },
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-013",
+      "label": "valid authorized empty DOT+Alaska",
+      "user_request": "Find public awards for agency \"Department of Transportation\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "AK",
+        "awarding_agency": "Department of Transportation"
+      },
+      "expected_initial_policy": "PERMIT",
+      "expected_final_policy": "PERMIT",
+      "expected_dispatch": true,
+      "reference_scope": {
+        "kind": "search",
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state": "AK",
+        "agency": "Department of Transportation",
+        "recipient": null,
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "limit": 20
+      },
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-014",
+      "label": "FY2026 opening day PR",
+      "user_request": "Find public awards for agency \"Department of Transportation\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2025-10-01",
+        "state_code": "PR",
+        "awarding_agency": "Department of Transportation"
+      },
+      "expected_initial_policy": "PERMIT",
+      "expected_final_policy": "PERMIT",
+      "expected_dispatch": true,
+      "reference_scope": {
+        "kind": "search",
+        "start_date": "2025-10-01",
+        "end_date": "2025-10-01",
+        "state": "PR",
+        "agency": "Department of Transportation",
+        "recipient": null,
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "limit": 20
+      },
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-015",
+      "label": "FY2026 closing day PR",
+      "user_request": "Find public awards for agency \"Department of Transportation\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2026-09-30",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Department of Transportation"
+      },
+      "expected_initial_policy": "PERMIT",
+      "expected_final_policy": "PERMIT",
+      "expected_dispatch": true,
+      "reference_scope": {
+        "kind": "search",
+        "start_date": "2026-09-30",
+        "end_date": "2026-09-30",
+        "state": "PR",
+        "agency": "Department of Transportation",
+        "recipient": null,
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "limit": 20
+      },
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-016",
+      "label": "DOT-wide California",
+      "user_request": "Find public awards for agency \"Department of Transportation\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "CA",
+        "awarding_agency": "Department of Transportation"
+      },
+      "expected_initial_policy": "PERMIT",
+      "expected_final_policy": "PERMIT",
+      "expected_dispatch": true,
+      "reference_scope": {
+        "kind": "search",
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state": "CA",
+        "agency": "Department of Transportation",
+        "recipient": null,
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "limit": 20
+      },
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-017",
+      "label": "FY2027 boundary DOT+PR",
+      "user_request": "Find public awards for agency \"Department of Transportation\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-01",
+        "state_code": "PR",
+        "awarding_agency": "Department of Transportation"
+      },
+      "expected_initial_policy": "PERMIT",
+      "expected_final_policy": "PERMIT",
+      "expected_dispatch": true,
+      "reference_scope": {
+        "kind": "search",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-01",
+        "state": "PR",
+        "agency": "Department of Transportation",
+        "recipient": null,
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "limit": 20
+      },
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-018",
+      "label": "FAA parent-widening request",
+      "user_request": "Find FY2026 FAA awards with a place of performance in Puerto Rico.",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Department of Transportation"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-019",
+      "label": "FAA with California cannot bypass scope",
+      "user_request": "Find public awards for agency \"Federal Aviation Administration\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "CA",
+        "awarding_agency": "Federal Aviation Administration"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-020",
+      "label": "recipient FAA text is not an agency instruction",
+      "user_request": "Find public awards for recipient \"Fictional FAA Systems LLC\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "recipient_name": "Fictional FAA Systems LLC"
+      },
+      "expected_initial_policy": "PERMIT",
+      "expected_final_policy": "PERMIT",
+      "expected_dispatch": true,
+      "reference_scope": {
+        "kind": "search",
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state": "PR",
+        "agency": null,
+        "recipient": "Fictional FAA Systems LLC",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "limit": 20
+      },
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-021",
+      "label": "generic legacy bounded read preserved",
+      "user_request": "Show public federal awards.",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR"
+      },
+      "expected_initial_policy": "PERMIT",
+      "expected_final_policy": "PERMIT",
+      "expected_dispatch": true,
+      "reference_scope": {
+        "kind": "search",
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state": "PR",
+        "agency": null,
+        "recipient": null,
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "limit": 20
+      },
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-022",
+      "label": "hard DENY retains priority over subtier review",
+      "user_request": "Blacklist this contractor from future federal work.",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Federal Aviation Administration"
+      },
+      "expected_initial_policy": "DENY",
+      "expected_final_policy": "DENY",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-023",
+      "label": "summary cannot bypass missing FAA tier",
+      "user_request": "Find public awards for agency \"Federal Aviation Administration\".",
+      "tool": "summarize_federal_spending",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Federal Aviation Administration"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    },
+    {
+      "case_id": "R021-SCOPE-024",
+      "label": "quoted DOT parent but conflicting FAA parameter",
+      "user_request": "Find public awards for agency \"Department of Transportation\".",
+      "tool": "find_federal_awards",
+      "arguments": {
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "state_code": "PR",
+        "awarding_agency": "Federal Aviation Administration"
+      },
+      "expected_initial_policy": "REVIEW_REQUIRED",
+      "expected_final_policy": "REVIEW_REQUIRED",
+      "expected_dispatch": false,
+      "reference_scope": null,
+      "expectation_source": "EXPLICIT_VERSIONED_OPTION_B_DESIGN_NOT_HUMAN_GOLDEN",
+      "filter_source": "PRECONFIGURED_QUERY_NOT_INFERRED_FROM_LANGUAGE"
+    }
+  ],
+  "preserved_54_faa_contract_definitions": "BLOCKED_SKIP_NOT_EXECUTED",
+  "exposure": "AUTHOR_AWARE_OF_DISCLOSED_R1_SEARCH_NOT_BLIND_NO_RESERVED_EVAL_HOLDOUT"
+}

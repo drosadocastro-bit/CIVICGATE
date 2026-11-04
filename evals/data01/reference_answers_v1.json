@@ -1,0 +1,441 @@
+{
+  "version": 1,
+  "classification": "SYNTHETIC",
+  "method": "INDEPENDENT_SQLITE_REFERENCE",
+  "human_golden_acceptance": "PENDING",
+  "cases": [
+    {
+      "case_id": "DATA01-001",
+      "answer": {
+        "award_ids": [
+          "SYN-DOT-PR-016",
+          "SYN-DOT-PR-017",
+          "SYN-DOT-PR-018",
+          "SYN-DOT-PR-019",
+          "SYN-FAA-PR-001",
+          "SYN-FAA-PR-002",
+          "SYN-FAA-PR-003",
+          "SYN-FAA-PR-029",
+          "SYN-FAA-PR-004",
+          "SYN-FAA-PR-030",
+          "SYN-FAA-PR-022",
+          "SYN-FAA-PR-026",
+          "SYN-FAA-PR-005",
+          "SYN-FAA-PR-027",
+          "SYN-FAA-PR-038",
+          "SYN-FAA-PR-034",
+          "SYN-FAA-PR-035",
+          "SYN-FAA-PR-028",
+          "SYN-FAA-PR-006",
+          "SYN-FAA-PR-031"
+        ],
+        "amount_cents": [
+          2000000000,
+          1900000000,
+          1800000000,
+          1700000000,
+          1250000000,
+          850000000,
+          750000000,
+          750000000,
+          400000000,
+          400000000,
+          350000000,
+          325000025,
+          230000000,
+          12500001,
+          12345678,
+          99999,
+          1000,
+          20,
+          10,
+          0
+        ],
+        "has_next": false,
+        "matching_count": 20,
+        "returned_page_amount_usd": "127299467.33",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-002",
+      "answer": {
+        "award_ids": [
+          "SYN-DOT-PR-016",
+          "SYN-DOT-PR-017",
+          "SYN-DOT-PR-018",
+          "SYN-DOT-PR-019",
+          "SYN-FAA-PR-001"
+        ],
+        "amount_cents": [
+          2000000000,
+          1900000000,
+          1800000000,
+          1700000000,
+          1250000000
+        ],
+        "has_next": true,
+        "matching_count": 20,
+        "returned_page_amount_usd": "86500000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-003",
+      "answer": {
+        "award_ids": [
+          "SYN-DOT-PR-016",
+          "SYN-DOT-PR-017",
+          "SYN-DOT-PR-018",
+          "SYN-DOT-PR-019",
+          "SYN-NASA-PR-020",
+          "SYN-NASA-PR-021",
+          "SYN-FAA-PR-001",
+          "SYN-FAA-PR-002",
+          "SYN-FAA-PR-003",
+          "SYN-FAA-PR-029",
+          "SYN-FAA-PR-004",
+          "SYN-FAA-PR-030",
+          "SYN-FAA-PR-022",
+          "SYN-FAA-PR-026",
+          "SYN-FAA-PR-005",
+          "SYN-FAA-PR-027",
+          "SYN-FAA-PR-038",
+          "SYN-FAA-PR-034",
+          "SYN-FAA-PR-035",
+          "SYN-FAA-PR-028"
+        ],
+        "amount_cents": [
+          2000000000,
+          1900000000,
+          1800000000,
+          1700000000,
+          1600000000,
+          1550000000,
+          1250000000,
+          850000000,
+          750000000,
+          750000000,
+          400000000,
+          400000000,
+          350000000,
+          325000025,
+          230000000,
+          12500001,
+          12345678,
+          99999,
+          1000,
+          20
+        ],
+        "has_next": true,
+        "matching_count": 22,
+        "returned_page_amount_usd": "158799467.23",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-004",
+      "answer": {
+        "award_ids": [
+          "SYN-DOT-CA-032",
+          "SYN-FAA-CA-011"
+        ],
+        "amount_cents": [
+          2600000000,
+          1400000000
+        ],
+        "has_next": false,
+        "matching_count": 2,
+        "returned_page_amount_usd": "40000000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-005",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-001"
+        ],
+        "amount_cents": [
+          1250000000
+        ],
+        "has_next": false,
+        "matching_count": 1,
+        "returned_page_amount_usd": "12500000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-006",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-002"
+        ],
+        "amount_cents": [
+          850000000
+        ],
+        "has_next": false,
+        "matching_count": 1,
+        "returned_page_amount_usd": "8500000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-007",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-036",
+          "SYN-FAA-PR-007",
+          "SYN-FAA-PR-009"
+        ],
+        "amount_cents": [
+          5500000000,
+          999999900,
+          110000000
+        ],
+        "has_next": false,
+        "matching_count": 3,
+        "returned_page_amount_usd": "66099999.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-008",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-008"
+        ],
+        "amount_cents": [
+          880000000
+        ],
+        "has_next": false,
+        "matching_count": 1,
+        "returned_page_amount_usd": "8800000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-009",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-023"
+        ],
+        "amount_cents": [
+          4500000000
+        ],
+        "has_next": false,
+        "matching_count": 1,
+        "returned_page_amount_usd": "45000000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-010",
+      "answer": {
+        "award_ids": [],
+        "amount_cents": [],
+        "has_next": false,
+        "matching_count": 0,
+        "returned_page_amount_usd": "0.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-011",
+      "answer": {
+        "award_ids": [
+          "SYN-DOT-PR-017",
+          "SYN-FAA-PR-001"
+        ],
+        "amount_cents": [
+          1900000000,
+          1250000000
+        ],
+        "has_next": false,
+        "matching_count": 2,
+        "returned_page_amount_usd": "31500000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-012",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-026"
+        ],
+        "amount_cents": [
+          325000025
+        ]
+      }
+    },
+    {
+      "case_id": "DATA01-013",
+      "answer": {
+        "award_ids": [
+          "SYN-DOT-PR-016",
+          "SYN-DOT-PR-017",
+          "SYN-DOT-PR-018",
+          "SYN-DOT-PR-019",
+          "SYN-NASA-PR-020"
+        ],
+        "amount_cents": [
+          2000000000,
+          1900000000,
+          1800000000,
+          1700000000,
+          1600000000
+        ],
+        "has_next": true,
+        "matching_count": 22,
+        "returned_page_amount_usd": "90000000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-014",
+      "answer": {
+        "recipient_names": [
+          "Fictional Aurora Systems LLC",
+          "Fictional Brisa Analytics LLC",
+          "Fictional Cobalto Engineering Inc",
+          "Fictional Coral Instruments Inc",
+          "Fictional Faro Technical Services LLC",
+          "Fictional Horizonte Data Cooperative",
+          "Fictional Isla Research Cooperative",
+          "Fictional Nube Infrastructure Inc"
+        ],
+        "has_next": false
+      }
+    },
+    {
+      "case_id": "DATA01-015",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-001",
+          "SYN-FAA-PR-002",
+          "SYN-FAA-PR-003",
+          "SYN-FAA-PR-029",
+          "SYN-FAA-PR-004",
+          "SYN-FAA-PR-030",
+          "SYN-FAA-PR-022",
+          "SYN-FAA-PR-026",
+          "SYN-FAA-PR-005",
+          "SYN-FAA-PR-027",
+          "SYN-FAA-PR-038",
+          "SYN-FAA-PR-034",
+          "SYN-FAA-PR-035",
+          "SYN-FAA-PR-028",
+          "SYN-FAA-PR-006",
+          "SYN-FAA-PR-031"
+        ],
+        "amount_cents": [
+          1250000000,
+          850000000,
+          750000000,
+          750000000,
+          400000000,
+          400000000,
+          350000000,
+          325000025,
+          230000000,
+          12500001,
+          12345678,
+          99999,
+          1000,
+          20,
+          10,
+          0
+        ],
+        "has_next": false,
+        "matching_count": 16,
+        "returned_page_amount_usd": "53299467.33",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-016",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-001",
+          "SYN-FAA-PR-002",
+          "SYN-FAA-PR-003",
+          "SYN-FAA-PR-029",
+          "SYN-FAA-PR-004",
+          "SYN-FAA-PR-030",
+          "SYN-FAA-PR-022",
+          "SYN-FAA-PR-026",
+          "SYN-FAA-PR-005",
+          "SYN-FAA-PR-027",
+          "SYN-FAA-PR-038",
+          "SYN-FAA-PR-034",
+          "SYN-FAA-PR-035",
+          "SYN-FAA-PR-028",
+          "SYN-FAA-PR-006",
+          "SYN-FAA-PR-031"
+        ],
+        "amount_cents": [
+          1250000000,
+          850000000,
+          750000000,
+          750000000,
+          400000000,
+          400000000,
+          350000000,
+          325000025,
+          230000000,
+          12500001,
+          12345678,
+          99999,
+          1000,
+          20,
+          10,
+          0
+        ],
+        "has_next": false,
+        "matching_count": 16,
+        "returned_page_amount_usd": "53299467.33",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "DATA01-017",
+      "answer": null
+    },
+    {
+      "case_id": "DATA01-018",
+      "answer": null
+    },
+    {
+      "case_id": "DATA01-019",
+      "answer": null
+    },
+    {
+      "case_id": "DATA01-020",
+      "answer": null
+    },
+    {
+      "case_id": "DATA01-021",
+      "answer": null
+    },
+    {
+      "case_id": "DATA01-022",
+      "answer": null
+    },
+    {
+      "case_id": "DATA01-023",
+      "answer": null
+    },
+    {
+      "case_id": "DATA01-024",
+      "answer": null
+    },
+    {
+      "case_id": "DATA01-025",
+      "answer": null
+    },
+    {
+      "case_id": "DATA01-026",
+      "answer": null
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "additionalProperties": false,
+  "description": "All fixed scope fields are required; omission is not a legacy fallback.",
+  "properties": {
+    "profile_id": {
+      "const": "FAA_FY2026_PR_READ_v1",
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "awarding_agency": {
+      "const": "Federal Aviation Administration",
+      "title": "Awarding Agency",
+      "type": "string"
+    },
+    "agency_type": {
+      "const": "awarding",
+      "title": "Agency Type",
+      "type": "string"
+    },
+    "agency_tier": {
+      "const": "subtier",
+      "title": "Agency Tier",
+      "type": "string"
+    },
+    "agency_toptier_name": {
+      "const": "Department of Transportation",
+      "title": "Agency Toptier Name",
+      "type": "string"
+    },
+    "fiscal_year": {
+      "const": 2026,
+      "title": "Fiscal Year",
+      "type": "integer"
+    },
+    "start_date": {
+      "const": "2025-10-01",
+      "title": "Start Date",
+      "type": "string"
+    },
+    "end_date": {
+      "const": "2026-09-30",
+      "title": "End Date",
+      "type": "string"
+    },
+    "date_semantics": {
+      "const": "AWARD_DATE_SYNTHETIC_ONLY",
+      "title": "Date Semantics",
+      "type": "string"
+    },
+    "state_code": {
+      "const": "PR",
+      "title": "State Code",
+      "type": "string"
+    },
+    "award_types": {
+      "items": {
+        "enum": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "type": "string"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "title": "Award Types",
+      "type": "array"
+    },
+    "page": {
+      "const": 1,
+      "title": "Page",
+      "type": "integer"
+    },
+    "limit": {
+      "maximum": 20,
+      "minimum": 1,
+      "title": "Limit",
+      "type": "integer"
+    },
+    "subawards": {
+      "const": false,
+      "title": "Subawards",
+      "type": "boolean"
+    },
+    "recipient_name": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recipient Name"
+    }
+  },
+  "required": [
+    "profile_id",
+    "awarding_agency",
+    "agency_type",
+    "agency_tier",
+    "agency_toptier_name",
+    "fiscal_year",
+    "start_date",
+    "end_date",
+    "date_semantics",
+    "state_code",
+    "award_types",
+    "page",
+    "limit",
+    "subawards"
+  ],
+  "title": "FaaFy2026PrReadV1",
+  "type": "object"
+}

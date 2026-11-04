@@ -1,0 +1,161 @@
+{
+  "manifest_version": 1,
+  "candidate": "MINI09-R02.3-TRUSTED-FAA-HOST-v1",
+  "classification": "EXPERIMENTAL_OFFLINE_SYNTHETIC_NOT_AUTHORIZATION",
+  "final_disposition": "FAA_HOST_COMPOSITION_READY_FOR_HUMAN_REVIEW",
+  "claim_scope": "ONLY_THE_TESTED_HOST_PROVISIONED_PRIVATE_STDIO_TOPOLOGY; noConsolemigration or arbitraryhostprocess isolation",
+  "self_excluded": true,
+  "files_including_manifest": 9,
+  "baseline": {
+    "branch": "codex/mini09-eval-r02-data01",
+    "head": "fdf91d288eba9160dedc4c83b8a0ff339da14857",
+    "tree": "b87dad4e0421ec8afd6e37e425a2337b337e96b5",
+    "git_tree_does_not_identify_untracked_files": true
+  },
+  "files": [
+    {
+      "path": "docs/MINI09_R023_TRUSTED_HOST_COMPOSITION.md",
+      "bytes": 15224,
+      "sha256": "1cafb0ea0ca53264b375635c45aa76b93e2e2eb6d9db54d30533cdacc11a4a43"
+    },
+    {
+      "path": "evals/data01/r023_cases_v1.json",
+      "bytes": 59304,
+      "sha256": "72def15c19c1ec58c3aeda36e615c2b1404ff2275e08cf0f09b5160d4d93dac3"
+    },
+    {
+      "path": "evals/proposals/r023/host_v1.py",
+      "bytes": 10553,
+      "sha256": "ee35f3e5ab72ca6b1ac3984900c87d6be670d06e648882e8254d8a11242919bf"
+    },
+    {
+      "path": "evals/proposals/r023/observation_v1.py",
+      "bytes": 24369,
+      "sha256": "7f71f4ddd6d4e0845fbe2d3aa104799c85ecc0cdbdc098f15f6435a4015b5019"
+    },
+    {
+      "path": "evals/tests/test_r023_adversarial_v1.py",
+      "bytes": 8059,
+      "sha256": "a80ff1ddb557ebb57e98ef199b1b9fe9017f0a2ee8b05480180825fef83aaa0a"
+    },
+    {
+      "path": "evals/tests/test_r023_fullpath_v1.py",
+      "bytes": 6317,
+      "sha256": "bdde4eda9f326155c7c9049990e6f9f4be975f6436dd079a0108cedafd096597"
+    },
+    {
+      "path": "evals/tests/test_r023_host_v1.py",
+      "bytes": 10484,
+      "sha256": "a566915e27c5f85e19b981173c91f39926d4280c9c56b8de1bd33098a9729889"
+    },
+    {
+      "path": "scripts/run_r023_host_v1.py",
+      "bytes": 9173,
+      "sha256": "8d6f49f68b72ee318df82a2fd5e5125d702fe356a9cd7448c54f523b0083cc7e"
+    }
+  ],
+  "prior_preserved_manifests": [
+    {
+      "path": "evals/manifests/mini09_data01_candidate_v1.json",
+      "bytes": 5207,
+      "sha256": "4931ef717223ca9c3876a44a261d1e220feeabcc05ff0cd88220bc803755e0db"
+    },
+    {
+      "path": "evals/manifests/mini09_r021_candidate_v1.json",
+      "bytes": 4496,
+      "sha256": "5ec5f8146bcc60da2256f178ce9c735656b1450422eb7f865683f9670546d290"
+    },
+    {
+      "path": "evals/manifests/mini09_r022_candidate_v1.json",
+      "bytes": 5165,
+      "sha256": "087be0c817f4261194381a6ea05fb2071eb696d5e83b6987e1aef4f59ba43b9d"
+    }
+  ],
+  "private_evidence": {
+    "root_label": "mini09-r023-20261104",
+    "references": [
+      {
+        "path": "all-final-02/result.json",
+        "bytes": 511,
+        "sha256": "67749037e20d118635eeda1f12d1675682cf478c32cda52f32405c5a8504712c"
+      },
+      {
+        "path": "all-final-02/SHA256_INVENTORY.json",
+        "bytes": 219276,
+        "sha256": "c142326f8bab6cbed5371d98c1a8d83ca916b989d543397715614db005ed8bad"
+      },
+      {
+        "path": "all-final-02/execution/junit.xml",
+        "bytes": 13110,
+        "sha256": "d4d2cc91f2aa03884431318f407a126b892b8bfbcf33dd6e15083be85814bd65"
+      },
+      {
+        "path": "FINAL02_PRIMARY_READBACK_V1.json",
+        "bytes": 18479,
+        "sha256": "a8b1141ba8d2fd3b309fdb846a0a6354a701e6134ef8ed553a0f48e838924800"
+      },
+      {
+        "path": "GUARD_AND_FUNCTIONAL_READBACK_V1.json",
+        "bytes": 1747,
+        "sha256": "84623eee12deca7ae887530d89fb5e25c915a6b5f7893a08e856fc00b95c3f21"
+      },
+      {
+        "path": "REGRESSION_AND_PRESERVATION_SUMMARY_V1.json",
+        "bytes": 10504,
+        "sha256": "7091cdb932bec5b053397a7ccd2e49e05e7f508005229f47855314698244f83a"
+      },
+      {
+        "path": "PRESERVATION_PREFLIGHT_V1.json",
+        "bytes": 6511,
+        "sha256": "4a039e9bcd32a76456a5db6726e555b7f1f376bacef113badff1fad09fe40f78"
+      },
+      {
+        "path": "DEVELOPMENT_FINDINGS_V1.json",
+        "bytes": 2625,
+        "sha256": "1149dad1d06065e8bcf0ec5f4c228d7420e77c1f58f75ab21579f70e9d7cddff"
+      },
+      {
+        "path": "STATIC_FINAL_V2.json",
+        "bytes": 2938,
+        "sha256": "60889ec9ef83b81a78c19339936bb5ffefc9cd46bc2be74c243dfdcc75c213fa"
+      }
+    ]
+  },
+  "observed_counts": {
+    "scoped_observations": 32,
+    "initialized_strict_owners": 31,
+    "failed_startup_no_owner_or_projection": 1,
+    "separately_host_composed_legacy_control": 1,
+    "primary_logical_mcp_calls_total": 32,
+    "raw_sdk_sends_strict": 33,
+    "legacy_call_original_counter_input_result": 1,
+    "manual_replay_attempts_no_new_dispatch": 2,
+    "bindings_issued_total": 9,
+    "bindings_consumed_total": 9,
+    "strict_backend_dispatches": 8,
+    "separate_legacy_backend_dispatches": 1,
+    "CLOSED": 9,
+    "OPEN": 24,
+    "provider_attempts": 0,
+    "provider_send_leases": 0
+  },
+  "not_certified": [
+    "arbitrary_python_or_OS_isolation",
+    "independent_human_authentication",
+    "ambient_or_separately_configured_MCP_clients",
+    "power_loss",
+    "distributed_exactly_once",
+    "real_model_identity_or_quality",
+    "live_USASpending_or_cloud_compatibility"
+  ],
+  "holds": {
+    "LIVE_PROVIDER_TRANSPORT": "NOT_AUTHORIZED",
+    "EVAL002_EXECUTION_AUTHORIZATION": "HOLD",
+    "USASPENDING_INTEGRATION": "HOLD",
+    "P2_02_DURABLE_STOP": "PARTIAL",
+    "FAA_FULL_CONTRACT": "BLOCKED",
+    "SERVICE_WRITE": "NOT_IMPLEMENTED",
+    "PRODUCTION_DEPLOYMENT": "NOT_AUTHORIZED"
+  },
+  "identities_are_measurements_not_trust_pins_or_authority_receipts": true
+}
