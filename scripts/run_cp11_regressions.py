@@ -139,7 +139,9 @@ def main() -> int:
             stream.write((ROOT / row["path"]).read_bytes())
     (copy / "isolated-pytest.ini").write_bytes(b"[pytest]\n")
     guard = execution / "guarded_run.py"
-    guard.write_bytes((ROOT / "evals/demos/guarded_pytest_v1.py").read_bytes())
+    guard_source = console_worker().ACTIVE_GUARD
+    guard.write_bytes((ROOT / guard_source).read_bytes())
+    guard_sha256 = sha(guard.read_bytes())
     save(execution / "guard-config.json", {"version": 1, "source_root": str(ROOT)})
     env = {key: os.environ[key] for key in ("SystemRoot", "WINDIR", "COMSPEC") if key in os.environ}
     env.update(
@@ -168,7 +170,9 @@ def main() -> int:
             "source_files": rows,
             "selection": SUITES[args.suite],
             "expected_cases": EXPECTED[args.suite],
-            "guard_sha256": sha(guard.read_bytes()),
+            "guard_source": guard_source,
+            "guard_version": 2,
+            "guard_sha256": guard_sha256,
             "historical_tests_unchanged": True,
             "restart_layout": "PINNED_COPY_WITH_SIBLING_EXECUTION_GUARD_CONFIG",
             "no_live_configuration": True,
@@ -199,9 +203,11 @@ def main() -> int:
     counts, cases = _junit(execution / "junit.xml")
     unchanged = all(sha((copy / row["path"]).read_bytes()) == row["sha256"] for row in rows)
     loaded_verified = False
+    guard_identity_verified = False
     guard_facts = None
     if (execution / "guard-evidence.json").is_file():
         guard_facts = json.loads((execution / "guard-evidence.json").read_bytes())
+        guard_identity_verified = console_worker().verify_guard_identity(guard_facts, guard_sha256)
         expected = {row["path"]: row["sha256"] for row in rows}
         loaded_verified = bool(guard_facts.get("loaded_project_modules")) and all(
             Path(row["path"]).is_relative_to(copy)
@@ -213,6 +219,7 @@ def main() -> int:
         and counts == {"PASS": EXPECTED[args.suite], "FAIL": 0, "ERROR": 0, "SKIP": 0}
         and unchanged
         and loaded_verified
+        and guard_identity_verified
     )
     result = {
         "suite": args.suite,
@@ -226,6 +233,10 @@ def main() -> int:
         "cases": cases,
         "source_copy_unchanged": unchanged,
         "guard_loaded_sources_verified": loaded_verified,
+        "guard_source": guard_source,
+        "guard_version": 2,
+        "guard_sha256": guard_sha256,
+        "guard_identity_verified": guard_identity_verified,
         "blocked_network_attempts": sum(
             row.get("allowed") is False for row in guard_facts.get("network_events", [])
         )
