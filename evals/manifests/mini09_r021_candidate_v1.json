@@ -1,0 +1,128 @@
+{
+  "candidate": "MINI09-R02.1-TECHNICAL-DISPOSITION-AND-UNAPPLIED-PROPOSAL-v1",
+  "status": "EVAL_R02_DATA01_HOLD",
+  "head": "fdf91d288eba9160dedc4c83b8a0ff339da14857",
+  "tree": "b87dad4e0421ec8afd6e37e425a2337b337e96b5",
+  "branch": "codex/mini09-eval-r02-data01",
+  "preserved_original_files": 364,
+  "preserved_prior_candidate_files": 21,
+  "prior_candidate_manifest_sha256": "4931ef717223ca9c3876a44a261d1e220feeabcc05ff0cd88220bc803755e0db",
+  "manifest_self_excluded": true,
+  "files": [
+    {
+      "path": "docs/MINI09_R021_DISPOSITION_AND_SCOPE_PROPOSAL.md",
+      "bytes": 17840,
+      "sha256": "2cf9ed144b786695416b7c4563ca869b8eba488ff4796e79e7054a14bae77eaf",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "ACTIVE_REVIEW_ARTIFACT"
+    },
+    {
+      "path": "evals/data01/agency_scope_r021_cases_v1.json",
+      "bytes": 20135,
+      "sha256": "4a1e0fb03329a4a21dc5ccab0d2fb09e25a5cda40229c24603a7fe74eda58fad",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "ACTIVE_REVIEW_ARTIFACT"
+    },
+    {
+      "path": "evals/data01/agency_scope_r021_reference_v1.json",
+      "bytes": 5943,
+      "sha256": "d9eb64d57b15ea44ee2a8f8ed9ae9edc2e45b3cdd398c266e9df3236c3aafdf2",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "ACTIVE_REVIEW_ARTIFACT"
+    },
+    {
+      "path": "evals/data01/benchmark_dispositions_r021_v1.json",
+      "bytes": 2036,
+      "sha256": "3cfddb6b931640e274fe8ce715b94c49f7132a2731e3be3627026cf6fdd9b5ab",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "ACTIVE_REVIEW_ARTIFACT"
+    },
+    {
+      "path": "evals/proposals/r021/agency_scope_v1.py",
+      "bytes": 4407,
+      "sha256": "f64ae7c53800b0156c527b2c2ec996d27d2c351b6e0cb2269bcfd2facb6e037d",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "PROPOSED_NOT_APPLIED"
+    },
+    {
+      "path": "evals/proposals/r021/option_b_proposed.patch",
+      "bytes": 5540,
+      "sha256": "06243e8816fc9c1dad522e5e676805d474ea1bb47c0d89f6e58c439f166ff015",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "PROPOSED_NOT_APPLIED"
+    },
+    {
+      "path": "evals/proposals/r021/preview_v1.py",
+      "bytes": 3270,
+      "sha256": "cbc2d80dd96fa2255cda17a0a24e31da04b5346ff317848ce8c36209a3e7f89a",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "PROPOSED_NOT_APPLIED"
+    },
+    {
+      "path": "evals/tests/test_r021_agency_scope_v1.py",
+      "bytes": 6468,
+      "sha256": "1fe51f28b4da90a44e19d1aeae6338684f4810bd088dcfa0d615d54a112476dd",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "ACTIVE_REVIEW_ARTIFACT"
+    },
+    {
+      "path": "evals/tests/test_r021_benchmark_v1.py",
+      "bytes": 2326,
+      "sha256": "77a82dd2918c44d7c8e10fe447421db2b480ee28a1d5d31ef393bcef51e591ea",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "ACTIVE_REVIEW_ARTIFACT"
+    },
+    {
+      "path": "evals/tests/test_r021_preview_v1.py",
+      "bytes": 2284,
+      "sha256": "f5131fea79789c56e1dd115f5180908209f9ce24e4c5c9de745d7ff25a5e60d4",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "ACTIVE_REVIEW_ARTIFACT"
+    },
+    {
+      "path": "evals/tests/test_r021_scope_fullpath_v1.py",
+      "bytes": 6263,
+      "sha256": "a2f739f193ee5bb01ccf3f5d6f798b0bc1ffc4983c11749eb98e43017f3a5f6f",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "ACTIVE_REVIEW_ARTIFACT"
+    },
+    {
+      "path": "scripts/run_r021_review_v1.py",
+      "bytes": 7888,
+      "sha256": "d823498ef1e3efc3907d5406cd5b4335432572f2b8fcee8e214d47515ffdd5fe",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "PRESERVED_DEVELOPMENT_RUNNER_NOT_ACTIVE"
+    },
+    {
+      "path": "scripts/run_r021_review_v2.py",
+      "bytes": 10361,
+      "sha256": "cb27f08cdebe50c4cee44a55f516bee969248604933bdf70c9940cb4cd9625c9",
+      "change": "ADDITIVE_NEW_FILE",
+      "before_sha256": null,
+      "role": "ACTIVE_REVIEW_ARTIFACT"
+    }
+  ],
+  "new_files_including_manifest": 14,
+  "production_amendment_applied": false,
+  "proposal_compatibility": {
+    "PASS": 202,
+    "FAIL": 19,
+    "ERROR": 0,
+    "SKIP": 0
+  },
+  "live_provider_transport": "NOT_AUTHORIZED",
+  "service_write": "NOT_IMPLEMENTED",
+  "reserved_eval_holdout": "RESERVED_UNEXECUTED_NOT_ADJUDICATED"
+}

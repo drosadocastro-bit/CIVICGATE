@@ -1,0 +1,23 @@
+{
+  "manifest_version": 1,
+  "dataset_id": "CIVICGATE-DATA01-v1",
+  "classification": "SYNTHETIC",
+  "reference_kind": "fixed local fictional source identity; not execution authorization",
+  "files": [
+    {
+      "path": "awards_v1.json",
+      "bytes": 31704,
+      "sha256": "7aa5521b2cd4010d8a4e66d847eb599c5368cb92b36e1a250e54c66d88c3569d"
+    },
+    {
+      "path": "schema_v1.json",
+      "bytes": 3068,
+      "sha256": "e345a991204018d0177c65d5ea5ea6a2b00d45a8e95b099a0401d5912e130ac5"
+    },
+    {
+      "path": "generator.py",
+      "bytes": 10696,
+      "sha256": "ba7d51ec03afabc3070f42e3cc1a34e6ac23b423357486e53080d0af8b489ed7"
+    }
+  ]
+}

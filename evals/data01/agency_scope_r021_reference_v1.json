@@ -1,0 +1,272 @@
+{
+  "method": "UNCHANGED_INDEPENDENT_SQL_REFERENCE_NOT_HUMAN_GOLDEN",
+  "cases": [
+    {
+      "case_id": "R021-SCOPE-001",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-002",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-003",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-004",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-005",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-006",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-007",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-008",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-009",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-010",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-011",
+      "answer": {
+        "award_ids": [
+          "SYN-DOT-PR-016",
+          "SYN-DOT-PR-017",
+          "SYN-DOT-PR-018",
+          "SYN-DOT-PR-019",
+          "SYN-FAA-PR-001",
+          "SYN-FAA-PR-002",
+          "SYN-FAA-PR-003",
+          "SYN-FAA-PR-029",
+          "SYN-FAA-PR-004",
+          "SYN-FAA-PR-030",
+          "SYN-FAA-PR-022",
+          "SYN-FAA-PR-026",
+          "SYN-FAA-PR-005",
+          "SYN-FAA-PR-027",
+          "SYN-FAA-PR-038",
+          "SYN-FAA-PR-034",
+          "SYN-FAA-PR-035",
+          "SYN-FAA-PR-028",
+          "SYN-FAA-PR-006",
+          "SYN-FAA-PR-031"
+        ],
+        "amount_cents": [
+          2000000000,
+          1900000000,
+          1800000000,
+          1700000000,
+          1250000000,
+          850000000,
+          750000000,
+          750000000,
+          400000000,
+          400000000,
+          350000000,
+          325000025,
+          230000000,
+          12500001,
+          12345678,
+          99999,
+          1000,
+          20,
+          10,
+          0
+        ],
+        "has_next": false,
+        "matching_count": 20,
+        "returned_page_amount_usd": "127299467.33",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "R021-SCOPE-012",
+      "answer": {
+        "award_ids": [
+          "SYN-NASA-PR-020",
+          "SYN-NASA-PR-021"
+        ],
+        "amount_cents": [
+          1600000000,
+          1550000000
+        ],
+        "has_next": false,
+        "matching_count": 2,
+        "returned_page_amount_usd": "31500000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "R021-SCOPE-013",
+      "answer": {
+        "award_ids": [],
+        "amount_cents": [],
+        "has_next": false,
+        "matching_count": 0,
+        "returned_page_amount_usd": "0.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "R021-SCOPE-014",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-001"
+        ],
+        "amount_cents": [
+          1250000000
+        ],
+        "has_next": false,
+        "matching_count": 1,
+        "returned_page_amount_usd": "12500000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "R021-SCOPE-015",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-002"
+        ],
+        "amount_cents": [
+          850000000
+        ],
+        "has_next": false,
+        "matching_count": 1,
+        "returned_page_amount_usd": "8500000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "R021-SCOPE-016",
+      "answer": {
+        "award_ids": [
+          "SYN-DOT-CA-032",
+          "SYN-FAA-CA-011"
+        ],
+        "amount_cents": [
+          2600000000,
+          1400000000
+        ],
+        "has_next": false,
+        "matching_count": 2,
+        "returned_page_amount_usd": "40000000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "R021-SCOPE-017",
+      "answer": {
+        "award_ids": [
+          "SYN-FAA-PR-008"
+        ],
+        "amount_cents": [
+          880000000
+        ],
+        "has_next": false,
+        "matching_count": 1,
+        "returned_page_amount_usd": "8800000.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "R021-SCOPE-018",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-019",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-020",
+      "answer": {
+        "award_ids": [],
+        "amount_cents": [],
+        "has_next": false,
+        "matching_count": 0,
+        "returned_page_amount_usd": "0.00",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "R021-SCOPE-021",
+      "answer": {
+        "award_ids": [
+          "SYN-DOT-PR-016",
+          "SYN-DOT-PR-017",
+          "SYN-DOT-PR-018",
+          "SYN-DOT-PR-019",
+          "SYN-NASA-PR-020",
+          "SYN-NASA-PR-021",
+          "SYN-FAA-PR-001",
+          "SYN-FAA-PR-002",
+          "SYN-FAA-PR-003",
+          "SYN-FAA-PR-029",
+          "SYN-FAA-PR-004",
+          "SYN-FAA-PR-030",
+          "SYN-FAA-PR-022",
+          "SYN-FAA-PR-026",
+          "SYN-FAA-PR-005",
+          "SYN-FAA-PR-027",
+          "SYN-FAA-PR-038",
+          "SYN-FAA-PR-034",
+          "SYN-FAA-PR-035",
+          "SYN-FAA-PR-028"
+        ],
+        "amount_cents": [
+          2000000000,
+          1900000000,
+          1800000000,
+          1700000000,
+          1600000000,
+          1550000000,
+          1250000000,
+          850000000,
+          750000000,
+          750000000,
+          400000000,
+          400000000,
+          350000000,
+          325000025,
+          230000000,
+          12500001,
+          12345678,
+          99999,
+          1000,
+          20
+        ],
+        "has_next": true,
+        "matching_count": 22,
+        "returned_page_amount_usd": "158799467.23",
+        "scope": "RETURNED_PAGE_ONLY"
+      }
+    },
+    {
+      "case_id": "R021-SCOPE-022",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-023",
+      "answer": null
+    },
+    {
+      "case_id": "R021-SCOPE-024",
+      "answer": null
+    }
+  ]
+}

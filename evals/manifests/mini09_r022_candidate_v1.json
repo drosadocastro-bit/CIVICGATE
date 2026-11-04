@@ -1,0 +1,152 @@
+{
+  "manifest_version": 1,
+  "candidate": "MINI09-R02.2-FAA_FY2026_PR_READ_v1",
+  "classification": "EXPERIMENTAL_OFFLINE_PROTOTYPE_NOT_AUTHORIZATION",
+  "final_disposition": "FAA_SEMANTIC_HOLD",
+  "self_excluded": true,
+  "files_including_manifest": 17,
+  "source_baseline": {
+    "branch": "codex/mini09-eval-r02-data01",
+    "head": "fdf91d288eba9160dedc4c83b8a0ff339da14857",
+    "tree": "b87dad4e0421ec8afd6e37e425a2337b337e96b5",
+    "git_tree_does_not_identify_untracked_candidate": true
+  },
+  "files": [
+    {
+      "path": "docs/FAA_FY2026_PR_READ_v1_PROPOSAL.md",
+      "bytes": 8421,
+      "sha256": "3232404793a27a13768ebbe302bb4ab9adecaadddcf2c206ebfe308876534e2f"
+    },
+    {
+      "path": "docs/MINI09_R022_EVALUATION_REPORT.md",
+      "bytes": 12269,
+      "sha256": "5a515b7bb4a48e303544dd8839cf68632c3177c6a615d1f827459120a1b964a9"
+    },
+    {
+      "path": "evals/data01/r022_cases_v1.json",
+      "bytes": 44454,
+      "sha256": "5cd82c86b96beaf3502e138ad043b93a976c19c3ba02fad7d59d7cfc07a0a87a"
+    },
+    {
+      "path": "evals/data01/r022_reference_v1.json",
+      "bytes": 13326,
+      "sha256": "3bbda9524cdaf89c21ce1c5f540026be89645c3a0909ac79afcc596d939244ae"
+    },
+    {
+      "path": "evals/proposals/r022/FAA_FY2026_PR_READ_v1.schema.json",
+      "bytes": 2462,
+      "sha256": "657dcb4036154c445133a8b8d177a6e9c805d23dba0e0269dcf898dc502bc184"
+    },
+    {
+      "path": "evals/proposals/r022/faa_adapter_v1.py",
+      "bytes": 16498,
+      "sha256": "f8f8497bbef35cbeea05ad3dff92a0a85063ad0e168d79c15687c80a37abb338"
+    },
+    {
+      "path": "evals/proposals/r022/faa_contract_v1.py",
+      "bytes": 6025,
+      "sha256": "57670958c836866e243fbdf68a915d87d22238ccfe4ff20b8b1e669af5b36425"
+    },
+    {
+      "path": "evals/proposals/r022/observation_v1.py",
+      "bytes": 21993,
+      "sha256": "94cb744c54c394fbaf1ebded6ad29ae500034c9af86cc996232155c9d0016b65"
+    },
+    {
+      "path": "evals/proposals/r022/profile_capture_v1.py",
+      "bytes": 21979,
+      "sha256": "9820e00c743ef92e937452e4be1530dd710bb1da65e02eb12daf9ff9a2184f23"
+    },
+    {
+      "path": "evals/proposals/r022/stdio_v1.py",
+      "bytes": 9721,
+      "sha256": "cda7f0eca990bcf2ea352e9140c9b7720753db15868b4cf49d0848c07cc109a1"
+    },
+    {
+      "path": "evals/tests/test_r022_binding_v1.py",
+      "bytes": 6005,
+      "sha256": "1b78bca9e8392658bb587a0fd790f78641e7e4e3b3d36fb1e86e80d796e56116"
+    },
+    {
+      "path": "evals/tests/test_r022_capture_v1.py",
+      "bytes": 13649,
+      "sha256": "47a26dda48267e81445c36e4a6a98fc5856823247ddce4c2c39a8d7ff95386f9"
+    },
+    {
+      "path": "evals/tests/test_r022_contract_v1.py",
+      "bytes": 10782,
+      "sha256": "19307e4c703f78206f099b28088ee65b3cf3aa0f8460f64b1532d6b0acab1aeb"
+    },
+    {
+      "path": "evals/tests/test_r022_fullpath_v1.py",
+      "bytes": 4295,
+      "sha256": "6f2a4c47248f8739cd2be2cdd53f5f063ddfa193a538f5aaf557b62aca2a76ad"
+    },
+    {
+      "path": "evals/tests/test_r022_stdio_admission_v1.py",
+      "bytes": 10621,
+      "sha256": "119293a91772a1a1dbb38f77654109eefe40a3396d37e0121ab453bda1ae8b62"
+    },
+    {
+      "path": "scripts/run_r022_profile_v1.py",
+      "bytes": 8159,
+      "sha256": "e03774c2c3d9a9329dd64ca40831e0d19cfbadf0146f1848860ecf2ee64c7ce3"
+    }
+  ],
+  "preserved_candidates": [
+    {
+      "manifest": "evals/manifests/mini09_data01_candidate_v1.json",
+      "bytes": 5207,
+      "sha256": "4931ef717223ca9c3876a44a261d1e220feeabcc05ff0cd88220bc803755e0db"
+    },
+    {
+      "manifest": "evals/manifests/mini09_r021_candidate_v1.json",
+      "bytes": 4496,
+      "sha256": "5ec5f8146bcc60da2256f178ce9c735656b1450422eb7f865683f9670546d290"
+    }
+  ],
+  "private_primary_evidence": {
+    "root_label": "mini09-r022-20261104",
+    "final_selection": "all-final-02",
+    "result": {
+      "bytes": 426,
+      "sha256": "7d495581fd3c9bcd6a7aafb1b6f096f2bd0a721222acf4667e7ab0e0109b7193"
+    },
+    "inventory": {
+      "bytes": 198757,
+      "sha256": "4ed00c92e81cd577607d22c45385b2a1dd8d4d99bd95deb7db6b5cb80730d481"
+    },
+    "development_findings": {
+      "bytes": 7776,
+      "sha256": "6dad592c99bd6018b97781a0e98311cc7e906dd38c9cecfed332b98b04928422"
+    },
+    "regression_and_preservation_summary": {
+      "bytes": 317914,
+      "sha256": "3dcd54fa856995c207a67f4e21f27fc8f976582300b7f146917594745ff9a701"
+    }
+  },
+  "tested_limits": {
+    "fullpath_observations": 24,
+    "strict_owner": 22,
+    "separate_legacy_controls": 2,
+    "a2_observations": 8,
+    "direct_mcp_observations": 16,
+    "bindings_issued": 9,
+    "bindings_consumed": 9,
+    "adapter_entries": 9,
+    "mocktransport_attempts": 9,
+    "custody_closed": 7,
+    "custody_open": 17,
+    "global_containment": "NOT_ESTABLISHED_SEPARATE_LEGACY_OWNER_REMAINS_PERMISSIVE"
+  },
+  "holds": {
+    "LIVE_PROVIDER_TRANSPORT": "NOT_AUTHORIZED",
+    "EVAL002_EXECUTION_AUTHORIZATION": "HOLD",
+    "USASPENDING_INTEGRATION": "HOLD",
+    "P2_02_DURABLE_STOP": "PARTIAL",
+    "FAA_FULL_CONTRACT": "BLOCKED",
+    "SERVICE_WRITE": "NOT_IMPLEMENTED",
+    "PRODUCTION_DEPLOYMENT": "NOT_AUTHORIZED"
+  },
+  "identity_is_not_external_trust_or_human_authorization": true
+}

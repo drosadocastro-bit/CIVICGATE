@@ -1,0 +1,1845 @@
+{
+  "version": 1,
+  "candidate": "MINI09-R02.3",
+  "profile_id": "FAA_FY2026_PR_READ_v1",
+  "classification": "SYNTHETIC_LOCAL_TRUSTED_HOST_TOPOLOGY_NOT_HOSTILE_OS_ISOLATION",
+  "cases": [
+    {
+      "case_id": "R023-001",
+      "label": "actual A2 strict FAA16",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "a2",
+      "backend_mode": "normal",
+      "expected_policy": "PERMIT",
+      "expected_bindings": 1,
+      "expected_backend_attempts": 1,
+      "expected_result_count": 16,
+      "expected_status": "GOVERNED_RESPONSE",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-002",
+      "label": "explicit bounded firstfive",
+      "host_request": "Show 5 public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 5,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 5,
+          "subawards": false
+        }
+      },
+      "execution": "a2",
+      "backend_mode": "normal",
+      "expected_policy": "PERMIT",
+      "expected_bindings": 1,
+      "expected_backend_attempts": 1,
+      "expected_result_count": 5,
+      "expected_status": "GOVERNED_RESPONSE",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-003",
+      "label": "verified empty exact recipient",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" for recipient \"Fictional No Matching Recipient LLC\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false,
+        "recipient_name": "Fictional No Matching Recipient LLC"
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false,
+          "recipient_name": "Fictional No Matching Recipient LLC"
+        }
+      },
+      "execution": "a2",
+      "backend_mode": "normal",
+      "expected_policy": "PERMIT",
+      "expected_bindings": 1,
+      "expected_backend_attempts": 1,
+      "expected_result_count": 0,
+      "expected_status": "GOVERNED_RESPONSE",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-004",
+      "label": "natural unsupported intent held by policy",
+      "host_request": "Find FY2026 FAA awards with a place of performance in Puerto Rico.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "a2",
+      "backend_mode": "normal",
+      "expected_policy": "REVIEW_REQUIRED",
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "GOVERNED_RESPONSE",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-005",
+      "label": "fixedhost omit explicit profile identity",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-006",
+      "label": "fixedhost choose original FIND wire schema",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "awarding_agency": "Federal Aviation Administration",
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "state_code": "PR"
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-007",
+      "label": "fixedhost caller selects unsupported profile",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "LEGACY_READ",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-008",
+      "label": "fixedhost contradictory fiscal year boundary",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-09-30",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-009",
+      "label": "fixedhost geography outside selected PR profile",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "CA",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-010",
+      "label": "fixedhost funding cannot replace awarding role",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "funding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-011",
+      "label": "fixedhost toptier cannot replace FAA subtier",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "toptier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-012",
+      "label": "fixedhost DOT-wide scope cannot replace FAA agency",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Department of Transportation",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-013",
+      "label": "fixedhost omit parent context",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-014",
+      "label": "fixedhost valid but unauthorized limit substitution",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 5,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-015",
+      "label": "fixedhost original user request substitution",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "wire_request": "Show public federal awards.",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-016",
+      "label": "fixedhost summary tool cannot downgrade scoped owner",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "summarize_federal_spending",
+        "arguments": {
+          "awarding_agency": "Federal Aviation Administration",
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "state_code": "PR"
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-017",
+      "label": "fixedhost detail tool is not the selected scoped operation",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "get_federal_award",
+        "arguments": {
+          "award_id": "SYN-FAA-PR-026"
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-018",
+      "label": "fixedhost recipient tool is not selected operation",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "resolve_federal_recipient",
+        "arguments": {
+          "recipient_name": "Fictional"
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-019",
+      "label": "historical legacy FAA query on strict target",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "state_code": "PR",
+          "awarding_agency": "Federal Aviation Administration"
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-020",
+      "label": "unknown alias legacy.find_federal_awards",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "legacy.find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-021",
+      "label": "unknown alias /legacy/mcp/find_federal_awards",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "/legacy/mcp/find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-022",
+      "label": "caller routing fields refused owner",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "extra_fields": {
+        "owner": "legacy-control"
+      },
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-023",
+      "label": "caller routing fields refused profile_id",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "extra_fields": {
+        "profile_id": "LEGACY"
+      },
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-024",
+      "label": "caller routing fields refused transport,endpoint",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "extra_fields": {
+        "transport": "sse",
+        "endpoint": "http://127.0.0.1:9999/mcp"
+      },
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-025",
+      "label": "metadata profile cannot redirect valid strict operation",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": "PERMIT",
+      "expected_bindings": 1,
+      "expected_backend_attempts": 1,
+      "expected_result_count": 16,
+      "expected_status": "GOVERNED_RESPONSE",
+      "mcp_meta": {
+        "profile": "LEGACY",
+        "owner": "legacy-control",
+        "worker_module": "civicgate.mcp.server"
+      },
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-026",
+      "label": "metadata alternate endpoint cannot redirect strict pipe",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": "PERMIT",
+      "expected_bindings": 1,
+      "expected_backend_attempts": 1,
+      "expected_result_count": 16,
+      "expected_status": "GOVERNED_RESPONSE",
+      "mcp_meta": {
+        "transport": "streamable-http",
+        "endpoint": "http://127.0.0.1:9999/mcp",
+        "session_id": "SYNTHETIC_STALE_SESSION"
+      },
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-027",
+      "label": "same SDK direct replay refused after authorized read",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": "PERMIT",
+      "expected_bindings": 1,
+      "expected_backend_attempts": 1,
+      "expected_result_count": 16,
+      "expected_status": "GOVERNED_RESPONSE",
+      "after_call": "repeat",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-028",
+      "label": "reinitialize same pipe never transfers owner",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": "PERMIT",
+      "expected_bindings": 1,
+      "expected_backend_attempts": 1,
+      "expected_result_count": 16,
+      "expected_status": "GOVERNED_RESPONSE",
+      "after_call": "reinitialize_then_repeat",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-029",
+      "label": "failed worker configuration does not fallback",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": null,
+      "startup_mutation": "missing_config_after_reservation",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-030",
+      "label": "malformed nonobject query refused",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "wire_query": null,
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-031",
+      "label": "missing original request refused",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "direct",
+      "backend_mode": "normal",
+      "expected_policy": null,
+      "expected_bindings": 0,
+      "expected_backend_attempts": 0,
+      "expected_result_count": null,
+      "expected_status": "MCP_TOOL_ERROR",
+      "remove_wire_fields": [
+        "user_request"
+      ],
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    },
+    {
+      "case_id": "R023-032",
+      "label": "attribution failure retains initial authorization",
+      "host_request": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+      "host_query": {
+        "profile_id": "FAA_FY2026_PR_READ_v1",
+        "awarding_agency": "Federal Aviation Administration",
+        "agency_type": "awarding",
+        "agency_tier": "subtier",
+        "agency_toptier_name": "Department of Transportation",
+        "fiscal_year": 2026,
+        "start_date": "2025-10-01",
+        "end_date": "2026-09-30",
+        "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+        "state_code": "PR",
+        "award_types": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "page": 1,
+        "limit": 20,
+        "subawards": false
+      },
+      "proposal": {
+        "tool": "find_federal_awards",
+        "arguments": {
+          "profile_id": "FAA_FY2026_PR_READ_v1",
+          "awarding_agency": "Federal Aviation Administration",
+          "agency_type": "awarding",
+          "agency_tier": "subtier",
+          "agency_toptier_name": "Department of Transportation",
+          "fiscal_year": 2026,
+          "start_date": "2025-10-01",
+          "end_date": "2026-09-30",
+          "date_semantics": "AWARD_DATE_SYNTHETIC_ONLY",
+          "state_code": "PR",
+          "award_types": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "page": 1,
+          "limit": 20,
+          "subawards": false
+        }
+      },
+      "execution": "a2",
+      "backend_mode": "wrong_subagency",
+      "expected_policy": "REVIEW_REQUIRED",
+      "expected_bindings": 1,
+      "expected_backend_attempts": 1,
+      "expected_result_count": null,
+      "expected_status": "GOVERNED_RESPONSE",
+      "scope": "FAA_AGENT_FIXED_STDIO_ONLY",
+      "independent_golden_reference": false
+    }
+  ],
+  "separate_legacy_control_case_id": "R023-LEGACY-CONTROL",
+  "legacy_control_is_not_an_agent_route": true
+}

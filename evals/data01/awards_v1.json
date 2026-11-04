@@ -1,0 +1,807 @@
+{
+  "dataset_id": "CIVICGATE-DATA01-v1",
+  "classification": "SYNTHETIC",
+  "generated_by": "evals/data01/generator.py:generate_dataset (fixed reference rows; no RNG)",
+  "records": [
+    {
+      "award_id": "SYN-FAA-PR-001",
+      "recipient_name": "Fictional Aurora Systems LLC",
+      "description": "SYNTHETIC fictional award 001: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "12500000.00",
+      "award_type": "A",
+      "award_date": "2025-10-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-002",
+      "recipient_name": "Fictional Isla Research Cooperative",
+      "description": "SYNTHETIC fictional award 002: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "8500000.00",
+      "award_type": "B",
+      "award_date": "2026-09-30",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-003",
+      "recipient_name": "Fictional Cobalto Engineering Inc",
+      "description": "SYNTHETIC fictional award 003: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "7500000.00",
+      "award_type": "C",
+      "award_date": "2026-01-15",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-004",
+      "recipient_name": "Fictional Brisa Analytics LLC",
+      "description": "SYNTHETIC fictional award 004: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "4000000.00",
+      "award_type": "D",
+      "award_date": "2026-05-20",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-005",
+      "recipient_name": "Fictional Nube Infrastructure Inc",
+      "description": "SYNTHETIC fictional award 005: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "2300000.00",
+      "award_type": "A",
+      "award_date": "2026-07-04",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-006",
+      "recipient_name": "Fictional Faro Technical Services LLC",
+      "description": "SYNTHETIC fictional award 006: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "0.10",
+      "award_type": "B",
+      "award_date": "2025-12-31",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-007",
+      "recipient_name": "Fictional Coral Instruments Inc",
+      "description": "SYNTHETIC fictional award 007: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "9999999.00",
+      "award_type": "A",
+      "award_date": "2025-09-30",
+      "fiscal_year": 2025,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-008",
+      "recipient_name": "Fictional Horizonte Data Cooperative",
+      "description": "SYNTHETIC fictional award 008: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "8800000.00",
+      "award_type": "A",
+      "award_date": "2026-10-01",
+      "fiscal_year": 2027,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-009",
+      "recipient_name": "Fictional Aurora Systems LLC",
+      "description": "SYNTHETIC fictional award 009: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "1100000.00",
+      "award_type": "C",
+      "award_date": "2024-10-01",
+      "fiscal_year": 2025,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-FL-010",
+      "recipient_name": "Fictional Isla Research Cooperative",
+      "description": "SYNTHETIC fictional award 010: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "15000000.00",
+      "award_type": "A",
+      "award_date": "2026-01-15",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "FL",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-CA-011",
+      "recipient_name": "Fictional Cobalto Engineering Inc",
+      "description": "SYNTHETIC fictional award 011: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "14000000.00",
+      "award_type": "B",
+      "award_date": "2026-02-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "CA",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-TX-012",
+      "recipient_name": "Fictional Brisa Analytics LLC",
+      "description": "SYNTHETIC fictional award 012: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "13000000.00",
+      "award_type": "C",
+      "award_date": "2026-03-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "TX",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-NY-013",
+      "recipient_name": "Fictional Nube Infrastructure Inc",
+      "description": "SYNTHETIC fictional award 013: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "12000000.00",
+      "award_type": "D",
+      "award_date": "2026-04-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "NY",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-DC-014",
+      "recipient_name": "Fictional Faro Technical Services LLC",
+      "description": "SYNTHETIC fictional award 014: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "1000000.00",
+      "award_type": "A",
+      "award_date": "2026-06-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "DC",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-GU-015",
+      "recipient_name": "Fictional Coral Instruments Inc",
+      "description": "SYNTHETIC fictional award 015: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "600000.00",
+      "award_type": "B",
+      "award_date": "2026-08-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "GU",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-DOT-PR-016",
+      "recipient_name": "Fictional Horizonte Data Cooperative",
+      "description": "SYNTHETIC fictional award 016: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Highway Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Highway Administration",
+      "award_amount": "20000000.00",
+      "award_type": "A",
+      "award_date": "2026-01-15",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-DOT-PR-017",
+      "recipient_name": "Fictional Aurora Systems LLC",
+      "description": "SYNTHETIC fictional award 017: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Transit Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Transit Administration",
+      "award_amount": "19000000.00",
+      "award_type": "B",
+      "award_date": "2026-02-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-DOT-PR-018",
+      "recipient_name": "Fictional Isla Research Cooperative",
+      "description": "SYNTHETIC fictional award 018: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Highway Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "18000000.00",
+      "award_type": "C",
+      "award_date": "2026-03-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-DOT-PR-019",
+      "recipient_name": "Fictional Cobalto Engineering Inc",
+      "description": "SYNTHETIC fictional award 019: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Transit Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "17000000.00",
+      "award_type": "D",
+      "award_date": "2026-04-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-NASA-PR-020",
+      "recipient_name": "Fictional Brisa Analytics LLC",
+      "description": "SYNTHETIC fictional award 020: public-data evaluation only",
+      "awarding_agency": "National Aeronautics and Space Administration",
+      "awarding_subagency": "National Aeronautics and Space Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "16000000.00",
+      "award_type": "A",
+      "award_date": "2026-05-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-NASA-PR-021",
+      "recipient_name": "Fictional Nube Infrastructure Inc",
+      "description": "SYNTHETIC fictional award 021: public-data evaluation only",
+      "awarding_agency": "National Aeronautics and Space Administration",
+      "awarding_subagency": "National Aeronautics and Space Administration",
+      "funding_agency": "National Aeronautics and Space Administration",
+      "funding_subagency": "National Aeronautics and Space Administration",
+      "award_amount": "15500000.00",
+      "award_type": "B",
+      "award_date": "2026-06-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-022",
+      "recipient_name": "Fictional Faro Technical Services LLC",
+      "description": "SYNTHETIC fictional award 022: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "National Aeronautics and Space Administration",
+      "funding_subagency": "National Aeronautics and Space Administration",
+      "award_amount": "3500000.00",
+      "award_type": "C",
+      "award_date": "2026-06-15",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-023",
+      "recipient_name": "Fictional Coral Instruments Inc",
+      "description": "SYNTHETIC fictional award 023: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "45000000.00",
+      "award_type": "02",
+      "award_date": "2026-08-15",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-024",
+      "recipient_name": "Fictional Horizonte Data Cooperative",
+      "description": "SYNTHETIC fictional award 024: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "42000000.00",
+      "award_type": "03",
+      "award_date": "2026-08-20",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-VI-025",
+      "recipient_name": "Fictional Aurora Systems LLC",
+      "description": "SYNTHETIC fictional award 025: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "750000.00",
+      "award_type": "D",
+      "award_date": "2026-09-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "VI",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-026",
+      "recipient_name": "Fictional Isla Research Cooperative",
+      "description": "SYNTHETIC fictional award 026: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "3250000.25",
+      "award_type": "D",
+      "award_date": "2026-09-15",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-027",
+      "recipient_name": "Fictional Cobalto Engineering Inc",
+      "description": "SYNTHETIC fictional award 027: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "125000.01",
+      "award_type": "A",
+      "award_date": "2026-02-28",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-028",
+      "recipient_name": "Fictional Brisa Analytics LLC",
+      "description": "SYNTHETIC fictional award 028: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "0.20",
+      "award_type": "B",
+      "award_date": "2026-03-31",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-029",
+      "recipient_name": "Fictional Nube Infrastructure Inc",
+      "description": "SYNTHETIC fictional award 029: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "7500000.00",
+      "award_type": "C",
+      "award_date": "2026-04-30",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-030",
+      "recipient_name": "Fictional Faro Technical Services LLC",
+      "description": "SYNTHETIC fictional award 030: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "4000000.00",
+      "award_type": "D",
+      "award_date": "2026-05-31",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-031",
+      "recipient_name": "Fictional Coral Instruments Inc",
+      "description": "SYNTHETIC fictional award 031: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "0.00",
+      "award_type": "A",
+      "award_date": "2026-06-30",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-DOT-CA-032",
+      "recipient_name": "Fictional Horizonte Data Cooperative",
+      "description": "SYNTHETIC fictional award 032: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Highway Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Highway Administration",
+      "award_amount": "26000000.00",
+      "award_type": "A",
+      "award_date": "2026-07-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "CA",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-DOT-TX-033",
+      "recipient_name": "Fictional Aurora Systems LLC",
+      "description": "SYNTHETIC fictional award 033: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Transit Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Transit Administration",
+      "award_amount": "27000000.00",
+      "award_type": "B",
+      "award_date": "2026-07-02",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "TX",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-034",
+      "recipient_name": "Fictional Isla Research Cooperative",
+      "description": "SYNTHETIC fictional award 034: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "999.99",
+      "award_type": "A",
+      "award_date": "2025-10-02",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-035",
+      "recipient_name": "Fictional Cobalto Engineering Inc",
+      "description": "SYNTHETIC fictional award 035: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "10.00",
+      "award_type": "B",
+      "award_date": "2026-09-29",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-036",
+      "recipient_name": "Fictional Brisa Analytics LLC",
+      "description": "SYNTHETIC fictional award 036: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "55000000.00",
+      "award_type": "D",
+      "award_date": "2025-09-29",
+      "fiscal_year": 2025,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-037",
+      "recipient_name": "Fictional Nube Infrastructure Inc",
+      "description": "SYNTHETIC fictional award 037: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "56000000.00",
+      "award_type": "C",
+      "award_date": "2026-10-02",
+      "fiscal_year": 2027,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-PR-038",
+      "recipient_name": "Fictional Faro Technical Services LLC",
+      "description": "SYNTHETIC fictional award 038: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "123456.78",
+      "award_type": "D",
+      "award_date": "2026-01-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "PR",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-FAA-MP-039",
+      "recipient_name": "Fictional Coral Instruments Inc",
+      "description": "SYNTHETIC fictional award 039: public-data evaluation only",
+      "awarding_agency": "Department of Transportation",
+      "awarding_subagency": "Federal Aviation Administration",
+      "funding_agency": "Department of Transportation",
+      "funding_subagency": "Federal Aviation Administration",
+      "award_amount": "650000.00",
+      "award_type": "A",
+      "award_date": "2026-02-02",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "MP",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    },
+    {
+      "award_id": "SYN-NASA-FL-040",
+      "recipient_name": "Fictional Horizonte Data Cooperative",
+      "description": "SYNTHETIC fictional award 040: public-data evaluation only",
+      "awarding_agency": "National Aeronautics and Space Administration",
+      "awarding_subagency": "National Aeronautics and Space Administration",
+      "funding_agency": "National Aeronautics and Space Administration",
+      "funding_subagency": "National Aeronautics and Space Administration",
+      "award_amount": "999000.00",
+      "award_type": "D",
+      "award_date": "2025-10-01",
+      "fiscal_year": 2026,
+      "place_of_performance_state": "FL",
+      "review_status": "UNREVIEWED",
+      "provenance": {
+        "classification": "SYNTHETIC",
+        "source": "CIVICGATE-DATA01-v1",
+        "actual_government_record": false
+      }
+    }
+  ]
+}
