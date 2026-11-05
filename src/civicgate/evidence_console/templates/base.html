@@ -13,12 +13,12 @@
   <aside class="sidebar">
     <a class="brand" href="/"><span class="brand-mark" aria-hidden="true">C</span><span>CIVICGATE<small>Evidence Console</small></span></a>
     <div class="workspace-label">LOCAL WORKSPACE</div>
-    <nav aria-label="Main navigation"><a class="nav-item {{ 'selected' if active == 'runs' else '' }}" href="/"><span aria-hidden="true">▦</span> Demonstration runs</a>{% if interactive %}<a class="nav-item {{ 'selected' if active == 'execute' else '' }}" href="/demonstrations"><span aria-hidden="true">▷</span> Run demonstration</a>{% endif %}</nav>
-    <div class="sidebar-note"><span class="status-dot"></span> {{ 'Controlled synthetic E2E' if interactive else 'Read-only by design' }}<p>{% if interactive %}Explicit demo requests only.<br>GET evidence views never dispatch.{% else %}Inspect what happened.<br>No tool invocation. No new authority.{% endif %}</p></div>
-    <div class="sidebar-footer"><span class="prototype">RESEARCH PROTOTYPE</span><p>Channel A · Offline synthetic<br>{{ 'MINI08.2 / Mock Advisor' if advisor_enabled else 'MINI08.0 / Local MVP' }}</p></div>
+    <nav aria-label="Main navigation"><a class="nav-item {{ 'selected' if active == 'runs' else '' }}" href="/"><span aria-hidden="true">▦</span> Demonstration runs</a>{% if interactive %}<a class="nav-item {{ 'selected' if active == 'execute' else '' }}" href="/demonstrations"><span aria-hidden="true">▷</span> Run demonstration</a>{% endif %}{% if chat_enabled %}<a class="nav-item {{ 'selected' if active == 'chat' else '' }}" href="/chat"><span aria-hidden="true">◇</span> Governed chat</a>{% endif %}</nav>
+    <div class="sidebar-note"><span class="status-dot"></span> {{ 'Controlled synthetic execution' if interactive or chat_enabled else 'Read-only by design' }}<p>{% if interactive or chat_enabled %}Explicit local requests only.<br>GET evidence views never dispatch.{% else %}Inspect what happened.<br>No tool invocation. No new authority.{% endif %}</p></div>
+    <div class="sidebar-footer"><span class="prototype">RESEARCH PROTOTYPE</span><p>Channel A · Offline synthetic<br>{{ 'MINI10 / Governed Chat' if chat_enabled else 'MINI08.2 / Mock Advisor' if advisor_enabled else 'MINI08.0 / Local MVP' }}</p></div>
   </aside>
   <div class="shell">
-    <header class="topbar"><div><span class="muted">CIVICGATE</span><span class="slash">/</span> Execution evidence</div><span class="local-badge"><span class="status-dot"></span> LOCAL ONLY <span class="lock-label">· {{ 'Synthetic E2E enabled' if interactive else 'GET only' }}</span></span></header>
+    <header class="topbar"><div><span class="muted">CIVICGATE</span><span class="slash">/</span> Execution evidence</div><span class="local-badge"><span class="status-dot"></span> LOCAL ONLY <span class="lock-label">· {{ 'Synthetic execution enabled' if interactive or chat_enabled else 'GET only' }}</span></span></header>
     <main id="main">{% block content %}{% endblock %}</main>
     <footer class="main-footer"><strong>Discovery does not imply authority.</strong><span>Models propose. The Judge advises. Deterministic policy authorizes.</span></footer>
   </div>

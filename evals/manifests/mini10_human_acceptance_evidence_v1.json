@@ -1,0 +1,199 @@
+{
+  "accepted_candidate": {
+    "accepted_file_count": 19,
+    "branch_observed": "codex/mini10-governed-chat",
+    "candidate": "MINI10_GOVERNED_CHAT_V1",
+    "canonical_inventory": {
+      "accepted_total_bytes": 151795,
+      "hash_algorithm": "SHA-256",
+      "serialization": "UTF-8 sorted path<TAB>bytes<TAB>sha256<LF> rows including final LF",
+      "sha256": "fd51f0233a79355a0b03b30ba95e613b0bfaeaa87b3c05fdc76d85b513a65a57"
+    },
+    "head": "13e9f769a8c14aed208b0b73e42d569a1849fa7c",
+    "tree": "c047034a1f9bf6befb5937c5b8996a7381c00ad9"
+  },
+  "accepted_files": [
+    {
+      "bytes": 6410,
+      "path": "docs/MINI10_GOVERNED_CHAT.md",
+      "sha256": "4792c53d4636bb501f4e6190de0a3b17a55f799c6a92dbf930f602e954481e01"
+    },
+    {
+      "bytes": 4241,
+      "path": "evals/demos/mini10_chat_fixtures_v1.py",
+      "sha256": "9cf105337e89e25e9cbaa60fb84e2f021aff071fb1e6d589356142561c36a404"
+    },
+    {
+      "bytes": 2639,
+      "path": "evals/demos/test_mini10_chat_v1.py",
+      "sha256": "02ed57c9f37ffdf3120096e1752a869fa6ab1d077e2f0f6c756f43961aacab43"
+    },
+    {
+      "bytes": 4655,
+      "path": "evals/tests/test_mini10_chat_benchmark_v1.py",
+      "sha256": "ffe5edcccde309b9da3790ac00ba67db3a80d46b06d30cc836e5bca97fb508e4"
+    },
+    {
+      "bytes": 12479,
+      "path": "scripts/evaluate_mini10_chat_v1.py",
+      "sha256": "45533be0772e28aaa1daa4ff8d252c89b55e8eef057ff9f266bac80a2c686e53"
+    },
+    {
+      "bytes": 12563,
+      "path": "scripts/run_console_chat_synthetic_v1.py",
+      "sha256": "b19ca2bd57a35068de147f7b89ce3f4eb4a8463ddae34051c7c40374e29a7c8f"
+    },
+    {
+      "bytes": 8156,
+      "path": "scripts/serve_evidence_console.py",
+      "sha256": "b11387638e7f0d39292bc8043f9c8db27e6ccbebc17e2747f0bd1f5bbfadbee3"
+    },
+    {
+      "bytes": 21013,
+      "path": "src/civicgate/evidence_console/app.py",
+      "sha256": "2d6803f0310ebfccd2ac80471c7b1f32e928265a1962ecba3cf88334cd7c45d9"
+    },
+    {
+      "bytes": 18377,
+      "path": "src/civicgate/evidence_console/chat_execution_v1.py",
+      "sha256": "a236832467781418423520c3affa32f62fff9740516117b1754e46a5df006d55"
+    },
+    {
+      "bytes": 3535,
+      "path": "src/civicgate/evidence_console/chat_planner_v1.py",
+      "sha256": "90e0deb3bddab5ab609c2a6f8ae6d65d8fb49e4bba432a278d4cf3f2ef98ba0b"
+    },
+    {
+      "bytes": 7717,
+      "path": "src/civicgate/evidence_console/static/chat.js",
+      "sha256": "7bcf7b047d9aa9a0b29dedf3973a88e9fbca006fd1a89e435c57e6ccfe78be88"
+    },
+    {
+      "bytes": 19856,
+      "path": "src/civicgate/evidence_console/static/console.css",
+      "sha256": "ca720a177ca654b3eb889d3402b616ab97c120a919d6644ee8cbf29d7dc3cef5"
+    },
+    {
+      "bytes": 2429,
+      "path": "src/civicgate/evidence_console/templates/base.html",
+      "sha256": "f0a616a95ff799d862de4427d78d3729a776f8f19c7a33e31170e7ca8a7279e8"
+    },
+    {
+      "bytes": 4642,
+      "path": "src/civicgate/evidence_console/templates/chat.html",
+      "sha256": "aafa89f8a424931b5aa4fae96cb28315a611a2d0eee29ae71571accc28b26b32"
+    },
+    {
+      "bytes": 5818,
+      "path": "tests/evidence_console/test_chat_api_v1.py",
+      "sha256": "c86bb79c81b913ce89fd08bff5d40c2b716b664b6819c525387d6edee30cdb69"
+    },
+    {
+      "bytes": 5471,
+      "path": "tests/evidence_console/test_chat_execution_v1.py",
+      "sha256": "fc9ce4c9778faf5b1542a86e41187b39db2e6f2575e2da8ccb7005fd37439183"
+    },
+    {
+      "bytes": 5716,
+      "path": "tests/evidence_console/test_chat_http_v1.py",
+      "sha256": "d9791ac760e13b5d5c940ebc7cf2f71150f75f44f1644efd37013aa6c4e2dea8"
+    },
+    {
+      "bytes": 5211,
+      "path": "tests/evidence_console/test_chat_planner_v1.py",
+      "sha256": "d8e53a61b60cc8076fdb82cc21300dcadbcd464f8d06e984d4df36329a9e79b8"
+    },
+    {
+      "bytes": 867,
+      "path": "tests/fixtures/mini10_chat_benchmark_v1.json",
+      "sha256": "07b0a2080bbdb64c5f08c0230c345524f96eb382574ba831e7824f5abef1cd5b"
+    }
+  ],
+  "acceptance_record": {
+    "bytes": 8828,
+    "path": "evals/acceptances/mini10_human_acceptance_20261105.md",
+    "sha256": "852bf9e77ad7b382027047870636982a2877d2ac4e9bdd080ce9e30e645593d0"
+  },
+  "artifact_type": "CIVICGATE_MINI10_HUMAN_ACCEPTANCE_EVIDENCE",
+  "artifact_version": "1.0",
+  "compatibility_preservation": {
+    "frozen_manifests": [
+      {
+        "path": "evals/manifests/mini08_cp1_console_sources_v1.json",
+        "sha256": "6ad01000d9ca729d8ffdf0d023e149fd1cfce0fc6b18ca65f022835f1a30f1c1"
+      },
+      {
+        "path": "evals/manifests/mini08_cp11_console_sources_v1.json",
+        "sha256": "082091edc166b86fde7bd93674960ce15eb7447d07ebaea355ce2afe6e5f420c"
+      },
+      {
+        "path": "evals/manifests/gsa_local_demo_checkpoint_v1.json",
+        "sha256": "299f26ea5f2985c859e8c0806633df0891ade46100a9d76da7a8fb2e1ea60c42"
+      }
+    ],
+    "shared_live_source": {
+      "bytes": 17595,
+      "path": "src/civicgate/llm/live.py",
+      "sha256": "d0802f083aa5dcdbbf7025c1e22b7a2e2211d8029a868c5def15beb0d1fd025a",
+      "working_tree_diff": false
+    }
+  },
+  "decision": {
+    "acceptance_scope": "LIMITED_LOCAL_SYNTHETIC_RESEARCH_ONLY",
+    "decision_value": "HUMAN_ACCEPTED_LIMITED_LOCAL_SYNTHETIC_MINI10",
+    "documentary_result": "MINI10_HUMAN_ACCEPTANCE_RECORDED"
+  },
+  "decision_provenance": {
+    "attributed_authority": "Danny, project owner, as directly stated in the current Codex conversation",
+    "cryptographic_signature": null,
+    "exact_human_emission_timestamp": null,
+    "human_identity_authentication": "NOT_ESTABLISHED",
+    "message_identifier": null,
+    "recording_date": "2026-11-05",
+    "recording_date_basis": "CURRENT_LOCAL_CONVERSATION_DATE_NOT_AUTHENTICATED_HUMAN_CLOCK",
+    "source": "CURRENT_USER_CODEX_CONVERSATION_MESSAGE",
+    "verbatim_human_signature": false
+  },
+  "documentary_status": {
+    "CHAT_TO_WRITE": "DISABLED_NOT_COMPOSED",
+    "DATA01": "2_HISTORICAL_DISCREPANCIES_PRESERVED",
+    "DURABLE_STOP": "PARTIAL",
+    "FAA_FULL_CONTRACT": "BLOCKED",
+    "GIT_COMMIT": "NOT_AUTHORIZED",
+    "GIT_PUSH": "NOT_AUTHORIZED",
+    "GIT_STAGING": "NOT_AUTHORIZED",
+    "GRANITE_EFFECTIVE_IDENTITY": "UNKNOWN_NOT_ACTIVATED",
+    "LIVE_PROVIDER_TRANSPORT": "NOT_AUTHORIZED",
+    "MERGE": "NOT_AUTHORIZED",
+    "MINI10_CHECKPOINT": "PLANNING_ONLY",
+    "PRODUCTION_DEPLOYMENT": "NOT_AUTHORIZED",
+    "USASPENDING_INTEGRATION": "HOLD",
+    "WRITE01_WINDOWS_PYTHON311": "130_PASS_12_FAIL_PRESERVED"
+  },
+  "hash_algorithm": "SHA-256",
+  "identity_and_authority_limits": {
+    "acceptance_requires_new_human_review_if_identity_scope_or_security_conditions_change": true,
+    "hashes_authenticate_human_identity": false,
+    "no_exactly_once_certification": true,
+    "no_hostile_host_isolation_certification": true,
+    "no_power_loss_durability_certification": true,
+    "record_creates_execution_authority": false
+  },
+  "preservation": {
+    "acceptance_artifacts_additive_file_count": 2,
+    "accepted_candidate_hash_mismatches": 0,
+    "accepted_candidate_revalidated": true,
+    "accepted_files_modified_by_recording": false,
+    "git_index_empty_after_recording": true,
+    "historical_evidence_modified": false
+  },
+  "self_excluded": "evals/manifests/mini10_human_acceptance_evidence_v1.json",
+  "supporting_review": {
+    "compatibility_after_junit_sha256": "3ccd56feab684506532933efdad78ffed42adfa8d1b6641cc9f734f00d4bf16d",
+    "compatibility_original_failure_junit_sha256": "316ee0afc19286e3980145b9299bbb2e65879ce6b7abe50f81c6a2a6438239",
+    "console_advisor_junit_sha256": "0a06c2e3b7805b1b248b7c6619d65cea6ff4241517c3ee4b426c296835cc01f6",
+    "dependency_audit_summary_sha256": "e6b89ad235fd8277452df1749f08340bb45b7356dabb86eb6ee178962e8135f4",
+    "fresh_benchmark_manifest_sha256": "dfd3de74cdcd2d031c89fb0ad7c70d1793128994d25f3b25ccf1c0d2caffde6a",
+    "technical_review_is_not_human_authority": true
+  }
+}

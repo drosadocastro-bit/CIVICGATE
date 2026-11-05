@@ -43,6 +43,10 @@ def main():
     parser.add_argument("--execution-root", type=Path)
     parser.add_argument("--deadline-seconds", type=int, default=90)
     parser.add_argument("--max-jobs", type=int, default=8)
+    parser.add_argument("--enable-synthetic-chat", action="store_true")
+    parser.add_argument("--chat-output-root", type=Path)
+    parser.add_argument("--chat-deadline-seconds", type=int, default=90)
+    parser.add_argument("--chat-max-turns", type=int, default=4)
     parser.add_argument("--advisor-mode", choices=("off", "mock"), default="off")
     parser.add_argument("--advisor-output-root", type=Path)
     parser.add_argument("--advisor-max-jobs", type=int, default=8)
@@ -53,32 +57,82 @@ def main():
     try:
         from civicgate.evidence_console.app import create_app
 
-        entries = load_catalog(args.catalog, allow_empty=args.enable_synthetic_e2e)
+        entries = load_catalog(
+            args.catalog,
+            allow_empty=args.enable_synthetic_e2e or args.enable_synthetic_chat,
+        )
         executor = None
-        if args.enable_synthetic_e2e:
-            if args.worker_python is None or args.execution_root is None:
+        chat = None
+        synthetic_enabled = args.enable_synthetic_e2e or args.enable_synthetic_chat
+        if synthetic_enabled:
+            if args.worker_python is None:
+                raise ValueError("EXPLICIT_SYNTHETIC_WORKER_REQUIRED")
+            if args.enable_synthetic_e2e and args.execution_root is None:
                 raise ValueError("EXPLICIT_SYNTHETIC_CONFIGURATION_REQUIRED")
+            if args.enable_synthetic_chat and args.chat_output_root is None:
+                raise ValueError("EXPLICIT_CHAT_CONFIGURATION_REQUIRED")
             from civicgate.evidence_console.reader import MAX_RUNS
 
-            if len(entries) + args.max_jobs > MAX_RUNS:
+            requested_runs = (args.max_jobs if args.enable_synthetic_e2e else 0) + (
+                args.chat_max_turns if args.enable_synthetic_chat else 0
+            )
+            if len(entries) + requested_runs > MAX_RUNS:
                 raise ValueError("CATALOG_CAPACITY_EXCEEDED")
-            output = args.execution_root.absolute()
             source = Path(__file__).resolve().parents[1]
+            outputs = [
+                path.absolute()
+                for path in (args.execution_root, args.chat_output_root)
+                if path is not None
+            ]
             for entry in entries:
                 historical = Path(entry["root"]).absolute()
-                if output.is_relative_to(historical) or historical.is_relative_to(output):
+                if any(
+                    output.is_relative_to(historical) or historical.is_relative_to(output)
+                    for output in outputs
+                ):
                     raise ValueError("HISTORICAL_EVIDENCE_OVERLAP")
-            from civicgate.evidence_console.demo_execution_v1 import DemoExecutor
+            if len(outputs) == 2 and (
+                outputs[0].is_relative_to(outputs[1]) or outputs[1].is_relative_to(outputs[0])
+            ):
+                raise ValueError("SYNTHETIC_OUTPUT_OVERLAP")
+            protected = tuple(Path(entry["root"]) for entry in entries)
+            if args.enable_synthetic_e2e:
+                from civicgate.evidence_console.demo_execution_v1 import DemoExecutor
 
-            executor = DemoExecutor(
-                source,
-                output,
-                args.worker_python,
-                deadline_seconds=args.deadline_seconds,
-                max_jobs=args.max_jobs,
-                protected_roots=[Path(entry["root"]) for entry in entries],
-            )
-        elif args.worker_python is not None or args.execution_root is not None:
+                assert args.execution_root is not None
+                executor = DemoExecutor(
+                    source,
+                    args.execution_root.absolute(),
+                    args.worker_python,
+                    deadline_seconds=args.deadline_seconds,
+                    max_jobs=args.max_jobs,
+                    protected_roots=protected
+                    + (
+                        (args.chat_output_root.absolute(),)
+                        if args.chat_output_root is not None
+                        else ()
+                    ),
+                )
+            if args.enable_synthetic_chat:
+                from civicgate.evidence_console.chat_execution_v1 import ChatExecutor
+
+                assert args.chat_output_root is not None
+                chat = ChatExecutor(
+                    source,
+                    args.chat_output_root.absolute(),
+                    args.worker_python,
+                    deadline_seconds=args.chat_deadline_seconds,
+                    max_jobs=args.chat_max_turns,
+                    protected_roots=protected
+                    + (
+                        (args.execution_root.absolute(),) if args.execution_root is not None else ()
+                    ),
+                )
+        elif (
+            args.worker_python is not None
+            or args.execution_root is not None
+            or args.chat_output_root is not None
+        ):
             raise ValueError("SYNTHETIC_OPT_IN_REQUIRED")
         advisor = None
         if args.advisor_mode == "mock":
@@ -91,9 +145,15 @@ def main():
             protected = [Path(entry["root"]) for entry in entries]
             if args.execution_root is not None:
                 protected.append(args.execution_root)
+            if args.chat_output_root is not None:
+                protected.append(args.chat_output_root)
             advisor = AdvisorService(
                 lambda: EvidenceStore(
-                    [*entries, *(executor.evidence_entries() if executor is not None else [])]
+                    [
+                        *entries,
+                        *(executor.evidence_entries() if executor is not None else []),
+                        *(chat.evidence_entries() if chat is not None else []),
+                    ]
                 ),
                 MockAdvisor(
                     ProviderConfig(
@@ -106,13 +166,18 @@ def main():
             )
         elif args.advisor_output_root is not None:
             raise ValueError("ADVISOR_EXPLICIT_OPT_IN_REQUIRED")
-        app = create_app(entries, executor=executor, advisor=advisor)
+        app = create_app(entries, executor=executor, advisor=advisor, chat=chat)
     except Exception:
         print("Console not started: invalid or unavailable local catalog.", file=sys.stderr)
         return 2
     import uvicorn
 
-    mode = "Synthetic E2E + read-only evidence" if executor is not None else "Read-only evidence"
+    modes = ["read-only evidence"]
+    if executor is not None:
+        modes.insert(0, "synthetic E2E")
+    if chat is not None:
+        modes.insert(0, "synthetic governed Chat")
+    mode = " + ".join(modes)
     print(f"{mode} console: http://127.0.0.1:{args.port}", flush=True)
     uvicorn.run(
         app,
