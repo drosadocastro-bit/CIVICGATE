@@ -11,7 +11,6 @@ import hashlib
 import json
 import os
 import subprocess
-import sys
 import threading
 import time
 import uuid
@@ -316,15 +315,21 @@ class ChatExecutor(DemoExecutor):
                 with self._lock:
                     if self._blocked or time.monotonic() >= deadline:
                         raise DemoError("EXECUTION_DEADLINE_BEFORE_SEND", 503)
+                    creation_flags = 0
+                    if os.name == "nt":
+                        windows_process_group = getattr(
+                            subprocess, "CREATE_NEW_PROCESS_GROUP", None
+                        )
+                        if type(windows_process_group) is not int:
+                            raise DemoError("WINDOWS_PROCESS_GROUP_UNAVAILABLE", 503)
+                        creation_flags = windows_process_group
                     process = subprocess.Popen(
                         command,
                         cwd=self.source_root,
                         env=self._environment(),
                         stdout=out,
                         stderr=err,
-                        creationflags=(
-                            subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0
-                        ),
+                        creationflags=creation_flags,
                         start_new_session=os.name != "nt",
                     )
                     self._process = process
