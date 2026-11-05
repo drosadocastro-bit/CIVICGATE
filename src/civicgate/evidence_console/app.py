@@ -25,6 +25,7 @@ from starlette.types import ASGIApp
 from .reader import EvidenceStore, SafeEvidenceError, strict_json
 
 if TYPE_CHECKING:
+    from .chat_execution_v1 import ChatExecutor
     from .demo_execution_v1 import DemoExecutor
     from .evidence_advisor_v1 import AdvisorService
 
@@ -146,10 +147,15 @@ def create_app(
     *,
     executor: DemoExecutor | None = None,
     advisor: AdvisorService | None = None,
+    chat: ChatExecutor | None = None,
 ) -> FastAPI:
     historical_entries = tuple(dict(entry) for entry in entries)
     EvidenceStore(list(historical_entries))
-    csrf_token = secrets.token_urlsafe(32) if executor is not None or advisor is not None else None
+    csrf_token = (
+        secrets.token_urlsafe(32)
+        if executor is not None or advisor is not None or chat is not None
+        else None
+    )
 
     @asynccontextmanager
     async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
@@ -160,6 +166,8 @@ def create_app(
                 await asyncio.to_thread(executor.shutdown)
             if advisor is not None:
                 await asyncio.to_thread(advisor.shutdown)
+            if chat is not None:
+                await asyncio.to_thread(chat.shutdown)
 
     app = FastAPI(
         title="CIVICGATE Evidence Console",
@@ -173,6 +181,8 @@ def create_app(
         post_paths.append("/api/demo/executions")
     if advisor is not None:
         post_paths.append("/api/advisor/analyses")
+    if chat is not None:
+        post_paths.append("/api/chat/turns")
     app.add_middleware(LocalReadBoundary, csrf_token=csrf_token, post_paths=post_paths)
     templates = Jinja2Templates(directory=str(HERE / "templates"))
     app.mount("/assets", StaticFiles(directory=str(HERE / "static")), name="assets")
@@ -184,7 +194,8 @@ def create_app(
 
     def store() -> EvidenceStore:
         fresh = executor.evidence_entries() if executor is not None else []
-        return EvidenceStore([*historical_entries, *fresh])
+        chat_entries = chat.evidence_entries() if chat is not None else []
+        return EvidenceStore([*historical_entries, *fresh, *chat_entries])
 
     def render(request: Request, template: str, **context: Any) -> HTMLResponse:
         return templates.TemplateResponse(
@@ -194,6 +205,7 @@ def create_app(
                 "active": "runs",
                 "interactive": executor is not None,
                 "advisor_enabled": advisor is not None,
+                "chat_enabled": chat is not None,
                 **context,
             },
         )
@@ -209,15 +221,30 @@ def create_app(
         return templates.TemplateResponse(
             request=request,
             name="error.html",
-            context={"active": "runs", "status": status, "interactive": executor is not None},
+            context={
+                "active": "runs",
+                "status": status,
+                "interactive": executor is not None,
+                "advisor_enabled": advisor is not None,
+                "chat_enabled": chat is not None,
+            },
             status_code=status,
         )
 
     @app.get("/health", response_model=None)
     def health() -> dict[str, str | bool]:
+        mode = (
+            "SYNTHETIC_CHAT_AND_E2E_LOCAL"
+            if chat is not None and executor is not None
+            else "SYNTHETIC_CHAT_LOCAL"
+            if chat is not None
+            else "SYNTHETIC_E2E_LOCAL"
+            if executor is not None
+            else "READ_ONLY"
+        )
         return {
             "service": "evidence-console",
-            "mode": "SYNTHETIC_E2E_LOCAL" if executor is not None else "READ_ONLY",
+            "mode": mode,
             "execution_authority": False,
         }
 
@@ -339,6 +366,86 @@ def create_app(
             except DemoError as exc:
                 return JSONResponse({"error": exc.code}, status_code=exc.status_code)
             return JSONResponse(job, status_code=202)
+
+    if chat is not None:
+        active_chat = chat
+
+        @app.get("/chat", response_class=HTMLResponse)
+        def chat_page(request: Request) -> HTMLResponse:
+            response = render(
+                request,
+                "chat.html",
+                active="chat",
+                csrf_token=csrf_token,
+                capabilities=active_chat.capabilities(),
+            )
+            if csrf_token is not None:
+                response.set_cookie(
+                    "civicgate_demo_csrf",
+                    csrf_token,
+                    httponly=True,
+                    samesite="strict",
+                    secure=False,
+                    path="/",
+                )
+            return response
+
+        @app.get("/api/chat/capabilities", response_model=None)
+        def chat_capabilities() -> dict[str, Any]:
+            return active_chat.capabilities()
+
+        @app.get("/api/chat/turns", response_model=None)
+        def chat_turns() -> dict[str, Any]:
+            return {"turns": active_chat.list_turns(), "mode": "SYNTHETIC_GOVERNED_CHAT_ONLY"}
+
+        @app.get("/api/chat/turns/{turn_id}", response_model=None)
+        def chat_turn(turn_id: str) -> dict[str, Any] | JSONResponse:
+            from .demo_execution_v1 import DemoError
+
+            try:
+                return active_chat.get_turn(checked_id(turn_id))
+            except DemoError as exc:
+                return JSONResponse({"error": exc.code}, status_code=exc.status_code)
+
+        @app.post("/api/chat/turns")
+        async def submit_chat_turn(request: Request) -> JSONResponse:
+            from .demo_execution_v1 import DemoError
+
+            raw_keys = [
+                value
+                for key, value in request.scope["headers"]
+                if key.lower() == b"idempotency-key"
+            ]
+            key = request.headers.get("idempotency-key", "")
+            try:
+                parsed_key = uuid.UUID(key)
+            except (ValueError, AttributeError):
+                return JSONResponse({"error": "IDEMPOTENCY_KEY_REQUIRED"}, status_code=400)
+            if len(raw_keys) != 1 or parsed_key.version != 4 or str(parsed_key) != key:
+                return JSONResponse({"error": "IDEMPOTENCY_KEY_REQUIRED"}, status_code=400)
+            body = bytearray()
+            try:
+                async with asyncio.timeout(2):
+                    async for chunk in request.stream():
+                        body.extend(chunk)
+                        if len(body) > 16_384:
+                            return JSONResponse({"error": "REQUEST_LIMIT"}, status_code=413)
+                value = strict_json(bytes(body))
+            except TimeoutError:
+                return JSONResponse({"error": "REQUEST_TIMEOUT"}, status_code=408)
+            except (SafeEvidenceError, ValueError):
+                return JSONResponse({"error": "INVALID_CHAT_REQUEST"}, status_code=400)
+            if (
+                type(value) is not dict
+                or set(value) != {"prompt"}
+                or type(value["prompt"]) is not str
+            ):
+                return JSONResponse({"error": "INVALID_CHAT_REQUEST"}, status_code=400)
+            try:
+                turn = active_chat.submit_prompt(value["prompt"], key)
+            except DemoError as exc:
+                return JSONResponse({"error": exc.code}, status_code=exc.status_code)
+            return JSONResponse(turn, status_code=202)
 
     if advisor is not None:
         active_advisor = advisor

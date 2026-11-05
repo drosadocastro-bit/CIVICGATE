@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Governed chat{% endblock %}
+{% block content %}
+<meta name="civicgate-csrf" content="{{ csrf_token }}">
+<script src="/assets/chat.js" defer></script>
+<div class="eyebrow">MINI10 · LOCAL SYNTHETIC CHAT</div>
+<div class="page-heading"><div><h1>Ask once. Govern every step.</h1><p class="lede">One immutable request, one scripted proposal, one governed MCP invocation at most.</p></div><span class="mode-pill">NO WRITE · NO LIVE MODEL</span></div>
+<div class="scope-banner"><span class="scope-icon" aria-hidden="true">i</span><div><strong>The host owns the route; the model never owns authority.</strong><p>The active owner is fixed to Channel A's local synthetic READ composition before discovery. FAA strict and WRITE owners are not composed, and there is no fallback route.</p></div></div>
+<div class="chat-layout">
+  <section class="panel chat-prompt-panel" aria-labelledby="chat-heading">
+    <div class="panel-heading"><h2 id="chat-heading">Research request</h2><span class="neutral-badge">SCRIPTED PLANNER FIXTURE</span></div>
+    <label class="input-label" for="chat-prompt">Natural-language prompt</label>
+    <textarea id="chat-prompt" maxlength="4000" rows="6" placeholder="Show public federal awards in Puerto Rico during FY2026."></textarea>
+    <div class="chat-examples" aria-label="Synthetic example prompts">
+      <button type="button" data-prompt="Show public federal awards in Puerto Rico during FY2026.">Compatible READ</button>
+      <button type="button" data-prompt="Show the five largest new FAA contract awards recorded during fiscal year 2026, ranked by reported award amount.">FAA ambiguity</button>
+      <button type="button" data-prompt="Blacklist this contractor from future federal work.">Prohibited request</button>
+    </div>
+    <button id="submit-chat" class="primary-action" type="button" disabled>Submit governed request <span aria-hidden="true">→</span></button>
+    <p class="explanation">The browser cannot submit a tool, arguments, owner, model, approval, WRITE operation or fallback. Unmatched scripted-planner input is conservatively held for review.</p>
+    <div class="execution-contract"><span class="kicker">TRUSTED HOST CONFIGURATION</span><p>{{ capabilities.host_owner }}<br>{{ capabilities.planner_identity }}<br><span id="chat-capacity">Capacity checked by the local controller</span></p></div>
+  </section>
+  <section class="panel chat-result-panel" aria-labelledby="chat-result-heading">
+    <div class="panel-heading"><h2 id="chat-result-heading">Governed result</h2><span id="chat-status" class="neutral-badge" role="status" aria-live="polite">IDLE</span></div>
+    <p id="chat-message" class="explanation">No request has been submitted from this page.</p>
+    <dl id="chat-details">
+      <div class="field"><dt>Original request SHA-256</dt><dd><code id="chat-request-sha">Not captured</code></dd></div>
+      <div class="field"><dt>Selected MCP tool</dt><dd><code id="chat-tool">Not proposed</code></dd></div>
+      <div class="field"><dt>Canonical arguments</dt><dd><pre id="chat-arguments">Not proposed</pre></dd></div>
+      <div class="field"><dt>Deterministic decision</dt><dd id="chat-decision">Not evaluated</dd></div>
+      <div class="field"><dt>Policy reasons</dt><dd><pre id="chat-reasons">Not evaluated</pre></dd></div>
+      <div class="field"><dt>Binding / backend</dt><dd id="chat-execution">Not evaluated</dd></div>
+      <div class="field"><dt>Result verification state</dt><dd id="chat-result-state">Not observed</dd></div>
+      <div class="field"><dt>Result</dt><dd><pre id="chat-result">Not released</pre></dd></div>
+      <div class="field"><dt>Observed stage entry deltas</dt><dd><pre id="chat-latency">Not measured</pre></dd></div>
+    </dl>
+    <p id="chat-error" class="warning" hidden></p>
+    <a id="chat-evidence" class="primary-action execution-link" href="/" hidden>Inspect associated evidence <span aria-hidden="true">↗</span></a>
+    <p class="custody-meaning">COMPLETE means the synthetic evidence passed admission. CLOSED means documentary custody, never human acceptance.</p>
+  </section>
+</div>
+<section class="panel path-panel"><span class="kicker">ACTUAL EXECUTION PATH</span><p>Immutable intake <span>→</span> bounded discovery <span>→</span> scripted planner fixture <span>→</span> MCP stdio <span>→</span> deterministic Gateway <span>→</span> ExecutionBinding when permitted <span>→</span> synthetic adapter <span>→</span> evidence</p><small>Granite, external Judge APIs, USAspending, WRITE and the strict FAA owner are not activated by this page.</small></section>
+{% endblock %}
