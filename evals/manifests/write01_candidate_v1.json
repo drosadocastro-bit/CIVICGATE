@@ -1,0 +1,77 @@
+{
+  "baseline_head": "ea59646fdfe54d8ce954b8917979a8370ad27bef",
+  "baseline_tree": "4c25cc3c2cd9f049e36b6075014c2e00121e4ec2",
+  "branch": "codex/write01-synthetic-review",
+  "candidate": "WRITE01_SYNTHETIC_REVIEW_V1",
+  "dataset_sha256": "7aa5521b2cd4010d8a4e66d847eb599c5368cb92b36e1a250e54c66d88c3569d",
+  "files": [
+    {
+      "bytes": 14932,
+      "path": "docs/WRITE01_SYNTHETIC_REVIEW_V1.md",
+      "sha256": "8cb99b2339022dc684957118f60f3b44adb431941973c9f6d25b54eb9d114194"
+    },
+    {
+      "bytes": 13935,
+      "path": "evals/tests/test_write01_authority_v1.py",
+      "sha256": "8b2d500ffb1ab1685b582c7b4b72ea057fe1a73727c4152836a29d881b9f4cad"
+    },
+    {
+      "bytes": 6911,
+      "path": "evals/tests/test_write01_gateway_v1.py",
+      "sha256": "2cfcbea7ec7fff76da11e49b34368b61b3260335f274e502f9a2ae35dca72f1a"
+    },
+    {
+      "bytes": 5567,
+      "path": "evals/tests/test_write01_independent_v1.py",
+      "sha256": "a24501b2620fc82dda6edc599190036aed2a4d31729a65d46e4c127411fdd607"
+    },
+    {
+      "bytes": 7952,
+      "path": "evals/tests/test_write01_mcp_v1.py",
+      "sha256": "d00e08561ef271e24fb2f9e68c4c59e2837dc35713719bde9be3cb57ff34ae3f"
+    },
+    {
+      "bytes": 14500,
+      "path": "evals/tests/test_write01_store_v1.py",
+      "sha256": "e409e8d37ba4238e5ede79d2aca4fb17f6c62044d63909e82e9eb73ceff88b5d"
+    },
+    {
+      "bytes": 14265,
+      "path": "evals/write01/authority_v1.py",
+      "sha256": "1a894f38eb523703517d116d05cac6a9ad505f46ae2c201bb6d7dfdbd21bde64"
+    },
+    {
+      "bytes": 2795,
+      "path": "evals/write01/contract_v1.py",
+      "sha256": "72a28620609396ea57d5ad2b12abb540b284bc3a0111c5966e843d45d333efc1"
+    },
+    {
+      "bytes": 4424,
+      "path": "evals/write01/demo_v1.py",
+      "sha256": "d07cb63a3c44032c1d41b33b1a2d0bee67a62dae2c61383f2605fced5bf2bd9b"
+    },
+    {
+      "bytes": 12849,
+      "path": "evals/write01/gateway_v1.py",
+      "sha256": "65038fd229890d6ebf4c0135dfdd552ddc52ffe63d78be3e6f721f133328a40c"
+    },
+    {
+      "bytes": 7379,
+      "path": "evals/write01/stdio_v1.py",
+      "sha256": "835fd5d1a7d0e5d9450a9cf2f8abb44db13df4abb49c3528a7e7fc08c0df7edd"
+    },
+    {
+      "bytes": 24140,
+      "path": "evals/write01/store_v1.py",
+      "sha256": "2a332c11e7173eb4b0cca8fefa3ab894cb13961b1e7704577b1930fd9157b645"
+    },
+    {
+      "bytes": 5082,
+      "path": "scripts/run_write01_synthetic_v1.py",
+      "sha256": "9f39bdda13188ec6447cea137974ef0f02d01e5336ca602010f4012aa02f6198"
+    }
+  ],
+  "historical_tracked_files_preserved": 425,
+  "scope": "LOCAL_SYNTHETIC_RESEARCH_ONLY_NOT_HUMAN_ACCEPTANCE",
+  "self_excluded": true
+}
