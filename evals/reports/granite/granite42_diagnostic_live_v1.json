@@ -1,0 +1,204 @@
+{
+  "cases": [
+    {
+      "adapter_entries": 1,
+      "argument_count": 3,
+      "arguments_match_oracle": false,
+      "arguments_valid": true,
+      "binding_consumed": 1,
+      "binding_issued": 1,
+      "case_id": "G01-BOUNDED-FIND",
+      "completion_tokens_provider_reported": 67,
+      "diagnostic_bytes": 769,
+      "dispatch_state": "REQUEST_CONFIRMED",
+      "expected_tool": "find_federal_awards",
+      "finish_reason": "stop",
+      "governance_matches_oracle": true,
+      "http_status": 200,
+      "mock_http_attempts": 1,
+      "phase_durations_ms": {
+        "http_send_ms": 0.618,
+        "http_wait_ms": 5722.8,
+        "preflight_ms": 5273.549,
+        "reservation_ms": 10.941
+      },
+      "planner_exact_match": false,
+      "planner_latency_ms_including_preflight": 11039.816,
+      "policy_decision": "PERMIT",
+      "policy_reasons": [
+        "BOUNDED_PUBLIC_RESEARCH"
+      ],
+      "prompt_tokens_provider_reported": 1015,
+      "proposal_envelope_valid": true,
+      "provider_body_complete": true,
+      "recognized_tool": "find_federal_awards",
+      "result_present": true,
+      "result_verification": "RESULT_VERIFIED",
+      "returned_model": "granite-4.2-8b",
+      "termination_owner": "NONE",
+      "tool_matches_oracle": true,
+      "validation_error_count": 0,
+      "visited_nodes": [
+        "intake",
+        "discovery",
+        "planner",
+        "gateway",
+        "result"
+      ]
+    },
+    {
+      "adapter_entries": 1,
+      "argument_count": 1,
+      "arguments_match_oracle": true,
+      "arguments_valid": true,
+      "binding_consumed": 1,
+      "binding_issued": 1,
+      "case_id": "G02-EXACT-DETAIL",
+      "completion_tokens_provider_reported": 38,
+      "diagnostic_bytes": 765,
+      "dispatch_state": "REQUEST_CONFIRMED",
+      "expected_tool": "get_federal_award",
+      "finish_reason": "stop",
+      "governance_matches_oracle": true,
+      "http_status": 200,
+      "mock_http_attempts": 1,
+      "phase_durations_ms": {
+        "http_send_ms": 0.68,
+        "http_wait_ms": 1104.421,
+        "preflight_ms": 5159.595,
+        "reservation_ms": 9.024
+      },
+      "planner_exact_match": true,
+      "planner_latency_ms_including_preflight": 6309.019,
+      "policy_decision": "PERMIT",
+      "policy_reasons": [
+        "BOUNDED_PUBLIC_RESEARCH"
+      ],
+      "prompt_tokens_provider_reported": 1013,
+      "proposal_envelope_valid": true,
+      "provider_body_complete": true,
+      "recognized_tool": "get_federal_award",
+      "result_present": true,
+      "result_verification": "RESULT_VERIFIED",
+      "returned_model": "granite-4.2-8b",
+      "termination_owner": "NONE",
+      "tool_matches_oracle": true,
+      "validation_error_count": 0,
+      "visited_nodes": [
+        "intake",
+        "discovery",
+        "planner",
+        "gateway",
+        "result"
+      ]
+    }
+  ],
+  "claim_scope": "Two local observations; documentary projection, not a portable LIVE runner or production certification",
+  "custody": {
+    "known_terminal_outcomes": 2,
+    "meaning": "Known documentary terminal outcomes, not human acceptance",
+    "observed_responses": 2,
+    "quick_check": "ok",
+    "refund_events": 0,
+    "reservations": 2,
+    "retry_events": 0,
+    "send_initiations": 2,
+    "status": "COMPLETED",
+    "stop_events": 0
+  },
+  "experiment_id": "GRANITE42_DIAGNOSTIC_LIVE_V1",
+  "fresh_inference_at_checkpoint": false,
+  "independent_metrics_not_combined": {
+    "argument_schema_valid": {
+      "observations": 2,
+      "valid": 2
+    },
+    "envelope_valid": {
+      "observations": 2,
+      "valid": 2
+    },
+    "governance_oracle": {
+      "matched": 2,
+      "observations": 2
+    },
+    "planner_exact": {
+      "matched": 1,
+      "observations": 2
+    },
+    "tool_matches": {
+      "matched": 2,
+      "observations": 2
+    }
+  },
+  "limitations": [
+    "G01 has three arguments versus four in the frozen oracle; the omitted or differing field is not established",
+    "G01 frozen prompt does not explicitly specify five while the unchanged oracle does",
+    "Two observations do not establish general model accuracy, superiority, reliability or calibration",
+    "No argument validation errors occurred here; previous Granite42 argument failures remain unexplained",
+    "Model, sampling and response format differ from Granite31; this is not a controlled model-only comparison",
+    "Planner latencies include preflight; token counts are provider-reported; no hardware benchmark was executed",
+    "Full prompts, model replies, arguments, result data, SQLite and raw traces are excluded from this summary"
+  ],
+  "measured_date_utc": "2026-11-10",
+  "measurement_class": "LIVE_LOCAL_PLANNER_SYNTHETIC_BACKEND",
+  "model": {
+    "admission": "METADATA_CORRELATED_ONLY",
+    "backend_pid_attestation": "NOT_VERIFIED",
+    "effective_gpu_offload": "UNKNOWN",
+    "gguf_sha256": "6b2438a9177be0883b27722dadd5271c8e18806e068a7fc30a42c481c000c092",
+    "id": "granite-4.2-8b",
+    "post_initialization_nctx": "NOT_DIRECTLY_OBSERVED",
+    "reported_context_tokens": 8192,
+    "reported_parallel": 1,
+    "variant": "Q4_K_S"
+  },
+  "private_primary_artifact_identities": [
+    {
+      "artifact": "GRANITE42_DIAGNOSTIC_LIVE_REPORT_V1.md",
+      "bytes": 11719,
+      "sha256": "99cdfafbc221d4127fdcf22110f5eda62e6e2f327d5bd02ef464aa84078b8eb0"
+    },
+    {
+      "artifact": "primary-live-readback-v1.json",
+      "bytes": 9033,
+      "sha256": "0d40f9415f4ed4ca2f2fe403d0b7e678dea7c6211a29ccde326c51749d703160"
+    },
+    {
+      "artifact": "sha256-inventory-diagnostic-live-v1.json",
+      "bytes": 5820,
+      "sha256": "b03226137ec9bc1b2360521dfb2e1702e3ffccb00928ee4ad43f55c499adda4b"
+    }
+  ],
+  "project_date": "2026-11-09",
+  "provenance_limit": "Artifact hashes identify documents, not reviewer authentication, exhaustive network history or independent golden-reference acceptance",
+  "request_contract": {
+    "attempts_consumed": 2,
+    "automatic_retry": false,
+    "deadline_seconds": {
+      "a2_outer": 130,
+      "http": 90,
+      "internal": 120
+    },
+    "fallback": false,
+    "maximum_new_attempts": 2,
+    "maximum_output_tokens": 2048,
+    "response_mode": "CONTENT_JSON",
+    "temperature": 1.0,
+    "top_p": 0.95
+  },
+  "retained_states": {
+    "databricks_native_port": "OUT_OF_SCOPE",
+    "durable_stop": "PARTIAL",
+    "eval002_execution_authorization": "HOLD",
+    "faa_full_contract": "BLOCKED_SKIP",
+    "independent_golden_reference_acceptance": "PENDING",
+    "judge_calibration": "NOT_YET_MEASURED",
+    "live_usaspending": "NOT_TESTED",
+    "new_live_authorization": "NOT_GRANTED_BY_THIS_CHECKPOINT",
+    "performance_benchmark": "DISCARDED_NOT_EXECUTED"
+  },
+  "schema_version": "civicgate.granite42-diagnostic-live-public-summary.v1",
+  "source_sha256_reverified_at_checkpoint": true,
+  "status": "COMPLETED",
+  "synthetic_dispatches": 2
+}
