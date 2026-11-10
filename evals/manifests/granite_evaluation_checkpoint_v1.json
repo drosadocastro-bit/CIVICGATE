@@ -1,0 +1,112 @@
+{
+  "baseline": {
+    "branch": "codex/granite-evaluation-checkpoint",
+    "head": "105dea82ea7267738d3053b5e3e94b7e7a7b8b07",
+    "tree": "ad083e63432da00c57b6ee495cc7ea1b4b52401d"
+  },
+  "candidate": "GRANITE_EVALUATION_DOCUMENTARY_CHECKPOINT_V1",
+  "classification": "DOCUMENTARY_SAFE_PROJECTION_LOCAL_COMMIT_ONLY",
+  "exclusions": [
+    "raw requests, model replies, arguments and tool-result bodies",
+    "credential values, DPAPI stores and environment files",
+    "personal machine paths, account identities and private per-run IDs",
+    "SQLite databases, raw logs, archives and model binaries",
+    "environment-bound LIVE runners and private dependency freezes",
+    "unrelated dirty README, gitignore, ADR and evaluation artifacts",
+    "reserved holdout"
+  ],
+  "files": [
+    {
+      "bytes": 10138,
+      "path": "docs/GRANITE_PLANNER_LESSONS_LEARNED.md",
+      "sha256": "cf69a61c39cb7d72f25df148caa84370e1ae5fa771a351bc9c59373fa8b1dd84"
+    },
+    {
+      "bytes": 3749,
+      "path": "evals/reports/granite/README.md",
+      "sha256": "b3b5e458002316454138b778a420d58771b56fd9f4202b0c8795e08da844df81"
+    },
+    {
+      "bytes": 15327,
+      "path": "evals/reports/granite/GRANITE_EVALUATION_CHECKPOINT_V1.md",
+      "sha256": "5f9b7264c87f138f363a0ca696cb15ab07f2824cc6e2c38cde68ab49fe9042c3"
+    },
+    {
+      "bytes": 50187,
+      "path": "evals/reports/granite/experiments_v1.json",
+      "sha256": "d8405c3b106f81d83383c358eaeb25c1e916b9ec97ec07f4c5915171eb57c423"
+    },
+    {
+      "bytes": 6867,
+      "path": "evals/reports/granite/granite42_diagnostic_live_v1.json",
+      "sha256": "68c3c4a24247cd46e3eba7db21dea8cc7215938d36993ed002f180c86d26ab95"
+    }
+  ],
+  "files_including_manifest": 6,
+  "historical_lessons": {
+    "bytes": 10138,
+    "content_or_eol_change": "NONE_BYTE_IDENTICAL",
+    "original_source_preserved": true,
+    "original_source_sha256": "cf69a61c39cb7d72f25df148caa84370e1ae5fa771a351bc9c59373fa8b1dd84",
+    "publication_sha256": "cf69a61c39cb7d72f25df148caa84370e1ae5fa771a351bc9c59373fa8b1dd84"
+  },
+  "manifest_identity": "External Git commit/tree and private checkpoint receipt; no self-referential hash",
+  "manifest_version": 1,
+  "projection_review": {
+    "fresh_inference_or_runtime_tests": false,
+    "hashes_authenticate_human_identity": false,
+    "independent_human_or_organizational_review": "NOT_ESTABLISHED",
+    "method": "Explicit latest-result field allowlist; reviewed phase catalogue with neutral source labels; exact resulting-byte privacy and factual review",
+    "private_primary_evidence_included": false
+  },
+  "publication_authority": {
+    "deployment": "NOT_AUTHORIZED",
+    "local_commit": "OWNER_AUTHORIZED",
+    "merge": "HOLD",
+    "new_inference": "NOT_AUTHORIZED",
+    "push": "NOT_AUTHORIZED_BY_THIS_REQUEST"
+  },
+  "retained_states": {
+    "benchmark": "DISCARDED_NOT_EXECUTED",
+    "durable_stop": "PARTIAL",
+    "eval002_execution_authorization": "HOLD",
+    "faa_full_contract": "BLOCKED_SKIP",
+    "independent_golden_reference_acceptance": "PENDING",
+    "judge_calibration": "NOT_YET_MEASURED",
+    "live_usaspending": "NOT_TESTED",
+    "new_inference_authorization": "NOT_GRANTED_BY_THIS_CHECKPOINT"
+  },
+  "self_excluded": true,
+  "source_document_identities": [
+    {
+      "artifact": "GRANITE02_LOCAL_FUNCTIONAL_TRIAL_RESULT_20261109.md",
+      "bytes": 5140,
+      "phase_id": "MINI10_GRANITE02_SIMPLIFIED_LOCAL_TRIAL",
+      "sha256": "a78d5424409d1ba194252e8bce38aaa1d0e3ec88060f9ba9071891e3f70ae7f4"
+    },
+    {
+      "artifact": "GRANITE02_V2_RECOVERY_LIVE_REPORT.md",
+      "bytes": 7762,
+      "phase_id": "GRANITE02_V2_RECOVERY_LIVE",
+      "sha256": "e49789af195e1523a118a8fc82dac81b486df636af7bffc50f66a0a3fa1b782f"
+    },
+    {
+      "artifact": "GRANITE02_TIMEOUT_V2_LIVE_REPORT.md",
+      "bytes": 9204,
+      "phase_id": "GRANITE02_TIMEOUT_V2_LIVE",
+      "sha256": "2449d7b949373ad6a90a3f80d03667730c9d82c05c1b67714db20e86933e17cb"
+    },
+    {
+      "artifact": "GRANITE42_Q4KS_LIVE_TRIAL_REPORT_V1.md",
+      "bytes": 12252,
+      "phase_id": "GRANITE42_Q4KS_LIVE_CANDIDATE_V1",
+      "sha256": "ed549e54c9d4004ba3abcf2eb7feb7159e5c66cd9b4727f6a459b65dc6f120c7"
+    },
+    {
+      "artifact": "GRANITE42_DIAGNOSTIC_LIVE_REPORT_V1.md",
+      "bytes": 11719,
+      "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_V1",
+      "sha256": "99cdfafbc221d4127fdcf22110f5eda62e6e2f327d5bd02ef464aa84078b8eb0"
+    }
+  ]
+}

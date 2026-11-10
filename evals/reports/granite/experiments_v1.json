@@ -1,0 +1,1394 @@
+{
+  "admission_records": [
+    {
+      "attempt_ceiling": 8,
+      "attempts_consumed": 0,
+      "custody_claimed": false,
+      "reason": "Model load timeout before runner admission",
+      "record_id": "GRANITE31_INITIAL_LOAD_HOLD",
+      "source": {
+        "artifact": "GRANITE02_LIVE_TRIAL_01_PREFLIGHT_HOLD.md",
+        "bytes": 4670,
+        "phase_id": "GRANITE02_LIVE_TRIAL01_HOLD",
+        "sha256": "5a2e4c2d5336cba321003b2b41dcb278209742d9c9ee846164aad6d395f1173d"
+      }
+    },
+    {
+      "attempt_ceiling": 2,
+      "attempts_consumed": 0,
+      "case_states": [
+        "PENDING",
+        "PENDING"
+      ],
+      "documentary_disposition_is_persisted_sqlite_stop": false,
+      "later_documentary_disposition": "ABORTED_PRE_DISPATCH",
+      "original_ledger_bytes_preserved": true,
+      "original_sqlite_status": "OPEN",
+      "reason": "Duplicate parsed-plan object identity mismatch",
+      "record_id": "GRANITE31_V2_PRE_DISPATCH_BRIDGE_HOLD",
+      "source": {
+        "artifact": "GRANITE02_V2_TWO_CASE_LIVE_HOLD.md",
+        "bytes": 5683,
+        "phase_id": "GRANITE02_V2_TWO_CASE_PREP",
+        "sha256": "f4203f23f8cdb4eab92a2aa7728eb23135f12baf94f25d7f06de0b3931c121fd"
+      }
+    },
+    {
+      "attempt_ceiling": 8,
+      "attempts_consumed": 0,
+      "custody_claimed": false,
+      "reason": "CORS remained enabled; frozen admission was not weakened",
+      "record_id": "GRANITE31_SIMPLIFIED_CORS_HOLD",
+      "source": {
+        "artifact": "GRANITE02_SIMPLIFIED_LOCAL_TRIAL_HOLD.md",
+        "bytes": 3696,
+        "phase_id": "MINI10_GRANITE02_SIMPLIFIED_LOCAL_TRIAL",
+        "sha256": "94f532f17918ad16122a41e3364c6fadc0beed8e8634dabf08da6810cfa54f8d"
+      }
+    },
+    {
+      "attempt_ceiling": 2,
+      "attempts_consumed": 0,
+      "custody_claimed": false,
+      "reason": "Authorization named Q4_K_M while frozen candidate required Q4_K_S",
+      "record_id": "GRANITE42_QUANTIZATION_AUTHORIZATION_HOLD",
+      "source": {
+        "artifact": "GRANITE42_DIAGNOSTIC_LIVE_HOLD_REPORT_V1.md",
+        "bytes": 1636,
+        "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_ADMISSION_HOLD_V1",
+        "sha256": "5ddeaea1d1774a950fb7e0a70e0e2627ac619bf3a8ab6fd962f0f5d217c0b006"
+      },
+      "subsequent_owner_clarification": "Q4_K_S"
+    }
+  ],
+  "checkpoint_type": "DOCUMENTARY_SAFE_PROJECTION_NOT_PORTABLE_LIVE_RUNNER",
+  "coverage": {
+    "explicit_zero_send_admission_records": 4,
+    "live_inference_experiments": 5,
+    "offline_selections": 17,
+    "phase_bundles_are_not_independent_experiments": true,
+    "prior_phase_bundles": 31,
+    "source_artifact_identities": 49
+  },
+  "initial_mock_adapter_and_console_selections": [
+    {
+      "artifact": "granite-new-tests.xml",
+      "bytes": 7979,
+      "phase_id": "MINI10_GRANITE01",
+      "sha256": "c72a14739d083b4ced6ebc279363e396895005dcfee7f0d1e3e5c63b321ef700",
+      "verified_junit_counts": {
+        "fail": 0,
+        "pass": 47,
+        "skip": 0
+      }
+    },
+    {
+      "artifact": "console-advisor-exact-pins.xml",
+      "bytes": 118013,
+      "phase_id": "MINI10_GRANITE01",
+      "sha256": "eb5e1cbf178f203069000db088241a868a3e8ac337980b8cf100028215401f57",
+      "verified_junit_counts": {
+        "fail": 0,
+        "junit_tests": 510,
+        "pass": 501,
+        "skip": 9
+      }
+    },
+    {
+      "artifact": "mini10-planner-benchmark.xml",
+      "bytes": 5254,
+      "phase_id": "MINI10_GRANITE01",
+      "sha256": "6180e4bbf523d421fb9dbc8f5dafe59a4116cecb67d0e6d5677ad4193b8edeed",
+      "verified_junit_counts": {
+        "fail": 0,
+        "pass": 31,
+        "skip": 0
+      }
+    }
+  ],
+  "interpretation": {
+    "artifact_hashes": "Document identities, not identity authentication, access controls or runtime attestation",
+    "exact_scores": "Preserve each experiment denominator; do not pool planner and governance results",
+    "http_availability_12_of_12": "Historical secondary transcript transcription; not a newly captured primary network trace",
+    "independent_oracles": "Frozen separately from planner output, not independently accepted human golden references",
+    "pass_counts": "Overlapping assertions/selections, not additive semantic samples",
+    "scope_of_validation": "Document/JSON/link/staged-byte checks, not rerun inference or broad runtime regressions",
+    "source_bundles": "Neutral phase labels, not machine paths or public download locations; the original evidence remains private"
+  },
+  "live_experiments": [
+    {
+      "actual_gateway_decisions": {
+        "DENY": 0,
+        "PERMIT": 0,
+        "REVIEW_REQUIRED": 2
+      },
+      "attempt_ceiling": 8,
+      "attempts_consumed": 8,
+      "bindings_consumed": 0,
+      "bindings_issued": 0,
+      "experiment_id": "GRANITE31_FUNCTIONAL_V1",
+      "limitations": [
+        "Rejected response bodies and detailed validation errors not retained.",
+        "G04 planning failure does not prove intentional recognition of unrepresentable intent."
+      ],
+      "model_variant": "Granite 3.1 8B Q3_K_L",
+      "oracle_governance_matches": {
+        "denominator": 8,
+        "includes_two_G04_planning_containment_outcomes": true,
+        "numerator": 4
+      },
+      "planner_exact_match": {
+        "denominator": 6,
+        "denominator_scope": "representable cases; G04 excluded",
+        "numerator": 2
+      },
+      "proposal_schema_rejections": 6,
+      "source": {
+        "artifact": "GRANITE02_LOCAL_FUNCTIONAL_TRIAL_RESULT_20261109.md",
+        "bytes": 5140,
+        "phase_id": "MINI10_GRANITE02_SIMPLIFIED_LOCAL_TRIAL",
+        "sha256": "a78d5424409d1ba194252e8bce38aaa1d0e3ec88060f9ba9071891e3f70ae7f4"
+      },
+      "status": "COMPLETED",
+      "synthetic_dispatches": 0,
+      "tool_argument_rejections": 0
+    },
+    {
+      "G02": "NOT_ATTEMPTED",
+      "attempt_ceiling": 2,
+      "attempts_consumed": 1,
+      "experiment_id": "GRANITE31_RECOVERY_V2",
+      "limitations": [
+        "Unused slot does not authorize continuation after STOP.",
+        "No planner quality score is supported."
+      ],
+      "model_variant": "Granite 3.1 8B Q3_K_L",
+      "outcome": "CANCELLED_DELIVERY_UNKNOWN",
+      "planner_exact_match": null,
+      "source": {
+        "artifact": "GRANITE02_V2_RECOVERY_LIVE_REPORT.md",
+        "bytes": 7762,
+        "phase_id": "GRANITE02_V2_RECOVERY_LIVE",
+        "sha256": "e49789af195e1523a118a8fc82dac81b486df636af7bffc50f66a0a3fa1b782f"
+      },
+      "status": "STOPPED"
+    },
+    {
+      "actual_gateway_decisions": {},
+      "attempt_ceiling": 2,
+      "attempts_consumed": 2,
+      "bindings_consumed": 0,
+      "bindings_issued": 0,
+      "experiment_id": "GRANITE31_TIMEOUT_V2",
+      "limitations": [
+        "Tool selection and complete argument semantics not separately evaluable from sanitized rejected envelopes."
+      ],
+      "model_variant": "Granite 3.1 8B Q3_K_L",
+      "planner_exact_match": {
+        "denominator": 2,
+        "numerator": 0
+      },
+      "proposal_schema_rejections": 2,
+      "source": {
+        "artifact": "GRANITE02_TIMEOUT_V2_LIVE_REPORT.md",
+        "bytes": 9204,
+        "phase_id": "GRANITE02_TIMEOUT_V2_LIVE",
+        "sha256": "2449d7b949373ad6a90a3f80d03667730c9d82c05c1b67714db20e86933e17cb"
+      },
+      "status": "COMPLETED",
+      "synthetic_dispatches": 0,
+      "valid_typed_proposals": 0
+    },
+    {
+      "actual_gateway_decisions": {},
+      "attempt_ceiling": 2,
+      "attempts_consumed": 2,
+      "bindings_consumed": 0,
+      "bindings_issued": 0,
+      "experiment_id": "GRANITE42_Q4KS_CONTENT_V1",
+      "limitations": [
+        "Selected tool and rejected argument values/error locations were not retained.",
+        "Do not retrospectively attribute these failures to the later synthetic diagnostic fixtures."
+      ],
+      "model_variant": "Granite 4.2 8B Q4_K_S",
+      "planner_exact_match": null,
+      "proposal_schema_rejections": 0,
+      "source": {
+        "artifact": "GRANITE42_Q4KS_LIVE_TRIAL_REPORT_V1.md",
+        "bytes": 12252,
+        "phase_id": "GRANITE42_Q4KS_LIVE_CANDIDATE_V1",
+        "sha256": "ed549e54c9d4004ba3abcf2eb7feb7159e5c66cd9b4727f6a459b65dc6f120c7"
+      },
+      "status": "COMPLETED",
+      "synthetic_dispatches": 0,
+      "tool_argument_rejections": 2,
+      "tool_selection_accuracy": "NOT_ESTABLISHED",
+      "valid_typed_proposals_admitted_to_gateway": 0
+    },
+    {
+      "actual_gateway_decisions": {
+        "PERMIT": 2
+      },
+      "arguments_schema_valid": {
+        "denominator": 2,
+        "numerator": 2
+      },
+      "attempt_ceiling": 2,
+      "attempts_consumed": 2,
+      "bindings_consumed": 2,
+      "bindings_issued": 2,
+      "cases": [
+        {
+          "arguments_valid": true,
+          "binding_consumed": 1,
+          "binding_issued": 1,
+          "case_id": "G01-BOUNDED-FIND",
+          "diagnostic_bytes": 769,
+          "exact_oracle_match": false,
+          "missing_or_different_field": "UNKNOWN",
+          "observed_argument_count": 3,
+          "oracle_argument_count": 4,
+          "policy": "PERMIT",
+          "synthetic_dispatches": 1,
+          "tool": "find_federal_awards"
+        },
+        {
+          "arguments_valid": true,
+          "binding_consumed": 1,
+          "binding_issued": 1,
+          "case_id": "G02-EXACT-DETAIL",
+          "diagnostic_bytes": 765,
+          "exact_oracle_match": true,
+          "observed_argument_count": 1,
+          "oracle_argument_count": 1,
+          "policy": "PERMIT",
+          "synthetic_dispatches": 1,
+          "tool": "get_federal_award"
+        }
+      ],
+      "envelope_valid": {
+        "denominator": 2,
+        "numerator": 2
+      },
+      "experiment_id": "GRANITE42_DIAGNOSTIC_LIVE_V1",
+      "limitations": [
+        "G01 prompt does not explicitly request five, while the unchanged historical oracle requires five.",
+        "No INVALID_TOOL_ARGUMENTS occurred; prior argument failures remain unexplained."
+      ],
+      "model_variant": "Granite 4.2 8B Q4_K_S",
+      "planner_exact_match": {
+        "denominator": 2,
+        "numerator": 1
+      },
+      "source": {
+        "artifact": "GRANITE42_DIAGNOSTIC_LIVE_REPORT_V1.md",
+        "bytes": 11719,
+        "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_V1",
+        "sha256": "99cdfafbc221d4127fdcf22110f5eda62e6e2f327d5bd02ef464aa84078b8eb0"
+      },
+      "sqlite_status": "COMPLETED",
+      "status": "COMPLETED",
+      "synthetic_dispatches": 2,
+      "tool_match": {
+        "denominator": 2,
+        "numerator": 2
+      }
+    }
+  ],
+  "measurement_origin": "Existing source reports and primary readback; document identities rehashed at checkpoint; no new model or Gateway execution",
+  "offline_selections": [
+    {
+      "notes": [
+        "Eight mock observations: four PERMIT, four REVIEW_REQUIRED, four bindings consumed and dispatches.",
+        "Initial 6 PASS / 1 FAIL from Windows SQLite cleanup and a later import collection error remain retained."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 7,
+        "skip": 0
+      },
+      "selection_id": "FUNCTIONAL_RUNNER",
+      "source": {
+        "artifact": "GRANITE02_FUNCTIONAL_RUNNER_V1_REVIEW.md",
+        "bytes": 8368,
+        "phase_id": "MINI10_GRANITE02_FUNCTIONAL_RUNNER",
+        "sha256": "2b20fcc10568346b408f17c867f39cbe3235a4e44ffa3ba8db52fe96a2c2a2d8"
+      }
+    },
+    {
+      "notes": [
+        "Other separately reported 7,39 and47 PASS selections overlap existing regressions."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 17,
+        "subtests_pass": 20
+      },
+      "selection_id": "DIRECT_LIVE_ADAPTER_MOCKS",
+      "source": {
+        "artifact": "GRANITE02_LIVE_ADAPTER_V1_REVIEW.md",
+        "bytes": 9392,
+        "phase_id": "MINI10_GRANITE02_LIVE_ADAPTER_V1",
+        "sha256": "b01fd7b5fb114424be6acf48c656a16020b8f47dedf6e7890c2380a7432b8f15"
+      }
+    },
+    {
+      "notes": [
+        "Initial4 PASS/19 FAIL and second28 PASS/6 FAIL retained.",
+        "Separate pinned-venv guard selection9 PASS/6 FAIL lacked LangGraph; system run15 PASS+22subtests distinct."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 36,
+        "skip": 0
+      },
+      "selection_id": "SINGLE_SLOT_ADMISSION",
+      "source": {
+        "artifact": "GRANITE02_SINGLE_SLOT_OFFLINE_REPORT.md",
+        "bytes": 5642,
+        "phase_id": "MINI10_GRANITE02_SINGLE_SLOT_AMENDMENT_V1",
+        "sha256": "3494593983d91ae8a1db43f0d74419d8f0af9822e3ae2d35144742eb0a1dec8f"
+      }
+    },
+    {
+      "notes": [
+        "Initial32 PASS/2 FAIL retained."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 40,
+        "skip": 0
+      },
+      "selection_id": "SAFE_METADATA_ADMISSION",
+      "source": {
+        "artifact": "GRANITE02_SAFE_METADATA_ADMISSION_REVIEW.md",
+        "bytes": 6058,
+        "phase_id": "MINI10_GRANITE02_SAFE_METADATA_ADMISSION_V1",
+        "sha256": "821fed0cd70b5c2db7c92d7b4701672e23e41ce172a5e423ea815c9238055b57"
+      }
+    },
+    {
+      "notes": [
+        "Initial56 PASS/1 FAIL and77 PASS/4 FAIL retained."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 89,
+        "skip": 0
+      },
+      "selection_id": "LIMITED_METADATA_V1",
+      "source": {
+        "artifact": "GRANITE02_LIMITED_METADATA_ADMISSION_REVIEW.md",
+        "bytes": 6124,
+        "phase_id": "MINI10_GRANITE02_LIMITED_ADMISSION_V1",
+        "sha256": "71178f310ae07c5cf742aa935b19da6599a2c8b331ab453ab12ca63ac52c9eb0"
+      }
+    },
+    {
+      "notes": [
+        "V1 original89PASS rerun is separate and overlapping.",
+        "Passing isolated process probe did not override integrated BACKEND_PROCESS_IDENTITY_MISMATCH."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 96,
+        "skip": 0
+      },
+      "selection_id": "LIMITED_METADATA_V2",
+      "source": {
+        "artifact": "GRANITE02_PS51_COMPAT_V2_REVIEW.md",
+        "bytes": 4980,
+        "phase_id": "MINI10_GRANITE02_LIMITED_ADMISSION_V2",
+        "sha256": "f6e9c315796370cb89f7acd89bc8f1d658735e9261bb7195506f5720e34d5373"
+      }
+    },
+    {
+      "notes": [
+        "Initial8PASS/5FAIL, later14PASS/17PASS and separately frozen35PASS remain separate.",
+        "Synthetic privacy-sentinel display and chained-exception corrections retained."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 17,
+        "skip": 0
+      },
+      "selection_id": "PROPOSAL_DIAGNOSTIC_V2",
+      "source": {
+        "artifact": "GRANITE02_DIAGNOSTIC_V2_REPORT.md",
+        "bytes": 4925,
+        "phase_id": "GRANITE02_DIAGNOSTIC_V2",
+        "sha256": "b875f19c0bc40610c8641c770cd077e3e1ac057a3e6a51cbb8d32e77bc9db7c7"
+      }
+    },
+    {
+      "notes": [
+        "Preparation KeyError, invalid command and development runs retained."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "bridge_pass": 10,
+        "bridge_subtests_pass": 4,
+        "separate_integration_pass": 9
+      },
+      "selection_id": "TWO_CASE_BRIDGE_PREPARATION",
+      "source": {
+        "artifact": "GRANITE02_V2_TWO_CASE_PREPARATION.md",
+        "bytes": 10654,
+        "phase_id": "GRANITE02_V2_TWO_CASE_PREP",
+        "sha256": "a131269d9bb10a688c85c7d49f8a470bdd70171457f1b41ae7f40eb6c41b7aef"
+      }
+    },
+    {
+      "notes": [],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 5,
+        "skip": 0
+      },
+      "selection_id": "PLAN_IDENTITY_BRIDGE_FIX",
+      "source": {
+        "artifact": "GRANITE02_V2_BRIDGE_FIX_OFFLINE_REPORT.md",
+        "bytes": 7739,
+        "phase_id": "GRANITE02_V2_BRIDGE_FIX",
+        "sha256": "0e38914795e788a47ea0e3654cc438d6a727036468d4ed976b255af51f45a27d"
+      }
+    },
+    {
+      "notes": [
+        "Initial2PASS/3FAIL runtime receipt schema mismatch retained.",
+        "Simulated timer ordering does not retroactively prove historical LIVE cancellation ownership."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 9,
+        "skip": 0
+      },
+      "selection_id": "TIMEOUT_OBSERVABILITY_FIX",
+      "source": {
+        "artifact": "GRANITE02_TIMEOUT_FIX_REPORT.md",
+        "bytes": 9197,
+        "phase_id": "GRANITE02_TIMEOUT_FIX",
+        "sha256": "7101978b532d070dd917af3b96400f8dc39caad32ef603f767953b6b43f850ed"
+      }
+    },
+    {
+      "notes": [
+        "Absent audit-file test failure is preserved; do not combine11+1 into a fresh12PASS."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "original_full_fail": 1,
+        "original_full_pass": 11,
+        "targeted_corrected_pass": 1
+      },
+      "selection_id": "TIMEOUT_V2_INTEGRATION",
+      "source": {
+        "artifact": "GRANITE02_TIMEOUT_V2_INTEGRATION_REPORT.md",
+        "bytes": 9471,
+        "phase_id": "GRANITE02_TIMEOUT_V2_INTEGRATION",
+        "sha256": "6942ca24dce9992fa806beb44431c4c963958616c7f525e12d6543d7052d2c9f"
+      }
+    },
+    {
+      "notes": [
+        "One new complete invocation,115.38seconds; includes prior failing audit-file test."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "error": 0,
+        "fail": 0,
+        "pass": 12,
+        "skip": 0
+      },
+      "selection_id": "TIMEOUT_V2_CP01",
+      "source": {
+        "artifact": "GRANITE02_TIMEOUT_V2_CP01_REPORT.md",
+        "bytes": 8372,
+        "phase_id": "GRANITE02_TIMEOUT_V2_CP01",
+        "sha256": "ca9fae5a634968973fe2c37f2955279010913a5eca6013360cf34b55716f23e9"
+      }
+    },
+    {
+      "notes": [
+        "39 frozen parser checks,39 specification checks,9 controls; not87 model samples."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 87,
+        "skip": 0
+      },
+      "selection_id": "TOOL_FORMAT_INVESTIGATION",
+      "source": {
+        "artifact": "GRANITE02_TOOL_FORMAT_DIAGNOSIS.md",
+        "bytes": 14279,
+        "phase_id": "GRANITE02_TOOL_FORMAT_INVESTIGATION",
+        "sha256": "ef86a4aa386f49648b2bb96ca674450288a203a1f6f1972798f991d71c3423bd"
+      }
+    },
+    {
+      "notes": [
+        "Profile and documentary validation only; no inference,HTTP,MCP,Gateway or backend."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 30,
+        "skip": 0
+      },
+      "selection_id": "GRANITE42_CONTENT_PROFILE",
+      "source": {
+        "artifact": "PREPARATION_REPORT_V1.md",
+        "bytes": 4258,
+        "phase_id": "GRANITE42_CONTENT_CANDIDATE_V1",
+        "sha256": "79eff5165af5a699865fc5224bf765b0c8d923357d00163da45e684af2292ab6"
+      }
+    },
+    {
+      "notes": [
+        "Prior34PASS and2FAIL identity-STOP characterization retained."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 37,
+        "skip": 0
+      },
+      "selection_id": "GRANITE42_FIRST_TRIAL_OFFLINE_GATES",
+      "source": {
+        "artifact": "GRANITE42_Q4KS_LIVE_TRIAL_REPORT_V1.md",
+        "bytes": 12252,
+        "phase_id": "GRANITE42_Q4KS_LIVE_CANDIDATE_V1",
+        "sha256": "ed549e54c9d4004ba3abcf2eb7feb7159e5c66cd9b4727f6a459b65dc6f120c7"
+      }
+    },
+    {
+      "notes": [
+        "Maximum8errors and4096bytes.",
+        "Preparation oracle-bundle hash error retained."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 44,
+        "skip": 0
+      },
+      "selection_id": "GRANITE42_ARGUMENT_DIAGNOSTICS",
+      "source": {
+        "artifact": "GRANITE42_ARGUMENT_DIAGNOSTICS_REPORT_V1.md",
+        "bytes": 10472,
+        "phase_id": "GRANITE42_ARGUMENT_DIAGNOSTICS_V1",
+        "sha256": "7220b2efa24e989e08604a23a1b24e28003d628a9911c1012d62593b4c31cf74"
+      }
+    },
+    {
+      "notes": [
+        "One invocation/two simulated argument rejections; no Gateway evaluations or dispatch in that fresh selection."
+      ],
+      "overlap_warning": "Separate selection; not cumulative and not independent semantic samples",
+      "reported_result": {
+        "fail": 0,
+        "pass": 1,
+        "skip": 0
+      },
+      "selection_id": "GRANITE42_DIAGNOSTIC_BRIDGE",
+      "source": {
+        "artifact": "GRANITE42_DIAGNOSTIC_LIVE_PREPARATION_REPORT_V1.md",
+        "bytes": 10763,
+        "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_PREP_V1",
+        "sha256": "67e10706bb8e62e2d709e8eb68d6d6fe0024e461e557aeed11b01792b1cf0492"
+      }
+    }
+  ],
+  "phase_index": [
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_DIAGNOSTIC_V2_REPORT.md",
+          "bytes": 4925,
+          "sha256": "b875f19c0bc40610c8641c770cd077e3e1ac057a3e6a51cbb8d32e77bc9db7c7"
+        },
+        {
+          "artifact": "V2_DEVELOPMENT_FINDINGS.md",
+          "bytes": 1866,
+          "sha256": "10fa3e1d6d53e4d4653b75abbac98bc94f2861864dd9ff5d8b35480d3813d8e6"
+        }
+      ],
+      "phase_id": "GRANITE02_DIAGNOSTIC_V2",
+      "phase_subtype": "privacy_safe_proposal_diagnostics"
+    },
+    {
+      "category": "read_only_admission",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_ESTIMATE_DIAG02_REPORT.md",
+          "bytes": 5105,
+          "sha256": "86a0adfb4f8d047c2e5f768e40aa036d83fefb6ff719c6fd161445f8d6e98fc2"
+        }
+      ],
+      "phase_id": "GRANITE02_ESTIMATE_DIAG02",
+      "phase_subtype": "non_loading_estimate_diagnostic"
+    },
+    {
+      "category": "admission_failure",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_LIVE_TRIAL_01_PREFLIGHT_HOLD.md",
+          "bytes": 4670,
+          "sha256": "5a2e4c2d5336cba321003b2b41dcb278209742d9c9ee846164aad6d395f1173d"
+        }
+      ],
+      "phase_id": "GRANITE02_LIVE_TRIAL01_HOLD",
+      "phase_subtype": "model_load_timeout_before_inference"
+    },
+    {
+      "category": "read_only_admission",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_LOAD_ROOT_CAUSE_REPORT.md",
+          "bytes": 6355,
+          "sha256": "2a8d329ca4f687cc57a7be9bf11918a82efda9a32a477fce200febb46bded795"
+        }
+      ],
+      "phase_id": "GRANITE02_LOAD_DIAG01",
+      "phase_subtype": "existing_load_failure_analysis"
+    },
+    {
+      "category": "read_only_analysis",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_PLANNER_DIAGNOSTIC_V2_PROPOSAL.md",
+          "bytes": 3307,
+          "sha256": "b3ac0d6019a179bb22774b148a671477cbb8632b6bdc82cd6ccafea7a6d51643"
+        },
+        {
+          "artifact": "GRANITE02_PLANNER_RCA_01.md",
+          "bytes": 6050,
+          "sha256": "3fd735f1ebfc44ccd37d6610be71b31133b45ff0c1c53c64b744c5983ae12b24"
+        }
+      ],
+      "phase_id": "GRANITE02_PLANNER_RCA_01",
+      "phase_subtype": "sealed_evidence_analysis"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_LOCAL_TIME_BUDGET_PROPOSAL_V1.md",
+          "bytes": 2624,
+          "sha256": "10e4cbdd7ded1b67ba0b49027458d53b4a09c36d1468d546b45b592cb99f9cae"
+        },
+        {
+          "artifact": "GRANITE02_TIMEOUT_FIX_REPORT.md",
+          "bytes": 9197,
+          "sha256": "7101978b532d070dd917af3b96400f8dc39caad32ef603f767953b6b43f850ed"
+        }
+      ],
+      "phase_id": "GRANITE02_TIMEOUT_FIX",
+      "phase_subtype": "deadline_observability_correction"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_TIMEOUT_V2_CP01_REPORT.md",
+          "bytes": 8372,
+          "sha256": "ca9fae5a634968973fe2c37f2955279010913a5eca6013360cf34b55716f23e9"
+        },
+        {
+          "artifact": "PROPOSED_LIVE_AUTHORIZATION_CP01.md",
+          "bytes": 5415,
+          "sha256": "6ce300288828c63fba372cd51a954c4cd64e5820ba831782c866692b7a89d2d8"
+        }
+      ],
+      "phase_id": "GRANITE02_TIMEOUT_V2_CP01",
+      "phase_subtype": "final_timeout_regression_checkpoint"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_TIMEOUT_V2_INTEGRATION_REPORT.md",
+          "bytes": 9471,
+          "sha256": "6942ca24dce9992fa806beb44431c4c963958616c7f525e12d6543d7052d2c9f"
+        },
+        {
+          "artifact": "PROPOSED_LIVE_EXECUTION_PLAN.md",
+          "bytes": 4996,
+          "sha256": "1e8b9e2bf1b2d89766e4ae26efd24d16f1eb1bf722b930a37dadf9f73f0d90e3"
+        }
+      ],
+      "phase_id": "GRANITE02_TIMEOUT_V2_INTEGRATION",
+      "phase_subtype": "versioned_deadline_bridge_integration"
+    },
+    {
+      "category": "inference_trial",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_TIMEOUT_V2_LIVE_REPORT.md",
+          "bytes": 9204,
+          "sha256": "2449d7b949373ad6a90a3f80d03667730c9d82c05c1b67714db20e86933e17cb"
+        }
+      ],
+      "phase_id": "GRANITE02_TIMEOUT_V2_LIVE",
+      "phase_subtype": "granite31_two_case_timeout_trial"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_TOOL_FORMAT_DIAGNOSIS.md",
+          "bytes": 14279,
+          "sha256": "ef86a4aa386f49648b2bb96ca674450288a203a1f6f1972798f991d71c3423bd"
+        }
+      ],
+      "phase_id": "GRANITE02_TOOL_FORMAT_INVESTIGATION",
+      "phase_subtype": "parser_and_format_specification"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_V2_BRIDGE_FIX_OFFLINE_REPORT.md",
+          "bytes": 7739,
+          "sha256": "0e38914795e788a47ea0e3654cc438d6a727036468d4ed976b255af51f45a27d"
+        }
+      ],
+      "phase_id": "GRANITE02_V2_BRIDGE_FIX",
+      "phase_subtype": "plan_object_identity_correction"
+    },
+    {
+      "category": "inference_trial",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_V2_RECOVERY_LIVE_REPORT.md",
+          "bytes": 7762,
+          "sha256": "e49789af195e1523a118a8fc82dac81b486df636af7bffc50f66a0a3fa1b782f"
+        }
+      ],
+      "phase_id": "GRANITE02_V2_RECOVERY_LIVE",
+      "phase_subtype": "granite31_cancelled_trial"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_V2_TWO_CASE_LIVE_HOLD.md",
+          "bytes": 5683,
+          "sha256": "f4203f23f8cdb4eab92a2aa7728eb23135f12baf94f25d7f06de0b3931c121fd"
+        },
+        {
+          "artifact": "GRANITE02_V2_TWO_CASE_PREPARATION.md",
+          "bytes": 10654,
+          "sha256": "a131269d9bb10a688c85c7d49f8a470bdd70171457f1b41ae7f40eb6c41b7aef"
+        }
+      ],
+      "phase_id": "GRANITE02_V2_TWO_CASE_PREP",
+      "phase_subtype": "two_case_integration_and_zero_send_hold"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE42_ARGUMENT_DIAGNOSTICS_REPORT_V1.md",
+          "bytes": 10472,
+          "sha256": "7220b2efa24e989e08604a23a1b24e28003d628a9911c1012d62593b4c31cf74"
+        }
+      ],
+      "phase_id": "GRANITE42_ARGUMENT_DIAGNOSTICS_V1",
+      "phase_subtype": "per_tool_argument_diagnostic_helper"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE42_CONTENT_PROFILE_V1.md",
+          "bytes": 3989,
+          "sha256": "424d3b81344ad45d8f413d7a3ed9179139dbddc33d2ea4737af0f7a698a7cc46"
+        },
+        {
+          "artifact": "PREPARATION_REPORT_V1.md",
+          "bytes": 4258,
+          "sha256": "79eff5165af5a699865fc5224bf765b0c8d923357d00163da45e684af2292ab6"
+        }
+      ],
+      "phase_id": "GRANITE42_CONTENT_CANDIDATE_V1",
+      "phase_subtype": "content_json_profile_preparation"
+    },
+    {
+      "category": "read_only_admission",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE42_DIAGNOSTIC_LIVE_HOLD_REPORT_V1.md",
+          "bytes": 1636,
+          "sha256": "5ddeaea1d1774a950fb7e0a70e0e2627ac619bf3a8ab6fd962f0f5d217c0b006"
+        }
+      ],
+      "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_ADMISSION_HOLD_V1",
+      "phase_subtype": "authorization_quantization_mismatch"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE42_DIAGNOSTIC_LIVE_PREPARATION_REPORT_V1.md",
+          "bytes": 10763,
+          "sha256": "67e10706bb8e62e2d709e8eb68d6d6fe0024e461e557aeed11b01792b1cf0492"
+        },
+        {
+          "artifact": "PROPOSED_TWO_CASE_LIVE_AUTHORIZATION_V1.md",
+          "bytes": 5381,
+          "sha256": "bd549d1e1a65c2e65c8e8ab590887a4ff85b6ea788a956b8e114f042a55c967f"
+        }
+      ],
+      "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_PREP_V1",
+      "phase_subtype": "diagnostic_bridge_integration"
+    },
+    {
+      "category": "inference_trial",
+      "documentary_sources": [
+        {
+          "artifact": "EXECUTED_COMMAND_V1.md",
+          "bytes": 1088,
+          "sha256": "5fba777aed9fb7b17a1a7c0a505e2d6e2a594fea1a90831055ea99150ae18651"
+        },
+        {
+          "artifact": "GRANITE42_DIAGNOSTIC_LIVE_REPORT_V1.md",
+          "bytes": 11719,
+          "sha256": "99cdfafbc221d4127fdcf22110f5eda62e6e2f327d5bd02ef464aa84078b8eb0"
+        }
+      ],
+      "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_V1",
+      "phase_subtype": "granite42_diagnostic_two_case_trial"
+    },
+    {
+      "category": "inference_trial",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE42_Q4KS_LIVE_TRIAL_REPORT_V1.md",
+          "bytes": 12252,
+          "sha256": "ed549e54c9d4004ba3abcf2eb7feb7159e5c66cd9b4727f6a459b65dc6f120c7"
+        }
+      ],
+      "phase_id": "GRANITE42_Q4KS_LIVE_CANDIDATE_V1",
+      "phase_subtype": "granite42_first_two_case_trial_and_offline_candidate"
+    },
+    {
+      "category": "read_only_admission",
+      "documentary_sources": [
+        {
+          "artifact": "RUNTIME_VERIFICATION_V1.md",
+          "bytes": 4526,
+          "sha256": "7eb8c19e4f12b03091c9812145597f23b372187c0f5916d37f5f9c94ef0582c5"
+        }
+      ],
+      "phase_id": "GRANITE42_Q4KS_RUNTIME_VERIFICATION_V1",
+      "phase_subtype": "loaded_runtime_metadata_observation"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "console-advisor-exact-pins.xml",
+          "bytes": 118013,
+          "sha256": "eb5e1cbf178f203069000db088241a868a3e8ac337980b8cf100028215401f57"
+        },
+        {
+          "artifact": "granite-new-tests.xml",
+          "bytes": 7979,
+          "sha256": "c72a14739d083b4ced6ebc279363e396895005dcfee7f0d1e3e5c63b321ef700"
+        },
+        {
+          "artifact": "mini10-planner-benchmark.xml",
+          "bytes": 5254,
+          "sha256": "6180e4bbf523d421fb9dbc8f5dafe59a4116cecb67d0e6d5677ad4193b8edeed"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE01",
+      "phase_subtype": "initial_adapter_console_and_scripted_benchmark"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_DIAGNOSTIC_KEY_EXPOSURE_NOTE.md",
+          "bytes": 976,
+          "sha256": "21b2f25134f039be4af03204344fd212441899819c0c67d5969f70bd94683810"
+        },
+        {
+          "artifact": "GRANITE02_EXTERNAL_GUARD_AND_RUNNER_REPORT.md",
+          "bytes": 6147,
+          "sha256": "a21c2694d06387c6b4cd00f81a5f5d4fa501b0389ab95cad75ca3fab8a427b36"
+        },
+        {
+          "artifact": "GRANITE02_PREFLIGHT_HOLD_20261106.md",
+          "bytes": 5359,
+          "sha256": "a406d2ea808f1b8b49969587b11abda17f9da901b9d6ab2fe98c8ddab1551b86"
+        },
+        {
+          "artifact": "GRANITE02_V2_OFFLINE_REMEDIATION_REPORT.md",
+          "bytes": 6757,
+          "sha256": "5e1f1c0d4f87ccd941f594e0ac7251fa02b2056de6a51a00f0c37e933c8503fd"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE02",
+      "phase_subtype": "durable_budget_and_transport_guard"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_FUNCTIONAL_RUNNER_V1_REVIEW.md",
+          "bytes": 8368,
+          "sha256": "2b20fcc10568346b408f17c867f39cbe3235a4e44ffa3ba8db52fe96a2c2a2d8"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE02_FUNCTIONAL_RUNNER",
+      "phase_subtype": "four_case_two_repetition_mock_composition"
+    },
+    {
+      "category": "read_only_admission",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_FUNCTIONAL_TRIAL_V1_PROPOSAL.md",
+          "bytes": 7590,
+          "sha256": "c861ec7c419c4c6c0e4786f7f4f50fcd693d8ee0c66c3a2510b9959e203fec67"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE02_FUNCTIONAL_TRIAL",
+      "phase_subtype": "functional_trial_proposal_and_listener_observation"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_LIMITED_METADATA_ADMISSION_REVIEW.md",
+          "bytes": 6124,
+          "sha256": "71178f310ae07c5cf742aa935b19da6599a2c8b331ab453ab12ca63ac52c9eb0"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE02_LIMITED_ADMISSION_V1",
+      "phase_subtype": "limited_metadata_admission_v1"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_PS51_COMPAT_V2_REVIEW.md",
+          "bytes": 4980,
+          "sha256": "f6e9c315796370cb89f7acd89bc8f1d658735e9261bb7195506f5720e34d5373"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE02_LIMITED_ADMISSION_V2",
+      "phase_subtype": "powershell51_compatible_metadata_admission"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_LIVE_ADAPTER_V1_REVIEW.md",
+          "bytes": 9392,
+          "sha256": "b01fd7b5fb114424be6acf48c656a16020b8f47dedf6e7890c2380a7432b8f15"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE02_LIVE_ADAPTER_V1",
+      "phase_subtype": "direct_local_adapter_offline_validation"
+    },
+    {
+      "category": "read_only_admission",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_LISTENER_CAUSE_FOLLOWUP_V1.md",
+          "bytes": 2310,
+          "sha256": "655a722428ae8f48c237f478a6475fd13e74ec3f8b22ae2ed8be77571ec16c66"
+        },
+        {
+          "artifact": "GRANITE02_LISTENER_RECOVERY_REPORT_V1.md",
+          "bytes": 2048,
+          "sha256": "d1fed834753b18137d9048eff932808a48f0fd501b63ea58b04114eac80bcc15"
+        },
+        {
+          "artifact": "GRANITE02_PREFLIGHT_RECOVERY_REPORT.md",
+          "bytes": 5138,
+          "sha256": "94619b72fa27187b6eaec70f9b2865f9a714e83fdafd4c0cd99c4c9bb0cbbcfd"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE02_RECOVERY",
+      "phase_subtype": "listener_and_hardware_metadata_diagnostics"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_SAFE_METADATA_ADMISSION_REVIEW.md",
+          "bytes": 6058,
+          "sha256": "821fed0cd70b5c2db7c92d7b4701672e23e41ce172a5e423ea815c9238055b57"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE02_SAFE_METADATA_ADMISSION_V1",
+      "phase_subtype": "credential_free_metadata_contract"
+    },
+    {
+      "category": "inference_trial",
+      "documentary_sources": [
+        {
+          "artifact": "GRANITE02_LOCAL_FUNCTIONAL_TRIAL_RESULT_20261109.md",
+          "bytes": 5140,
+          "sha256": "a78d5424409d1ba194252e8bce38aaa1d0e3ec88060f9ba9071891e3f70ae7f4"
+        },
+        {
+          "artifact": "GRANITE02_SIMPLIFIED_LOCAL_TRIAL_HOLD.md",
+          "bytes": 3696,
+          "sha256": "94f532f17918ad16122a41e3364c6fadc0beed8e8634dabf08da6810cfa54f8d"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE02_SIMPLIFIED_LOCAL_TRIAL",
+      "phase_subtype": "granite31_four_case_trial_and_initial_cors_hold"
+    },
+    {
+      "category": "offline_engineering",
+      "documentary_sources": [
+        {
+          "artifact": "first_failure_note.md",
+          "bytes": 1728,
+          "sha256": "37ed7fafd7b25d1aae449261eb5639e2182e312eb9115b269352e48eb619bfc4"
+        },
+        {
+          "artifact": "GRANITE02_SINGLE_SLOT_OFFLINE_REPORT.md",
+          "bytes": 5642,
+          "sha256": "3494593983d91ae8a1db43f0d74419d8f0af9822e3ae2d35144742eb0a1dec8f"
+        }
+      ],
+      "phase_id": "MINI10_GRANITE02_SINGLE_SLOT_AMENDMENT_V1",
+      "phase_subtype": "single_slot_versioned_admission"
+    }
+  ],
+  "retained_limitations": [
+    "No counts or denominators are summed across selections.",
+    "Schema validity, tool match, exact oracle match, policy decision, binding consumption, dispatch and custody are separate observations.",
+    "Changed model,sampling and format confound model-only comparisons.",
+    "Latest benchmark is DISCARDED_NOT_EXECUTED; earlier0/20 snapshots stay historical.",
+    "METADATA_CORRELATED_ONLY; post-initialization n_ctx,PID-to-instance,in-memory GGUF and effective GPU offload not independently attested.",
+    "Durable STOP PARTIAL; no hostile-host,power-loss or network exactly-once certification.",
+    "Earlier failed runs and zero-send HOLD records remain preserved.",
+    "No holdout examined; independent golden references pending and Judge calibration not yet measured."
+  ],
+  "retained_states": {
+    "benchmark": "DISCARDED_NOT_EXECUTED",
+    "durable_stop": "PARTIAL",
+    "eval002_execution_authorization": "HOLD",
+    "faa_full_contract": "BLOCKED_SKIP",
+    "independent_golden_reference_acceptance": "PENDING",
+    "judge_calibration": "NOT_YET_MEASURED",
+    "live_usaspending": "NOT_TESTED",
+    "new_inference_authorization": "NOT_GRANTED_BY_THIS_CHECKPOINT"
+  },
+  "schema_version": "civicgate.granite-experiment-registry.v1",
+  "scope": "Granite31 and Granite42 local planner integration; synthetic read-only backend; preserved engineering failures and admission limits",
+  "source_artifacts": [
+    {
+      "artifact": "GRANITE02_DIAGNOSTIC_V2_REPORT.md",
+      "bytes": 4925,
+      "phase_id": "GRANITE02_DIAGNOSTIC_V2",
+      "sha256": "b875f19c0bc40610c8641c770cd077e3e1ac057a3e6a51cbb8d32e77bc9db7c7"
+    },
+    {
+      "artifact": "V2_DEVELOPMENT_FINDINGS.md",
+      "bytes": 1866,
+      "phase_id": "GRANITE02_DIAGNOSTIC_V2",
+      "sha256": "10fa3e1d6d53e4d4653b75abbac98bc94f2861864dd9ff5d8b35480d3813d8e6"
+    },
+    {
+      "artifact": "GRANITE02_ESTIMATE_DIAG02_REPORT.md",
+      "bytes": 5105,
+      "phase_id": "GRANITE02_ESTIMATE_DIAG02",
+      "sha256": "86a0adfb4f8d047c2e5f768e40aa036d83fefb6ff719c6fd161445f8d6e98fc2"
+    },
+    {
+      "artifact": "GRANITE02_LIVE_TRIAL_01_PREFLIGHT_HOLD.md",
+      "bytes": 4670,
+      "phase_id": "GRANITE02_LIVE_TRIAL01_HOLD",
+      "sha256": "5a2e4c2d5336cba321003b2b41dcb278209742d9c9ee846164aad6d395f1173d"
+    },
+    {
+      "artifact": "GRANITE02_LOAD_ROOT_CAUSE_REPORT.md",
+      "bytes": 6355,
+      "phase_id": "GRANITE02_LOAD_DIAG01",
+      "sha256": "2a8d329ca4f687cc57a7be9bf11918a82efda9a32a477fce200febb46bded795"
+    },
+    {
+      "artifact": "GRANITE02_PLANNER_DIAGNOSTIC_V2_PROPOSAL.md",
+      "bytes": 3307,
+      "phase_id": "GRANITE02_PLANNER_RCA_01",
+      "sha256": "b3ac0d6019a179bb22774b148a671477cbb8632b6bdc82cd6ccafea7a6d51643"
+    },
+    {
+      "artifact": "GRANITE02_PLANNER_RCA_01.md",
+      "bytes": 6050,
+      "phase_id": "GRANITE02_PLANNER_RCA_01",
+      "sha256": "3fd735f1ebfc44ccd37d6610be71b31133b45ff0c1c53c64b744c5983ae12b24"
+    },
+    {
+      "artifact": "GRANITE02_LOCAL_TIME_BUDGET_PROPOSAL_V1.md",
+      "bytes": 2624,
+      "phase_id": "GRANITE02_TIMEOUT_FIX",
+      "sha256": "10e4cbdd7ded1b67ba0b49027458d53b4a09c36d1468d546b45b592cb99f9cae"
+    },
+    {
+      "artifact": "GRANITE02_TIMEOUT_FIX_REPORT.md",
+      "bytes": 9197,
+      "phase_id": "GRANITE02_TIMEOUT_FIX",
+      "sha256": "7101978b532d070dd917af3b96400f8dc39caad32ef603f767953b6b43f850ed"
+    },
+    {
+      "artifact": "GRANITE02_TIMEOUT_V2_CP01_REPORT.md",
+      "bytes": 8372,
+      "phase_id": "GRANITE02_TIMEOUT_V2_CP01",
+      "sha256": "ca9fae5a634968973fe2c37f2955279010913a5eca6013360cf34b55716f23e9"
+    },
+    {
+      "artifact": "PROPOSED_LIVE_AUTHORIZATION_CP01.md",
+      "bytes": 5415,
+      "phase_id": "GRANITE02_TIMEOUT_V2_CP01",
+      "sha256": "6ce300288828c63fba372cd51a954c4cd64e5820ba831782c866692b7a89d2d8"
+    },
+    {
+      "artifact": "GRANITE02_TIMEOUT_V2_INTEGRATION_REPORT.md",
+      "bytes": 9471,
+      "phase_id": "GRANITE02_TIMEOUT_V2_INTEGRATION",
+      "sha256": "6942ca24dce9992fa806beb44431c4c963958616c7f525e12d6543d7052d2c9f"
+    },
+    {
+      "artifact": "PROPOSED_LIVE_EXECUTION_PLAN.md",
+      "bytes": 4996,
+      "phase_id": "GRANITE02_TIMEOUT_V2_INTEGRATION",
+      "sha256": "1e8b9e2bf1b2d89766e4ae26efd24d16f1eb1bf722b930a37dadf9f73f0d90e3"
+    },
+    {
+      "artifact": "GRANITE02_TIMEOUT_V2_LIVE_REPORT.md",
+      "bytes": 9204,
+      "phase_id": "GRANITE02_TIMEOUT_V2_LIVE",
+      "sha256": "2449d7b949373ad6a90a3f80d03667730c9d82c05c1b67714db20e86933e17cb"
+    },
+    {
+      "artifact": "GRANITE02_TOOL_FORMAT_DIAGNOSIS.md",
+      "bytes": 14279,
+      "phase_id": "GRANITE02_TOOL_FORMAT_INVESTIGATION",
+      "sha256": "ef86a4aa386f49648b2bb96ca674450288a203a1f6f1972798f991d71c3423bd"
+    },
+    {
+      "artifact": "GRANITE02_V2_BRIDGE_FIX_OFFLINE_REPORT.md",
+      "bytes": 7739,
+      "phase_id": "GRANITE02_V2_BRIDGE_FIX",
+      "sha256": "0e38914795e788a47ea0e3654cc438d6a727036468d4ed976b255af51f45a27d"
+    },
+    {
+      "artifact": "GRANITE02_V2_RECOVERY_LIVE_REPORT.md",
+      "bytes": 7762,
+      "phase_id": "GRANITE02_V2_RECOVERY_LIVE",
+      "sha256": "e49789af195e1523a118a8fc82dac81b486df636af7bffc50f66a0a3fa1b782f"
+    },
+    {
+      "artifact": "GRANITE02_V2_TWO_CASE_LIVE_HOLD.md",
+      "bytes": 5683,
+      "phase_id": "GRANITE02_V2_TWO_CASE_PREP",
+      "sha256": "f4203f23f8cdb4eab92a2aa7728eb23135f12baf94f25d7f06de0b3931c121fd"
+    },
+    {
+      "artifact": "GRANITE02_V2_TWO_CASE_PREPARATION.md",
+      "bytes": 10654,
+      "phase_id": "GRANITE02_V2_TWO_CASE_PREP",
+      "sha256": "a131269d9bb10a688c85c7d49f8a470bdd70171457f1b41ae7f40eb6c41b7aef"
+    },
+    {
+      "artifact": "GRANITE42_ARGUMENT_DIAGNOSTICS_REPORT_V1.md",
+      "bytes": 10472,
+      "phase_id": "GRANITE42_ARGUMENT_DIAGNOSTICS_V1",
+      "sha256": "7220b2efa24e989e08604a23a1b24e28003d628a9911c1012d62593b4c31cf74"
+    },
+    {
+      "artifact": "GRANITE42_CONTENT_PROFILE_V1.md",
+      "bytes": 3989,
+      "phase_id": "GRANITE42_CONTENT_CANDIDATE_V1",
+      "sha256": "424d3b81344ad45d8f413d7a3ed9179139dbddc33d2ea4737af0f7a698a7cc46"
+    },
+    {
+      "artifact": "PREPARATION_REPORT_V1.md",
+      "bytes": 4258,
+      "phase_id": "GRANITE42_CONTENT_CANDIDATE_V1",
+      "sha256": "79eff5165af5a699865fc5224bf765b0c8d923357d00163da45e684af2292ab6"
+    },
+    {
+      "artifact": "GRANITE42_DIAGNOSTIC_LIVE_HOLD_REPORT_V1.md",
+      "bytes": 1636,
+      "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_ADMISSION_HOLD_V1",
+      "sha256": "5ddeaea1d1774a950fb7e0a70e0e2627ac619bf3a8ab6fd962f0f5d217c0b006"
+    },
+    {
+      "artifact": "GRANITE42_DIAGNOSTIC_LIVE_PREPARATION_REPORT_V1.md",
+      "bytes": 10763,
+      "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_PREP_V1",
+      "sha256": "67e10706bb8e62e2d709e8eb68d6d6fe0024e461e557aeed11b01792b1cf0492"
+    },
+    {
+      "artifact": "PROPOSED_TWO_CASE_LIVE_AUTHORIZATION_V1.md",
+      "bytes": 5381,
+      "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_PREP_V1",
+      "sha256": "bd549d1e1a65c2e65c8e8ab590887a4ff85b6ea788a956b8e114f042a55c967f"
+    },
+    {
+      "artifact": "EXECUTED_COMMAND_V1.md",
+      "bytes": 1088,
+      "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_V1",
+      "sha256": "5fba777aed9fb7b17a1a7c0a505e2d6e2a594fea1a90831055ea99150ae18651"
+    },
+    {
+      "artifact": "GRANITE42_DIAGNOSTIC_LIVE_REPORT_V1.md",
+      "bytes": 11719,
+      "phase_id": "GRANITE42_DIAGNOSTIC_LIVE_V1",
+      "sha256": "99cdfafbc221d4127fdcf22110f5eda62e6e2f327d5bd02ef464aa84078b8eb0"
+    },
+    {
+      "artifact": "GRANITE42_Q4KS_LIVE_TRIAL_REPORT_V1.md",
+      "bytes": 12252,
+      "phase_id": "GRANITE42_Q4KS_LIVE_CANDIDATE_V1",
+      "sha256": "ed549e54c9d4004ba3abcf2eb7feb7159e5c66cd9b4727f6a459b65dc6f120c7"
+    },
+    {
+      "artifact": "RUNTIME_VERIFICATION_V1.md",
+      "bytes": 4526,
+      "phase_id": "GRANITE42_Q4KS_RUNTIME_VERIFICATION_V1",
+      "sha256": "7eb8c19e4f12b03091c9812145597f23b372187c0f5916d37f5f9c94ef0582c5"
+    },
+    {
+      "artifact": "console-advisor-exact-pins.xml",
+      "bytes": 118013,
+      "phase_id": "MINI10_GRANITE01",
+      "sha256": "eb5e1cbf178f203069000db088241a868a3e8ac337980b8cf100028215401f57"
+    },
+    {
+      "artifact": "granite-new-tests.xml",
+      "bytes": 7979,
+      "phase_id": "MINI10_GRANITE01",
+      "sha256": "c72a14739d083b4ced6ebc279363e396895005dcfee7f0d1e3e5c63b321ef700"
+    },
+    {
+      "artifact": "mini10-planner-benchmark.xml",
+      "bytes": 5254,
+      "phase_id": "MINI10_GRANITE01",
+      "sha256": "6180e4bbf523d421fb9dbc8f5dafe59a4116cecb67d0e6d5677ad4193b8edeed"
+    },
+    {
+      "artifact": "GRANITE02_DIAGNOSTIC_KEY_EXPOSURE_NOTE.md",
+      "bytes": 976,
+      "phase_id": "MINI10_GRANITE02",
+      "sha256": "21b2f25134f039be4af03204344fd212441899819c0c67d5969f70bd94683810"
+    },
+    {
+      "artifact": "GRANITE02_EXTERNAL_GUARD_AND_RUNNER_REPORT.md",
+      "bytes": 6147,
+      "phase_id": "MINI10_GRANITE02",
+      "sha256": "a21c2694d06387c6b4cd00f81a5f5d4fa501b0389ab95cad75ca3fab8a427b36"
+    },
+    {
+      "artifact": "GRANITE02_PREFLIGHT_HOLD_20261106.md",
+      "bytes": 5359,
+      "phase_id": "MINI10_GRANITE02",
+      "sha256": "a406d2ea808f1b8b49969587b11abda17f9da901b9d6ab2fe98c8ddab1551b86"
+    },
+    {
+      "artifact": "GRANITE02_V2_OFFLINE_REMEDIATION_REPORT.md",
+      "bytes": 6757,
+      "phase_id": "MINI10_GRANITE02",
+      "sha256": "5e1f1c0d4f87ccd941f594e0ac7251fa02b2056de6a51a00f0c37e933c8503fd"
+    },
+    {
+      "artifact": "GRANITE02_FUNCTIONAL_RUNNER_V1_REVIEW.md",
+      "bytes": 8368,
+      "phase_id": "MINI10_GRANITE02_FUNCTIONAL_RUNNER",
+      "sha256": "2b20fcc10568346b408f17c867f39cbe3235a4e44ffa3ba8db52fe96a2c2a2d8"
+    },
+    {
+      "artifact": "GRANITE02_FUNCTIONAL_TRIAL_V1_PROPOSAL.md",
+      "bytes": 7590,
+      "phase_id": "MINI10_GRANITE02_FUNCTIONAL_TRIAL",
+      "sha256": "c861ec7c419c4c6c0e4786f7f4f50fcd693d8ee0c66c3a2510b9959e203fec67"
+    },
+    {
+      "artifact": "GRANITE02_LIMITED_METADATA_ADMISSION_REVIEW.md",
+      "bytes": 6124,
+      "phase_id": "MINI10_GRANITE02_LIMITED_ADMISSION_V1",
+      "sha256": "71178f310ae07c5cf742aa935b19da6599a2c8b331ab453ab12ca63ac52c9eb0"
+    },
+    {
+      "artifact": "GRANITE02_PS51_COMPAT_V2_REVIEW.md",
+      "bytes": 4980,
+      "phase_id": "MINI10_GRANITE02_LIMITED_ADMISSION_V2",
+      "sha256": "f6e9c315796370cb89f7acd89bc8f1d658735e9261bb7195506f5720e34d5373"
+    },
+    {
+      "artifact": "GRANITE02_LIVE_ADAPTER_V1_REVIEW.md",
+      "bytes": 9392,
+      "phase_id": "MINI10_GRANITE02_LIVE_ADAPTER_V1",
+      "sha256": "b01fd7b5fb114424be6acf48c656a16020b8f47dedf6e7890c2380a7432b8f15"
+    },
+    {
+      "artifact": "GRANITE02_LISTENER_CAUSE_FOLLOWUP_V1.md",
+      "bytes": 2310,
+      "phase_id": "MINI10_GRANITE02_RECOVERY",
+      "sha256": "655a722428ae8f48c237f478a6475fd13e74ec3f8b22ae2ed8be77571ec16c66"
+    },
+    {
+      "artifact": "GRANITE02_LISTENER_RECOVERY_REPORT_V1.md",
+      "bytes": 2048,
+      "phase_id": "MINI10_GRANITE02_RECOVERY",
+      "sha256": "d1fed834753b18137d9048eff932808a48f0fd501b63ea58b04114eac80bcc15"
+    },
+    {
+      "artifact": "GRANITE02_PREFLIGHT_RECOVERY_REPORT.md",
+      "bytes": 5138,
+      "phase_id": "MINI10_GRANITE02_RECOVERY",
+      "sha256": "94619b72fa27187b6eaec70f9b2865f9a714e83fdafd4c0cd99c4c9bb0cbbcfd"
+    },
+    {
+      "artifact": "GRANITE02_SAFE_METADATA_ADMISSION_REVIEW.md",
+      "bytes": 6058,
+      "phase_id": "MINI10_GRANITE02_SAFE_METADATA_ADMISSION_V1",
+      "sha256": "821fed0cd70b5c2db7c92d7b4701672e23e41ce172a5e423ea815c9238055b57"
+    },
+    {
+      "artifact": "GRANITE02_LOCAL_FUNCTIONAL_TRIAL_RESULT_20261109.md",
+      "bytes": 5140,
+      "phase_id": "MINI10_GRANITE02_SIMPLIFIED_LOCAL_TRIAL",
+      "sha256": "a78d5424409d1ba194252e8bce38aaa1d0e3ec88060f9ba9071891e3f70ae7f4"
+    },
+    {
+      "artifact": "GRANITE02_SIMPLIFIED_LOCAL_TRIAL_HOLD.md",
+      "bytes": 3696,
+      "phase_id": "MINI10_GRANITE02_SIMPLIFIED_LOCAL_TRIAL",
+      "sha256": "94f532f17918ad16122a41e3364c6fadc0beed8e8634dabf08da6810cfa54f8d"
+    },
+    {
+      "artifact": "first_failure_note.md",
+      "bytes": 1728,
+      "phase_id": "MINI10_GRANITE02_SINGLE_SLOT_AMENDMENT_V1",
+      "sha256": "37ed7fafd7b25d1aae449261eb5639e2182e312eb9115b269352e48eb619bfc4"
+    },
+    {
+      "artifact": "GRANITE02_SINGLE_SLOT_OFFLINE_REPORT.md",
+      "bytes": 5642,
+      "phase_id": "MINI10_GRANITE02_SINGLE_SLOT_AMENDMENT_V1",
+      "sha256": "3494593983d91ae8a1db43f0d74419d8f0af9822e3ae2d35144742eb0a1dec8f"
+    }
+  ]
+}
