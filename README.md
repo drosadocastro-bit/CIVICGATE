@@ -2,46 +2,170 @@
 
 [![CI](https://github.com/drosadocastro-bit/CIVICGATE/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/drosadocastro-bit/CIVICGATE/actions/workflows/ci.yml?query=branch%3Amain)
 
-CivicGate is a local research prototype for governed MCP access to public US federal spending records. Its implemented Channel A uses MCP stdio, bounded tool discovery and a deterministic Gateway. An optional LangGraph workflow proposes a tool invocation through that same boundary. Models propose; the semantic Judge and safety signals advise; deterministic policy decides PERMIT, DENY or REVIEW_REQUIRED. Only a policy-issued AuthorityEnvelope and exact, single-use ExecutionBinding can authorize adapter dispatch.
+> CIVICGATE is not designed to make AI agents more powerful. It is designed to make their authority explicit, bounded, and verifiable.
 
-The hackathon demonstration path, **MINI07.1 / MINI07.2**, runs entirely with synthetic planner/Judge responses and a synthetic read-only backend through actual local MCP transport. It demonstrates authorization, execution observations and evidence verification; it does not establish real-model quality, live USAspending compatibility or production readiness. **Discovery does not imply authority.**
+## Executive summary
 
-Historical Milestone 2 work includes a local Granite planner path, external Luna/Sonnet judge adapters, configuration/secret providers, hybrid evaluation and a redacted trace viewer. These integration paths are documented separately from the offline demo; live execution remains HOLD. USAspending is the only government data source represented by the adapters. Governmental decisions, private-system access, payments and government writes are outside the allowed capability.
+CIVICGATE is a local research prototype for governed MCP tool use. An AI planner proposes an action; an advisory Judge assesses it; deterministic policy authorizes, denies or holds it. Only an exact, single-use ExecutionBinding permits backend dispatch. The interface exposes the decision, execution and evidence. The project demonstrates synthetic data access, public-data READ contracts and a separate synthetic review-state WRITE, while preserving failed experiments and known limits. **Discovery is not authority.**
 
-The CI badge tracks GitHub `main`; it does not verify uncommitted local evaluation artifacts.
+Documentation reviewed November 12, 2026 for the November 20 GSA submission. This is a **documentation candidate**, not deployment approval. Public main was verified at `ced2628e4e447bf8ee8de478ad1257c0a3a2a1f6`. The latest integrated chat candidate remains local and unpublished. No new LIVE execution is authorized by this README.
 
-## Architecture at a glance
+[![CIVICGATE Evidence Console displaying a recorded offline REVIEW_REQUIRED observation with zero bindings and zero backend operations](docs/images/civicgate-offline-review-required.png)](docs/images/civicgate-offline-review-required.png)
+
+*Recorded offline/synthetic UI from the local, unpublished C03 candidate. The right panel shows a previous `REVIEW_REQUIRED` observation: **0/0 bindings and zero backend operations**. The left form is an unsubmitted draft, not the request that produced that result. Planner and Judge responses were mocked; `CLOSED` means documentary custody, not human acceptance. Captured by the project owner from a read-only preview; no new execution was started for this image.*
+
+## Contents
+
+- [Problem and purpose](#problem-and-purpose)
+- [Capabilities and publication status](#capabilities-and-publication-status)
+- [Architecture — local Channel A](#architecture--local-channel-a)
+- [Deterministic governance](#deterministic-governance)
+- [Planners and advisory Judge](#planners-and-advisory-judge)
+- [Demonstration and reproduction](#demonstration-and-reproduction)
+- [Evaluation results](#evaluation-results)
+- [Security and known limitations](#security-and-known-limitations)
+- [Potential ROI](#potential-roi)
+- [Technical debt](#technical-debt)
+- [AI-assisted development and human oversight](#ai-assisted-development-and-human-oversight)
+- [Lessons learned](#lessons-learned)
+- [Submission artifacts](#submission-artifacts)
+- [Preserved implementation reference](#preserved-implementation-reference)
+
+## Problem and purpose
+
+Discovering an MCP tool does not establish permission to use it. A plausible model proposal can still express an unsupported scope, prohibited action or incomplete request. CIVICGATE makes those boundaries observable: original intent, typed inputs, host-selected owner, policy reasons, binding, backend outcome and result verification.
+
+The contribution is the separation and demonstration of those controls. A favorable Judge, HTTP 200 or a well-formed model response cannot create authority. The intended public-sector value is accountable access to public information and reviewable actions, not autonomous government decision-making or proven operational savings.
+
+## Capabilities and publication status
+
+GSA asks entrants to select **one** of Dataset Access, Service Read or Service Write. CIVICGATE voluntarily developed bounded examples of all three; that is a project choice, not an additional contest requirement. See the [official-criteria gap assessment](docs/GSA_EVALUATION_GAP_MATRIX.md).
+
+| Capability | Implemented and evidenced scope | Publication / boundary |
+|---|---|---|
+| DATA-01 | 40 immutable fictional awards; separate SQL reference; host-selected FAA/FY2026/PR synthetic contract | Published evaluation components. FAA awarding subtier under DOT, PR **place of performance**, synthetic award-date semantics. Full FAA contract remains blocked. |
+| Service READ | `find_federal_awards`, `get_federal_award`, bounded recipient resolution and summary in the original READ owner | Published MCP/Gateway implementation. Synthetic success is distinct from public API success. |
+| USAspending V2 integration | One governed search received HTTP 200 but failed result validation; no validated records released | Local integration/forensic candidate, **LIVE HOLD**. Strict offline correction is not yet a successful LIVE result. |
+| WRITE-01 | Update fictional award review status and append a note in a separate local SQLite overlay; exact host approval, expected version and idempotency | Published experimental namespace, synthetic-only. Original dataset unchanged; no real payment, award decision or government write. |
+| Evidence Console and MINI10 Chat | FastAPI views, explicit synthetic actions, evidence inspection, mock Advisor and bounded READ chat | Published baseline. GET refresh does not grant execution authority; original MINI10 Chat does not enable WRITE. |
+| Latest guided chat composition | Existing Console + actual A2/MCP with DATA/READ/WRITE owners, provider parsers under mocks and six observed synthetic scenarios | **Local, unpublished CHAT-COMPOSITION-CLOSURE-03**. Its governed WRITE UI is a separate candidate, not silently enabled in published MINI10. |
+
+Dataset access and READ are distinct from a review-state mutation. An awarding agency is distinct from a funding agency; reported award amounts are distinct from fiscal-year obligations, outlays or physical performance. No FAA-to-DOT scope widening is permitted. [DATA-01](docs/MINI09_DATA01_EVALUATION_REPORT.md), [FAA host boundary](docs/MINI09_R023_TRUSTED_HOST_COMPOSITION.md), [WRITE-01](docs/WRITE01_SYNTHETIC_REVIEW_V1.md).
+
+## Architecture — local Channel A
 
 ```mermaid
 flowchart TB
-    HOST["Local MCP host / client"]
-    GRAPH["Optional LangGraph<br/>intake - discovery - planner - gateway - result"]
-    MCP["Channel A: local MCP stdio"]
-    DISC["Bounded discovery<br/>four tools, metadata and schemas"]
-    GW["Deterministic Gateway<br/>PERMIT / DENY / REVIEW_REQUIRED"]
-    JUDGE["Semantic Judge interface<br/>synthetic in offline demo"]
-    BIND["ExecutionBinding<br/>verified and consumed before dispatch"]
-    READ["Read-only adapter<br/>MockTransport in offline demo"]
-    CHECK["Post-result validation<br/>structured response and provenance"]
-    EVIDENCE["Captured evidence<br/>policy, binding, execution and result"]
-
-    HOST --> MCP
-    HOST --> GRAPH
-    GRAPH -->|"MCP client"| MCP
-    MCP -->|"tools/list"| DISC
-    MCP -->|"tools/call"| GW
-    JUDGE -.->|"advisory only"| GW
+    UI["Existing local FastAPI Console / MCP host"]
+    OWNER["Trusted host selects contract and owner"]
+    GRAPH["Optional LangGraph A2<br/>intake - discovery - planner - gateway - result"]
+    MCP["MCP SDK stdio / JSON-RPC<br/>bounded discovery and typed invocation"]
+    GW["Deterministic Gateway / selected authority<br/>PERMIT / DENY / REVIEW_REQUIRED"]
+    JUDGE["Advisory Judge<br/>mock in current integrated rehearsal"]
+    BIND["AuthorityEnvelope + exact single-use ExecutionBinding"]
+    DATA["Authorized DATA / READ adapter<br/>synthetic in rehearsal"]
+    WRITE["Dedicated WRITE-01 adapter<br/>synthetic SQLite review state only"]
+    CHECK["Post-result validation"]
+    EVIDENCE["Evidence Console<br/>policy, binding, dispatch, result, custody"]
+    UI --> OWNER
+    OWNER --> GRAPH
+    OWNER -->|"direct governed client"| MCP
+    GRAPH --> MCP
+    MCP --> GW
+    JUDGE -.->|"advises; cannot authorize"| GW
     GW -->|"PERMIT only"| BIND
-    BIND --> READ
-    READ --> CHECK
+    BIND -->|"selected READ scope"| DATA
+    BIND -->|"separate exact WRITE approval"| WRITE
+    DATA --> CHECK
+    WRITE --> CHECK
+    CHECK --> EVIDENCE
     GW --> EVIDENCE
     BIND --> EVIDENCE
-    CHECK --> EVIDENCE
 ```
 
-**Reading guide:** Direct MCP clients and optional LangGraph orchestration enter the same local Gateway. Discovery grants no execution authority. Pre-dispatch DENY or REVIEW_REQUIRED produces no binding or backend dispatch. The Judge cannot override a deterministic hold or issue its own binding. The local host and installed code are trusted; `user_request` is not independently authenticated human intent.
+The diagram shows the current **local composition design**, combining published owners with the unpublished integrated UI path. One host-selected owner governs an invocation; it is not an agent-selected route or a recursive multi-tool loop. The original READ path discovers four tools; dedicated WRITE has its own bounded contract. Direct MCP calls still enter the governed owner. The local host and installed code remain trusted assumptions.
 
-**Current scope:** Channel A is a local stdio implementation. MINI08.1/08.2 add an optional local FastAPI Evidence Console, explicit synthetic demonstration requests and a separately bounded mock Evidence Advisor. They do not add execution authority. The TDLS Write research concept remains unimplemented. The original MINI08-CP1 attempt was held because its historical observer did not recognize the current Gateway policy wrapper. CP1.1 repaired that observational compatibility in a versioned candidate; CP1.2 checkpoints the restored local synthetic integration. Earlier results retain their original source identities and are not relabeled as new execution evidence.
+Databricks/Channel B is historical and deferred, not an active branch or automatic failover. Preserve the [B2b evidence matrix](docs/research/B2B_EVIDENCE_MATRIX.md), [open risks](docs/research/B2B_OPEN_RISKS_AND_BLOCKERS.md) and [Genie-reported observations](docs/research/B2B_MVP_006I_LOG_ACCESS_AND_CUSTODY_ADDENDUM.md). The separate TDLS Write research concept is not an implemented CIVICGATE component; WRITE-01 is the specifically documented synthetic prototype.
+
+## Deterministic governance
+
+PERMIT can issue a binding only for the exact authorized invocation. The binding must be consumed before adapter dispatch. Pre-dispatch DENY and REVIEW_REQUIRED produce zero authorized backend dispatches. Post-result validation can still withhold an invalid result after PERMIT; the public API failure demonstrated this distinction.
+
+The host fixes the authorization context before discovery. A planner cannot choose a weaker owner, supply approval or convert a favorable Judge signal into execution permission. Evidence custody is separate: **CLOSED means documentary closure, not human acceptance**. [Authority model](docs/AUTHORITY_MODEL.md), [execution boundary](docs/CHANNEL_A1_EXECUTION_BOUNDARY.md).
+
+## Planners and advisory Judge
+
+| Component | Verified role and result class | Current limit |
+|---|---|---|
+| IBM Granite | Real local planner experiments; latest 4.2 **Q4_K_S** diagnostic: exact planner **1/2**, with two authorized synthetic dispatches | Metadata-correlated local admission; not a general accuracy/hardware claim or new inference permission |
+| NVIDIA Nemotron | Historical native-tool planner experiment: exact **1/2**; G01 held by Gateway, G02 ambiguous before Gateway | Two-attempt budget exhausted. UI evidence is historical; no new request authorized |
+| Luna | Advisory Judge adapters and separate historical J3/J4 direct-assessment runs | Current integrated rehearsal uses mocks. Independent semantic calibration remains unmeasured |
+| Claude Evidence Advisor | Separate read-only evidence analysis capability, mock-verified in the published Console | It is not the policy Judge and cannot issue bindings, call MCP or close custody. No real Claude analysis is claimed here |
+
+The newer integrated mock composition does not prove a real Granite/Nemotron + Luna session. Current provider access and a new experimental budget require separate admission and human approval. [Full evaluation summary](docs/GSA_EVALUATION_SUMMARY.md).
+
+## Demonstration and reproduction
+
+Use a bounded narrative: **PERMIT → DENY → REVIEW_REQUIRED**. Show the original question, selected tool/arguments, advisory signal where invoked, policy reason, binding counts, actual dispatch or its absence, result validation and custody. A permissive mock Judge does not remove REVIEW_REQUIRED.
+
+For the **published synthetic READ baseline**, follow [MINI07.2/CP1.2 three-case evidence and instructions](docs/GSA_THREE_CASE_EVALUATION.md), [interactive Console](docs/GSA_MINI081_INTERACTIVE_SYNTHETIC_E2E.md) and [MINI10 READ Chat](docs/MINI10_GOVERNED_CHAT.md). Use their stated worker/Console environments and fresh private output directories. Source-pinned historical tests must retain their own mapped sources; do not assume all historical suites run against arbitrary new files.
+
+For the **unpublished C03 integrated rehearsal**, the private package records six genuine offline observations: DATA, READ, synthetic WRITE, DENY, REVIEW and separately authorized overlay READ. Supported prompts are guided examples; edited unsupported intent is held. Its exact package and reproduction path need separate publication review. Genuine captured screenshots provide a labeled fallback; no approved public demo URL is available. Do not present captured evidence as fresh inference.
+
+## Evaluation results
+
+| Evidence class | Preserved observation | What it establishes |
+|---|---|---|
+| Published MINI07.1 | Three successful synthetic decision scenarios, reported separately from historical suites | Actual MCP/Gateway demonstration with scripted planner/Judge |
+| Latest local C03 | Six genuine offline browser observations; worker 44 PASS, affected final profile 22 PASS, UI 4 PASS, as separate overlapping selections | Tested local wiring and custody; no real-model quality claim |
+| Granite 4.2 diagnostic | Planner exact **1/2**; **2 PERMIT, 2 consumed bindings, 2 synthetic dispatches** | Local model integration and separate governance observations |
+| NVIDIA G01/G02 | Planner exact **1/2**; G01 REVIEW_REQUIRED / REQUEST_INTENT_UNRESOLVED; G02 NVIDIA_AMBIGUOUS_RESPONSE; zero dispatch | Real bounded cloud responses, not successful execution of both tasks |
+| USAspending smoke | HTTP 200 / 1,988 bytes, PERMIT/binding 1/1, then FAILED_VALIDATION → STOP; original **9 PASS / 1 FAIL** retained | Invalid result withholding; exact original response cause remains UNKNOWN |
+
+See [methodology, latency/token measurements, failures and limitations](docs/GSA_EVALUATION_SUMMARY.md) and [source identities](docs/GSA_EVIDENCE_REGISTER.md). HTTP 200 is not planner success. Test counts are not independent semantic samples and overlapping selections must not be added. The judge-facing summary does not rescore frozen oracles.
+
+## Security and known limitations
+
+- **Durable STOP: PARTIAL.** No production, power-loss, hostile-host or distributed exactly-once certification.
+- **USAspending LIVE: HOLD.** New inference, production WRITE and deployment remain unauthorized by this closeout. Historical one-time approvals are not ongoing execution permission.
+- The **54 full FAA definitions remain BLOCKED/SKIP**. The scoped synthetic contract does not establish new-awards-only or fiscal-year transaction semantics.
+- Independent golden-reference acceptance is **PENDING**; Judge calibration is **NOT_YET_MEASURED**. Holdout remains reserved and unexecuted; historical metadata exposure is disclosed.
+- The current integrated candidate is unpublished and has only guided mock-provider observations. Known historical DATA-01, platform and timer failures remain recorded.
+- SecretProvider/DPAPI is explicitly injected. Encrypted storage stays outside the repository; decrypted keys may exist in active provider memory. [Configuration details](#configuration-and-windows-credential-storage) remain specific to the implementation.
+
+## Potential ROI
+
+The potential value is less repeated integration and lookup work, clearer authorization review and faster diagnosis of withheld operations. Those benefits are not measured savings. [ROI methodology and sensitivity table](docs/POTENTIAL_VALUE_AND_ROI.md) show all assumptions, costs, a negative case and break-even case. No FAA productivity improvement or validated financial return is claimed.
+
+## Technical debt
+
+The [versioned debt register](docs/TECHNICAL_DEBT.md) separates submission work, accepted limitations and later research. It reconciles earlier risk records instead of rewriting failures or quietly treating HOLDs as closed.
+
+## AI-assisted development and human oversight
+
+**Daniel Rosado Castro** owns research direction, scope, authorization and final accountability. **Codex** contributed implementation, tests, repairs and evidence preparation; **GPT-6** contributed technical review and research guidance. **Vela Meta Muse** contributed repository review and Channel B work; **Genie Code** was the Channel B Databricks builder. The [collaboration record](docs/AI_ASSISTED_DEVELOPMENT.md) distinguishes owner-confirmed attribution, tool-executed evidence and documented limits.
+
+**Human direction → AI implementation → testing → AI-assisted review → corrective work → human acceptance.** AI review is advisory, not independently accredited human auditing. **Builder ≠ Reviewer ≠ Authority.** No agency or vendor endorsement is implied.
+
+## Lessons learned
+
+Failed integrations taught the project to distinguish model structure, semantic correctness, authorization and verified execution; preserve uncertain sends; and use versioned fixes without changing original experiments. [Granite lessons](docs/GRANITE_PLANNER_LESSONS_LEARNED.md), [FAA scope findings](docs/MINI09_R021_DISPOSITION_AND_SCOPE_PROPOSAL.md) and the [evaluation summary](docs/GSA_EVALUATION_SUMMARY.md) make those findings part of the research contribution.
+
+## Submission artifacts
+
+- **Repository:** published MCP implementation plus this unmerged documentation candidate; local C03 code is a separately reviewed publication decision.
+- **Presentation:** earlier deck exists; current final deck remains to be prepared/reviewed against the selected demo.
+- **Evaluation:** [current synthesis](docs/GSA_EVALUATION_SUMMARY.md) and linked historical reports; final submission packaging remains pending.
+- **Readiness:** [official-criteria gap matrix](docs/GSA_EVALUATION_GAP_MATRIX.md) and [prioritized checklist](docs/GSA_SUBMISSION_CHECKLIST.md).
+
+The official page requires documented code, a presentation with demonstration and evaluation documentation. A separate video-file requirement was not established. No public demo link is invented. Documentation readiness does not mean GSA acceptance or operational approval.
+
+## Preserved implementation reference
+
+The expandable reference retains existing setup, diagrams and technical links. Milestone-specific status paragraphs and commands describe their original scope. They are not the current capability inventory above, fresh regression results or permission to execute a model/API. Older reports may contain local-only artifact references or reported observations that are not redistributed.
+
+<details>
+<summary>Open historical milestones, local setup, MCP contracts and enforcement details</summary>
 
 ## MINI08-CP1: console consolidation and Claude preflight
 
@@ -64,7 +188,7 @@ python -B scripts/serve_evidence_console.py --catalog docs/examples/evidence_con
 
 Open the loopback address printed by the server. Explicitly select PERMIT, DENY and REVIEW_REQUIRED; Analyze Evidence is a separate mock-only action. GET viewing/refreshing does not execute a demonstration. Keep unsuccessful or uncertain attempts; there is no automatic retry or fallback.
 
-**Static/CI limitation:** strict `mypy src` retains 160 classified diagnostics in five optional console files. This is not a Mypy PASS or a green-CI claim. The unchanged standard CI runs Mypy before tests and does not install the separate optional console environment. Research checkpoint publication does not resolve those limitations or certify production readiness. CP1/CP1.1 status documents above record their historical gates, not a new execution authorization.
+**Historical CP1 static finding:** that candidate recorded 160 Mypy diagnostics in five optional console files. Its original report remains unchanged. Later compatibility/type and CI repairs belong to separate candidates; the [MINI10 acceptance record](evals/acceptances/mini10_human_acceptance_20261105.md) records its own passing checks and residual failures. The historical count is not a current-main diagnostic. This documentation review did not rerun application CI; verify the exact submission SHA before publication.
 
 ## MINI07.1: offline synthetic hackathon demonstration
 
@@ -281,11 +405,11 @@ Databricks / Channel B, B2a HTTP transport and B2b PostgreSQL/fencing are separa
 .\.venv\Scripts\pip-audit
 ```
 
-No live check is part of MINI07.1 or the README refresh. The following historical research commands can contact a model or the public API and require separate authorization while live execution is HOLD:
+No live check is part of MINI07.1 or this documentation closeout. The following historical research commands can contact a model or the public API and require separate authorization while live execution is HOLD:
 
 ```powershell
 # Reference only: local Granite inference, not the synthetic demo.
-.\.venv\Scripts\python scripts/run_granite_lmstudio_benchmark.py --model ibm/granite-3.1-8b
+# .\.venv\Scripts\python scripts/run_granite_lmstudio_benchmark.py --model ibm/granite-3.1-8b
 # After separately starting a local llama.cpp Vulkan server:
 # .\.venv\Scripts\python scripts/run_granite_llama_cpp_benchmark.py --model <local-gguf-path>
 # For Granite 4.2's reasoning-aware chat template, add --disable-thinking.
@@ -302,4 +426,6 @@ Milestone 2 details: [MILESTONE_2](docs/MILESTONE_2.md), [Granite benchmark](doc
 
 CI defines Ubuntu/Windows Python 3.11/3.12 checks and a Linux Docker smoke. Historical GitHub Actions run `35294741095` passed all five jobs, including M2 benchmark generation, dependency audit and the hardened container smoke. It is separate from the A1/A2 findings and MINI07.1, not current verification of this dirty local candidate. Docker is stdio-only, runs as non-root, and exposes no port. Build with `docker build -t civicgate:test .`; use `python scripts/container_smoke.py` for protocol verification. The local Docker daemon was unavailable during that build; no fresh local Docker verification is claimed here.
 
-This is not production-ready. PRAETOR served only as a read-only mechanism reference; none of its research results validate CivicGate. Public API responses, model traffic and credentials are ignored by default; reviewed sanitized M2 benchmark artifacts are the exception. No extra domain or write capability is included.
+This is not production-ready. PRAETOR served only as a read-only mechanism reference; none of its research results validate CivicGate. Public API responses, model traffic and credentials are ignored by default; reviewed sanitized M2 benchmark artifacts are the exception. That original READ-only milestone did not include WRITE. The subsequently published WRITE-01 candidate adds a separately authorized synthetic review-state capability; it does not add government-system writes or change the original READ policy.
+
+</details>
