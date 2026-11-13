@@ -8,7 +8,7 @@
 
 CIVICGATE is a local research prototype for governed MCP tool use. An AI planner proposes an action; an advisory Judge assesses it; deterministic policy authorizes, denies or holds it. Only an exact, single-use ExecutionBinding permits backend dispatch. The interface exposes the decision, execution and evidence. The project demonstrates synthetic data access, public-data READ contracts and a separate synthetic review-state WRITE, while preserving failed experiments and known limits. **Discovery is not authority.**
 
-Documentation reviewed November 12, 2026 for the November 20 GSA submission. This is a **documentation candidate**, not deployment approval. Public main was verified at `ced2628e4e447bf8ee8de478ad1257c0a3a2a1f6`. The latest integrated chat candidate remains local and unpublished. No new LIVE execution is authorized by this README.
+Documentation reviewed November 12, 2026 for the November 20 GSA submission. This is a **documentation candidate**, not deployment approval. As of November 13, 2026, remote `main` was verified at `732aae05e2a627352a7a3e88f30cc1e126410b20`; this is a dated baseline reference, not a claim about the current HEAD. The latest integrated chat candidate remains local and unpublished. No new LIVE execution is authorized by this README.
 
 [![CIVICGATE Evidence Console displaying a recorded offline REVIEW_REQUIRED observation with zero bindings and zero backend operations](docs/images/civicgate-offline-review-required.png)](docs/images/civicgate-offline-review-required.png)
 
