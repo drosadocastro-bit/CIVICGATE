@@ -17,6 +17,7 @@ Documentation reviewed November 12, 2026 for the November 20 GSA submission. Thi
 ## Contents
 
 - [Problem and purpose](#problem-and-purpose)
+- [MCP server and tools](#mcp)
 - [Capabilities and publication status](#capabilities-and-publication-status)
 - [Architecture — local Channel A](#architecture--local-channel-a)
 - [Deterministic governance](#deterministic-governance)
@@ -36,6 +37,35 @@ Documentation reviewed November 12, 2026 for the November 20 GSA submission. Thi
 Discovering an MCP tool does not establish permission to use it. A plausible model proposal can still express an unsupported scope, prohibited action or incomplete request. CIVICGATE makes those boundaries observable: original intent, typed inputs, host-selected owner, policy reasons, binding, backend outcome and result verification.
 
 The contribution is the separation and demonstration of those controls. A favorable Judge, HTTP 200 or a well-formed model response cannot create authority. The intended public-sector value is accountable access to public information and reviewable actions, not autonomous government decision-making or proven operational savings.
+
+## MCP
+
+Run `.\.venv\Scripts\civicgate-mcp`, or configure an MCP host with:
+
+```json
+{
+  "mcpServers": {
+    "civicgate": {
+      "command": "python",
+      "args": ["-m", "civicgate.mcp.server"],
+      "env": {"CIVICGATE_AUDIT_PATH": "audit/trace.jsonl"}
+    }
+  }
+}
+```
+
+Pass model configuration in the host environment to enable semantic assessment. Missing configuration yields REVIEW_REQUIRED. Each tool takes `user_request` (the original request) and a validated `query` object. Clients cannot submit trusted judge signals, capability claims or policy decisions. Protocol-invalid requests return MCP `isError`; valid tool invocations return the common structured envelope.
+
+| Tool | Goal |
+| --- | --- |
+| `find_federal_awards` | Retrieve a bounded award page |
+| `get_federal_award` | Look up a known internal or generated award ID |
+| `resolve_federal_recipient` | Present public identity candidates for clarification |
+| `summarize_federal_spending` | Sum award amounts from one authorized returned page |
+
+Limits: up to 100 awards, 25 recipient candidates, one page, date interval at most 367 calendar days. Searches require a recipient, agency or state filter. `state_code` means **place of performance**, not recipient address. Defaults cover contracts; selected non-loan assistance types are supported. Loans and IDVs are intentionally excluded from this first amount-aggregation contract.
+
+Award totals are not fiscal-year transaction spending. A date filter finds matching awards; their award amounts may cover multiple years. Truncation is explicit and summaries never claim a population total. Name matches do not establish legal identity.
 
 ## Capabilities and publication status
 
@@ -85,7 +115,7 @@ flowchart TB
 
 The diagram shows the current **local composition design**, combining published owners with the unpublished integrated UI path. One host-selected owner governs an invocation; it is not an agent-selected route or a recursive multi-tool loop. The original READ path discovers four tools; dedicated WRITE has its own bounded contract. Direct MCP calls still enter the governed owner. The local host and installed code remain trusted assumptions.
 
-Databricks/Channel B is historical and deferred, not an active branch or automatic failover. Preserve the [B2b evidence matrix](docs/research/B2B_EVIDENCE_MATRIX.md), [open risks](docs/research/B2B_OPEN_RISKS_AND_BLOCKERS.md) and [Genie-reported observations](docs/research/B2B_MVP_006I_LOG_ACCESS_AND_CUSTODY_ADDENDUM.md). The separate TDLS Write research concept is not an implemented CIVICGATE component; WRITE-01 is the specifically documented synthetic prototype.
+Databricks/Channel B is historical and deferred, not an active branch or automatic failover. Preserve the [B2b evidence matrix](docs/research/B2B_EVIDENCE_MATRIX.md), [open risks](docs/research/B2B_OPEN_RISKS_AND_BLOCKERS.md) and [Genie-reported observations](docs/research/B2B_MVP_006I_LOG_ACCESS_AND_CUSTODY_ADDENDUM.md).
 
 ## Deterministic governance
 
@@ -143,7 +173,7 @@ The [versioned debt register](docs/TECHNICAL_DEBT.md) separates submission work,
 
 ## AI-assisted development and human oversight
 
-**Daniel Rosado Castro** owns research direction, scope, authorization and final accountability. **Codex** contributed implementation, tests, repairs and evidence preparation; **GPT-6** contributed technical review and research guidance. **Vela Meta Muse** contributed repository review and Channel B work; **Genie Code** was the Channel B Databricks builder. The [collaboration record](docs/AI_ASSISTED_DEVELOPMENT.md) distinguishes owner-confirmed attribution, tool-executed evidence and documented limits.
+**Daniel Rosado Castro** owns research direction, scope, authorization and final accountability. **Codex** contributed implementation, tests, repairs and evidence preparation; **Nova (GPT-6 Sol)** contributed technical review and research guidance. **Vela (Muse)** contributed repository review and Channel B work; **Genie Code** was the Channel B Databricks builder. The [collaboration record](docs/AI_ASSISTED_DEVELOPMENT.md) distinguishes owner-confirmed attribution, tool-executed evidence and documented limits.
 
 **Human direction → AI implementation → testing → AI-assisted review → corrective work → human acceptance.** AI review is advisory, not independently accredited human auditing. **Builder ≠ Reviewer ≠ Authority.** No agency or vendor endorsement is implied.
 
@@ -283,35 +313,6 @@ Granite uses the local LM Studio chat-completions endpoint and strict `Proposal`
 - Provider-specific judge entries are `CIVICGATE_OPENAI_JUDGE_API_KEY` and `CIVICGATE_ANTHROPIC_JUDGE_API_KEY`. Provider configuration determines credential selection.
 - DPAPI is explicitly injected through `SecretProvider`; default entry points use process-environment credentials. Core governance does not depend on DPAPI.
 - DPAPI protects secrets at rest. Runtime settings and provider instances retain decrypted keys in memory while in use. Do not serialize or log these objects or authentication headers. Model telemetry excludes credential fields, and audit traces apply credential redaction.
-
-## MCP
-
-Run `.\.venv\Scripts\civicgate-mcp`, or configure an MCP host with:
-
-```json
-{
-  "mcpServers": {
-    "civicgate": {
-      "command": "python",
-      "args": ["-m", "civicgate.mcp.server"],
-      "env": {"CIVICGATE_AUDIT_PATH": "audit/trace.jsonl"}
-    }
-  }
-}
-```
-
-Pass model configuration in the host environment to enable semantic assessment. Missing configuration yields REVIEW_REQUIRED. Each tool takes `user_request` (the original request) and a validated `query` object. Clients cannot submit trusted judge signals, capability claims or policy decisions. Protocol-invalid requests return MCP `isError`; valid tool invocations return the common structured envelope.
-
-| Tool | Goal |
-| --- | --- |
-| `find_federal_awards` | Retrieve a bounded award page |
-| `get_federal_award` | Look up a known internal or generated award ID |
-| `resolve_federal_recipient` | Present public identity candidates for clarification |
-| `summarize_federal_spending` | Sum award amounts from one authorized returned page |
-
-Limits: up to 100 awards, 25 recipient candidates, one page, date interval at most 367 calendar days. Searches require a recipient, agency or state filter. `state_code` means **place of performance**, not recipient address. Defaults cover contracts; selected non-loan assistance types are supported. Loans and IDVs are intentionally excluded from this first amount-aggregation contract.
-
-Award totals are not fiscal-year transaction spending. A date filter finds matching awards; their award amounts may cover multiple years. Truncation is explicit and summaries never claim a population total. Name matches do not establish legal identity.
 
 ## Channel A1/A2: reviewed local development candidate
 
