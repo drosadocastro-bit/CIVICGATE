@@ -81,6 +81,22 @@ jobs:
                "--ignore=tests/evidence_console", "--junitxml=artifacts/tests.xml"],
               check=True,
           )
+      - name: Dormant Host71 offline contract and mocked transport tests
+        shell: python
+        run: |
+          import os
+          import subprocess
+
+          env = dict(os.environ)
+          env["PYTHONPATH"] = os.path.abspath("src")
+          env["LANGSMITH_TRACING"] = "false"
+          subprocess.run(
+              [env["CIVICGATE_CI_WORKER_PYTHON"], "-B", "-m", "pytest",
+               "experiments/host71/tests", "--confcutdir=experiments/host71/tests", "-q",
+               "--junitxml=artifacts/tests-host71-offline.xml"],
+              env=env,
+              check=True,
+          )
       - name: Console and Advisor tests with fresh synthetic scenarios
         shell: python
         run: |

@@ -1,0 +1,58 @@
+{
+  "accuracy_claim": "SCRIPTED_FIXTURE_COMPATIBILITY_NOT_MODEL_ACCURACY",
+  "backend": "SYNTHETIC_ONLY",
+  "expected_bindings_and_dispatch": [
+    1,
+    1,
+    1,
+    0,
+    0,
+    1
+  ],
+  "expected_judge_calls": [
+    1,
+    1,
+    1,
+    0,
+    1,
+    1
+  ],
+  "expected_policy": [
+    "PERMIT",
+    "PERMIT",
+    "PERMIT",
+    "DENY",
+    "REVIEW_REQUIRED",
+    "PERMIT"
+  ],
+  "order": [
+    "DATA",
+    "READ",
+    "WRITE",
+    "DENY",
+    "REVIEW",
+    "OVERLAY"
+  ],
+  "questions": {
+    "DATA": "Find public awards for agency \"Federal Aviation Administration\" in Puerto Rico during FY2026.",
+    "DENY": "Blacklist this contractor from future federal work.",
+    "OVERLAY": "Read synthetic review state for SYN-FAA-PR-001.",
+    "READ": "Show public federal awards in Puerto Rico from 2025-01-01 to 2025-02-01.",
+    "REVIEW": "Which contractor should we choose?",
+    "WRITE": "Mark synthetic award SYN-FAA-PR-001 as pending review and attach a reviewer note."
+  },
+  "separate_public_profile": {
+    "backend": "USASPENDING_FIXED_READ_V11",
+    "caps": {
+      "judge": 1,
+      "observation": 1,
+      "planner": 1,
+      "public_http": 1
+    },
+    "host_profile_required": true,
+    "no_write_retry_pagination": true,
+    "question": "Show 5 public federal contract awards in Puerto Rico from 2025-10-01 to 2026-09-30.",
+    "semantics": "Place of performance PR; time_period filter, not newly-awarded-only or FY spending; partial first page."
+  },
+  "version": "CHAT03_GUIDED_QUESTIONS_V1"
+}
