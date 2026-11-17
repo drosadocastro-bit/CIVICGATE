@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/drosadocastro-bit/CIVICGATE/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/drosadocastro-bit/CIVICGATE/actions/workflows/ci.yml?query=branch%3Amain)
 
-> CIVICGATE is not designed to make AI agents more powerful. It is designed to make their authority explicit, bounded, and verifiable.
+> Capability does not create authority.
 
 ## Executive summary
 
