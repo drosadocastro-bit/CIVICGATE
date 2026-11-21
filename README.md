@@ -4,6 +4,8 @@
 
 > Capability does not create authority.
 
+This is the ongoing technical development repository for CivicGate. For hackathon review, see the [Official GSA MCP Hackathon submission](https://github.com/gsa-mcp-hackathon/civicgate-nova-labs-research).
+
 ## Executive summary
 
 CIVICGATE is a local research prototype for governed MCP tool use. An AI planner proposes an action; an advisory Judge assesses it; deterministic policy authorizes, denies or holds it. Only an exact, single-use ExecutionBinding permits backend dispatch. The interface exposes the decision, execution and evidence. The project demonstrates synthetic data access, public-data READ contracts and a separate synthetic review-state WRITE, while preserving failed experiments and known limits. **Discovery is not authority.**
