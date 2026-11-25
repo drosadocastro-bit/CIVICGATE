@@ -1,0 +1,462 @@
+{
+  "baseline": "1ed15bb67afa82debddd843adc9199eb69cd62ee",
+  "contract": "MCP_TOOL_METADATA_V2",
+  "source": "Public projection of locally reviewed MCP-ANNOTATIONS-03 SDK capture matrix; private absolute capture paths removed",
+  "registration_count": 22,
+  "distinct_tool_count": 6,
+  "changed_tool_hint_fields": 17,
+  "rows": [
+    {
+      "profile": "primary-stdio",
+      "tool": "find_federal_awards",
+      "transport": "stdio",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "changed_fields": [],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "primary-stdio",
+      "tool": "get_federal_award",
+      "transport": "stdio",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "changed_fields": [],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "primary-stdio",
+      "tool": "resolve_federal_recipient",
+      "transport": "stdio",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "changed_fields": [],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "primary-stdio",
+      "tool": "summarize_federal_spending",
+      "transport": "stdio",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "changed_fields": [],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "b2a-http",
+      "tool": "find_federal_awards",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "b2a-http",
+      "tool": "get_federal_award",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "b2a-http",
+      "tool": "resolve_federal_recipient",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "b2a-http",
+      "tool": "summarize_federal_spending",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "faa-c1-http",
+      "tool": "find_federal_awards",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "faa-c1-http",
+      "tool": "get_federal_award",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "faa-c1-http",
+      "tool": "resolve_federal_recipient",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "faa-c1-http",
+      "tool": "summarize_federal_spending",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "cloud-discovery",
+      "tool": "find_federal_awards",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "cloud-discovery",
+      "tool": "get_federal_award",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "cloud-discovery",
+      "tool": "resolve_federal_recipient",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "cloud-discovery",
+      "tool": "summarize_federal_spending",
+      "transport": "loopback HTTP",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "r022-faa-stdio",
+      "tool": "find_federal_awards",
+      "transport": "stdio",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "r022-faa-stdio",
+      "tool": "get_federal_award",
+      "transport": "stdio",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "r022-faa-stdio",
+      "tool": "resolve_federal_recipient",
+      "transport": "stdio",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "r022-faa-stdio",
+      "tool": "summarize_federal_spending",
+      "transport": "stdio",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "openWorldHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "write01-stdio",
+      "tool": "update_synthetic_award_review",
+      "transport": "stdio",
+      "legacy_sdk": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "opt_in_v2": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "changed_fields": [
+        "destructiveHint"
+      ],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    },
+    {
+      "profile": "write01-stdio",
+      "tool": "get_synthetic_award_review_v1",
+      "transport": "stdio",
+      "legacy_sdk": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "opt_in_v2": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "changed_fields": [],
+      "capture": "Original raw local transport captures retained in private review package; not published"
+    }
+  ]
+}
