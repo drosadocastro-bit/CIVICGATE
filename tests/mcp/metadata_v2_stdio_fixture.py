@@ -33,6 +33,7 @@ def main():
     )
     parser.add_argument("--config", type=Path, required=True)
     args = parser.parse_args()
+
     async def run_guarded() -> None:
         # AnyIO creates the Windows 3.11 Proactor self-pipe during event-loop
         # bootstrap. Install the frozen audit guards immediately afterward,
