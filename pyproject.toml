@@ -16,6 +16,7 @@ dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.12", "mypy>=1.15", "pip
 [project.scripts]
 civicgate = "civicgate.cli:main"
 civicgate-mcp = "civicgate.mcp.server:main"
+civicgate-mcp-v2 = "civicgate.mcp.metadata_v2_host:main"
 civicgate-trace = "civicgate.audit.viewer:main"
 
 [tool.pytest.ini_options]
