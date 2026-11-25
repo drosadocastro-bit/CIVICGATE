@@ -178,6 +178,26 @@ Local review recorded **2,798 PASS / 1 SKIP** for the broader core selection, **
 
 **Badge policy:** No M8ven badge is claimed yet. A future badge may be shown only with a corresponding current external assessment, clearly labeled as an external directory signal—not as a government endorsement, a production authorization, or proof of comprehensive AI safety. This work is a **post-submission research correction**, not a retroactive rewrite of the original hackathon evidence.
 
+### Running the opt-in metadata V2 host (personal repository only)
+
+The versioned `MCP_TOOL_METADATA_V2` implementation can now be **started locally via a separate STDIO entry point**. This does not modify the existing `civicgate-mcp` command or automatically activate V2 in any deployed host. GitHub stores code and CI evidence; it does **not** keep this MCP server running.
+
+With an installed, reviewed Python environment (MCP SDK pinned to 1.30.0), start a trusted host with one of these explicit profiles:
+
+```powershell
+# Existing governed public-data READ server: hints remain open-world.
+python -B -m civicgate.mcp.metadata_v2_host --profile public-read
+
+# Separate synthetic WRITE-01 host: use ONLY an already prepared, private
+# host-config.json with synthetic dataset, store, approvals and audit paths.
+python -B -m civicgate.mcp.metadata_v2_host --profile synthetic-write --host-config "<absolute-private-path-to-host-config.json>"
+```
+
+Alternatively, use the distinct installed `civicgate-mcp-v2` command with the same arguments. The trusted host must select the profile; clients cannot choose metadata or execution authority. `public-read` retains `openWorldHint=true`; `synthetic-write` advertises `destructiveHint=true` for the non-additive review-status transition while keeping `idempotentHint=false`. The WRITE host requires the original approval/configuration checks and the unchanged synthetic network/data guards. No additional WRITE route is created.
+
+This entry point covers **these two STDIO profiles only**; the remaining audited HTTP/discovery profiles still require explicit integration by their own trusted hosts. Do not mistake a successful `tools/list` response for authorization to call a tool, a real government deployment or proof that M8ven's static score will change. V2 activation is independently verifiable through `tools/list` response `_meta.civicgateMetadataContract = MCP_TOOL_METADATA_V2`. See [wire-level tests](tests/mcp/test_metadata_v2_host.py) and the [audit report](docs/MCP-ANNOTATIONS-03_IMPLEMENTATION_REPORT.md).
+
+
 ## Security and known limitations
 
 - **Durable STOP: PARTIAL.** No production, power-loss, hostile-host or distributed exactly-once certification.
