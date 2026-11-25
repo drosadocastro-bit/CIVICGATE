@@ -91,7 +91,10 @@ async def test_v2_host_real_stdio_exposes_versioned_metadata_without_calls(tmp_p
                         )
     except ExceptionGroup:
         if log.is_file():
-            print("V2 host child stderr:\n" + log.read_text(encoding="utf-8", errors="replace")[-12000:])
+            print(
+                "V2 host child stderr:\n"
+                + log.read_text(encoding="utf-8", errors="replace")[-12000:]
+            )
         raise
 
     if profile == "synthetic-write":

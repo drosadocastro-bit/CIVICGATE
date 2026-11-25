@@ -5,9 +5,9 @@ Neither discovery nor selecting a profile confers execution authority.
 """
 
 import argparse
+from collections.abc import Sequence
 from importlib import import_module
 from pathlib import Path
-from typing import Sequence
 
 import anyio
 
@@ -41,9 +41,7 @@ async def _serve(args: argparse.Namespace) -> None:
         # Start AnyIO's Windows event loop before installing the unchanged
         # network/dataset guards; install them before opening the host config
         # or constructing a server. No external backend is configured.
-        import_module(
-            "evals.harness.eval_002b_composition_v4"
-        ).install_fixture_network_guard()
+        import_module("evals.harness.eval_002b_composition_v4").install_fixture_network_guard()
         import_module("evals.harness.live_composition_v3").install_dataset_guard()
         owner = import_module("evals.write01.stdio_v1").configured_server(args.host_config)
     else:
