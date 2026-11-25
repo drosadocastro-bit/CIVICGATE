@@ -248,52 +248,61 @@ async def test_real_stdio_successor_serialization(tmp_path, profile):
         ],
         env=env,
     )
-    with (tmp_path / "stderr.log").open("x", encoding="utf-8") as errors:
-        async with stdio_client(params, errlog=errors) as streams:
-            async with ClientSession(*streams) as client:
-                await client.initialize()
-                found = await client.list_tools()
-                raw = found.model_dump_json(exclude_none=True, by_alias=True)
-                parsed = json.loads(raw)
-                assert parsed["_meta"]["civicgateMetadataContract"] == "MCP_TOOL_METADATA_V2"
-                assert parsed["_meta"]["profile"] == profile
-                expected_names = (
-                    {"update_synthetic_award_review", "get_synthetic_award_review_v1"}
-                    if profile == "write01-stdio"
-                    else {
-                        "find_federal_awards",
-                        "get_federal_award",
-                        "resolve_federal_recipient",
-                        "summarize_federal_spending",
-                    }
-                )
-                assert {t["name"] for t in parsed["tools"]} == expected_names
-                for tool in parsed["tools"]:
-                    hints = tool["annotations"]
-                    expected = (
-                        {
-                            "readOnlyHint": False,
-                            "destructiveHint": True,
-                            "idempotentHint": False,
-                            "openWorldHint": False,
-                        }
-                        if tool["name"] == "update_synthetic_award_review"
+    stderr_log = tmp_path / "stderr.log"
+    try:
+        with stderr_log.open("x", encoding="utf-8") as errors:
+            async with stdio_client(params, errlog=errors) as streams:
+                async with ClientSession(*streams) as client:
+                    await client.initialize()
+                    found = await client.list_tools()
+                    raw = found.model_dump_json(exclude_none=True, by_alias=True)
+                    parsed = json.loads(raw)
+                    assert parsed["_meta"]["civicgateMetadataContract"] == "MCP_TOOL_METADATA_V2"
+                    assert parsed["_meta"]["profile"] == profile
+                    expected_names = (
+                        {"update_synthetic_award_review", "get_synthetic_award_review_v1"}
+                        if profile == "write01-stdio"
                         else {
-                            "readOnlyHint": True,
-                            "destructiveHint": False,
-                            "idempotentHint": True,
-                            "openWorldHint": False,
-                        }
-                        if tool["name"] == "get_synthetic_award_review_v1"
-                        else {
-                            "readOnlyHint": True,
-                            "destructiveHint": False,
-                            "idempotentHint": False,
-                            "openWorldHint": profile == "primary-stdio",
+                            "find_federal_awards",
+                            "get_federal_award",
+                            "resolve_federal_recipient",
+                            "summarize_federal_spending",
                         }
                     )
-                    assert hints == expected
-                (tmp_path / "after.json").write_text(raw, encoding="utf-8")
+                    assert {t["name"] for t in parsed["tools"]} == expected_names
+                    for tool in parsed["tools"]:
+                        hints = tool["annotations"]
+                        expected = (
+                            {
+                                "readOnlyHint": False,
+                                "destructiveHint": True,
+                                "idempotentHint": False,
+                                "openWorldHint": False,
+                            }
+                            if tool["name"] == "update_synthetic_award_review"
+                            else {
+                                "readOnlyHint": True,
+                                "destructiveHint": False,
+                                "idempotentHint": True,
+                                "openWorldHint": False,
+                            }
+                            if tool["name"] == "get_synthetic_award_review_v1"
+                            else {
+                                "readOnlyHint": True,
+                                "destructiveHint": False,
+                                "idempotentHint": False,
+                                "openWorldHint": profile == "primary-stdio",
+                            }
+                        )
+                        assert hints == expected
+                    (tmp_path / "after.json").write_text(raw, encoding="utf-8")
+    except ExceptionGroup:
+        # Preserve the original failure while exposing subprocess diagnostics on CI.
+        # The child receives only synthetic data and a stripped environment.
+        if stderr_log.is_file():
+            diagnostic = stderr_log.read_text(encoding="utf-8", errors="replace")
+            print(f"STDIO child stderr [{profile}]:\n{diagnostic[-12000:]}")
+        raise
 
 
 def test_all_thirteen_frozen_write_hashes_match(tmp_path):
