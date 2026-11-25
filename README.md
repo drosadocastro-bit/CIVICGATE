@@ -158,13 +158,25 @@ See [methodology, latency/token measurements, failures and limitations](docs/GSA
 
 ## Post-submission MCP annotation research — November 25, 2026
 
-An external MCP directory/static scan prompted an internal three-stage review of tool metadata. The SDK audit verified all four hints in **22 serialized registrations across six profiles**, while the subsequent semantic review identified **16 closed-profile open-world overstatements** and **one non-additive synthetic WRITE-01 transition**. These are metadata-truthfulness findings, not evidence that the Gateway authorization boundary was bypassed.
+**Responsible and trustworthy AI requires verifiable evidence, not just a favorable score.** An external [M8ven MCP Trust Index assessment](https://m8ven.ai/mcp/gsa-mcp-hackathon/civicgate-nova-labs-research) of the official CivicGate repository prompted a deeper internal review of tool annotations and test coverage. We treated the static scanner's alerts as questions to investigate—not as confirmed runtime failures or a security certification. M8ven's scoring logic and any subsequent rescan have not been independently reproduced here.
 
-The reviewed **MCP_TOOL_METADATA_V2** successor is **opt-in for a trusted host**. It adjusts the SDK-serialized `tools/list` metadata for the supported closed profiles and marks the synthetic review-status update `destructiveHint=true`, retaining conservative WRITE `idempotentHint=false`. The original tool registrations, frozen WRITE-01 v1 sources, execution bindings and policy are unchanged. No new tool, dispatch route, government WRITE or deployment is introduced.
+**What our audits actually found:** MCP-ANNOTATIONS-01 verified that all four hints were present in **22 serialized SDK tool registrations across six profiles**. MCP-ANNOTATIONS-02 then identified **16 closed-profile `openWorldHint=true` overstatements** and **one non-additive synthetic WRITE-01 update advertised with `destructiveHint=false`**. MCP-ANNOTATIONS-03 introduced an **opt-in, trusted-host `MCP_TOOL_METADATA_V2`** discovery view that corrects these 17 hint fields for the relevant profiles. The original registrations, frozen WRITE-01 v1 experiment, execution bindings, deterministic policy, and Gateway enforcement remain unchanged. Metadata does not grant authority, and these findings do not establish a security bypass.
 
-The local review reported **2,798 PASS / 1 SKIP** in the broader core selection, **30 PASS** focused, **487 PASS** in a freshly reproduced regression selection and **48 PASS** Host71 offline; selections overlap and are not summed. These are historical local Windows/Python 3.13 observations, **not** new CI or production certification. The six-profile matrix and publication report are privacy-redacted; raw local captures remain in the separately preserved review package.
+**Audit trail and reproducible evidence:**
 
-Read the [MCP-ANNOTATIONS-03 report](docs/MCP-ANNOTATIONS-03_IMPLEMENTATION_REPORT.md), [22-registration metadata matrix](docs/MCP-ANNOTATIONS-03_METADATA_MATRIX.json), [frozen WRITE-01 integrity summary](docs/MCP-ANNOTATIONS-03_FROZEN_WRITE01_INTEGRITY.json) and [versioned implementation](src/civicgate/mcp/metadata_v2.py). This is a post-submission scientific correction, not a retrospective change to the original hackathon evidence.
+| Evidence | What it establishes |
+| --- | --- |
+| [Public audit and correction report](docs/MCP-ANNOTATIONS-03_IMPLEMENTATION_REPORT.md) | Separates M8ven's external trigger, CivicGate's internal findings, versioned repair, limits, and CI diagnostics |
+| [22-registration before/after matrix](docs/MCP-ANNOTATIONS-03_METADATA_MATRIX.json) | Serialized hint values across all six supported profiles |
+| [Frozen WRITE-01 integrity summary](docs/MCP-ANNOTATIONS-03_FROZEN_WRITE01_INTEGRITY.json) · [original v1 manifest](evals/manifests/write01_candidate_v1.json) | Historical evidence and all 13 source pins preserved |
+| [Metadata v2 implementation](src/civicgate/mcp/metadata_v2.py) · [semantic and transport tests](tests/mcp/test_metadata_v2.py) | Opt-in discovery implementation and reproducible assertions |
+| [Windows/Python 3.11 diagnostic CI](https://github.com/drosadocastro-bit/CIVICGATE/actions/runs/45640646487) · [corrected 5/5 PASS PR CI](https://github.com/drosadocastro-bit/CIVICGATE/actions/runs/45657276877) | Preserved failure and independently verified publication repair |
+
+The publication CI exposed two additional compatibility problems: full `mypy src` traversal of frozen evaluation modules (addressed through fixed-name optional imports), and a Windows 3.11 STDIO fixture that installed synthetic network guards before the runtime's internal event-loop socketpair existed. The test-only fixture now installs the **unchanged guards immediately after loop creation and before MCP server construction**. The personal publication PR passed all five GitHub Actions jobs; separate CI acceptance is required for any organization-repository publication.
+
+Local review recorded **2,798 PASS / 1 SKIP** for the broader core selection, **30 PASS** focused, **487 PASS** in the reproduced historical selection, and **48 PASS** Host71 offline. Selections overlap and must **not** be added; these counts are distinct from the later five-job GitHub Actions result. The linked public record is privacy-redacted; raw local captures remain separately preserved.
+
+**Badge policy:** No M8ven badge is claimed yet. A future badge may be shown only with a corresponding current external assessment, clearly labeled as an external directory signal—not as a government endorsement, a production authorization, or proof of comprehensive AI safety. This work is a **post-submission research correction**, not a retroactive rewrite of the original hackathon evidence.
 
 ## Security and known limitations
 
