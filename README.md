@@ -156,6 +156,16 @@ For the **unpublished C03 integrated rehearsal**, the private package records si
 
 See [methodology, latency/token measurements, failures and limitations](docs/GSA_EVALUATION_SUMMARY.md) and [source identities](docs/GSA_EVIDENCE_REGISTER.md). HTTP 200 is not planner success. Test counts are not independent semantic samples and overlapping selections must not be added. The judge-facing summary does not rescore frozen oracles.
 
+## Post-submission MCP annotation research — November 25, 2026
+
+An external MCP directory/static scan prompted an internal three-stage review of tool metadata. The SDK audit verified all four hints in **22 serialized registrations across six profiles**, while the subsequent semantic review identified **16 closed-profile open-world overstatements** and **one non-additive synthetic WRITE-01 transition**. These are metadata-truthfulness findings, not evidence that the Gateway authorization boundary was bypassed.
+
+The reviewed **MCP_TOOL_METADATA_V2** successor is **opt-in for a trusted host**. It adjusts the SDK-serialized `tools/list` metadata for the supported closed profiles and marks the synthetic review-status update `destructiveHint=true`, retaining conservative WRITE `idempotentHint=false`. The original tool registrations, frozen WRITE-01 v1 sources, execution bindings and policy are unchanged. No new tool, dispatch route, government WRITE or deployment is introduced.
+
+The local review reported **2,798 PASS / 1 SKIP** in the broader core selection, **30 PASS** focused, **487 PASS** in a freshly reproduced regression selection and **48 PASS** Host71 offline; selections overlap and are not summed. These are historical local Windows/Python 3.13 observations, **not** new CI or production certification. The six-profile matrix and publication report are privacy-redacted; raw local captures remain in the separately preserved review package.
+
+Read the [MCP-ANNOTATIONS-03 report](docs/MCP-ANNOTATIONS-03_IMPLEMENTATION_REPORT.md), [22-registration metadata matrix](docs/MCP-ANNOTATIONS-03_METADATA_MATRIX.json), [frozen WRITE-01 integrity summary](docs/MCP-ANNOTATIONS-03_FROZEN_WRITE01_INTEGRITY.json) and [versioned implementation](src/civicgate/mcp/metadata_v2.py). This is a post-submission scientific correction, not a retrospective change to the original hackathon evidence.
+
 ## Security and known limitations
 
 - **Durable STOP: PARTIAL.** No production, power-loss, hostile-host or distributed exactly-once certification.
