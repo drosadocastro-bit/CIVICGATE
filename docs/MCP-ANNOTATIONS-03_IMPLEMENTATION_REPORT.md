@@ -1,10 +1,10 @@
 # MCP-ANNOTATIONS-03 — Versioned Metadata Correction and Audit Report
 
-**Status:** Post-submission research update, prepared for controlled publication on November 25, 2026. This public document is a privacy-redacted summary of the locally reviewed implementation report. It is not a new live experiment, a government security authorization, or a claim of deployment.
+**Status:** Post-submission, opt-in metadata research update (November 25, 2026). This public document is a privacy-redacted summary of the locally reviewed implementation report and subsequent publication-CI repairs. It is not a new live experiment, a government security authorization, or a claim of deployment.
 
 ## Why this update exists
 
-A third-party MCP directory/static-analysis review raised questions about annotation completeness and tool-test detection. The subsequent CivicGate internal investigations separated three distinct claims:
+The external [M8ven MCP Trust Index listing](https://m8ven.ai/mcp/gsa-mcp-hackathon/civicgate-nova-labs-research) for the official CivicGate repository prompted this research. Its static assessment raised questions about missing tool annotations and test-reference coverage. Those were **third-party scanner signals**, not confirmed missing fields in serialized MCP responses or a proof of security defects. We have not independently reproduced M8ven's scoring logic or verified how its latest scan interprets these changes. Subsequent **CivicGate internal investigations** separated three distinct claims:
 
 1. **Presence:** MCP-ANNOTATIONS-01 observed all four metadata hints in 22 serialized SDK tool registrations across six profiles; the selected offline regression reported 487 PASS, 0 FAIL, 0 SKIP.
 2. **Semantics:** MCP-ANNOTATIONS-02 identified 16 closed/non-executing profile registrations advertising openWorldHint=true, and one synthetic WRITE-01 state transition advertising destructiveHint=false despite replacing the current review status and version. These findings depend on the stated application-state interpretation of the MCP hints, and are not claims of a security bypass or loss of history.
@@ -81,8 +81,22 @@ To return to the legacy discovery view, create a fresh authorized process/sessio
 
 **Publication principle:** Metadata must describe observed behavior; it does not create execution authority. Deterministic policy decides, and the Gateway enforces. Agent K observes.
 
-## Publication CI compatibility note — November 25, 2026
+## Publication CI compatibility and guarded STDIO regression — November 25, 2026
 
 The initial GitHub Actions Linux/Python 3.11 and 3.12 checks on the publication branches revealed a source-typing traversal issue: static imports of optional, frozen evaluation modules inside metadata_v2.py caused mypy to check three historical evals files, finding 14 unrelated pre-existing type errors there. The original local MCP-ANNOTATIONS-03 candidate had been tested with scoped mypy follow-imports=skip on the new module rather than the complete CI import graph.
 
 A minimal publication compatibility amendment changes only metadata_v2.py to load those optional evaluation modules through importlib.import_module with fixed module names. Exact owner-type checks, trusted-host restrictions, tool-call behavior, public annotation values, authorization policy, and frozen evaluation files remain unchanged. This amended metadata_v2.py has a different source hash than the locally reviewed candidate; it is not presented as byte-identical to that original. The local test suite results above remain historical, and the independent GitHub PR CI runs determine whether the amended publication candidate is accepted. No test assertions or project-wide mypy configuration were weakened.
+
+The initial publication CI also failed three `test_real_stdio_successor_serialization` variants on Windows/Python 3.11 (primary, scoped FAA, and WRITE-01). At first the MCP client only reported `Connection closed`; adding failure-only test diagnostics exposed the child-process traceback: `PermissionError: EVAL002B_NON_FIXTURE_NETWORK_DISABLED`. The frozen synthetic network audit guard had been installed **before** Windows Python 3.11's Proactor event loop constructed its own internal loopback socketpair. This was a fixture-bootstrap ordering problem, not evidence of a real backend request or a policy bypass. The original failure remains traceable in the [diagnostic PR CI run](https://github.com/drosadocastro-bit/CIVICGATE/actions/runs/45640646487).
+
+The narrow fix changes **only the test-only host fixture** [`metadata_v2_stdio_fixture.py`](../tests/mcp/metadata_v2_stdio_fixture.py). It starts AnyIO's event loop first, then installs both existing audit guards **before** creating an MCP server or servicing a request. Neither frozen guard, test expectation, runtime Gateway, tool dispatcher nor WRITE-01 v1 source was modified. On the personal-repository PR head `4c50266bf241b45ef32ffc0b3a6bc2b60da89af7`, the [independent GitHub Actions pull-request CI run](https://github.com/drosadocastro-bit/CIVICGATE/actions/runs/45657276877) completed **SUCCESS for all five jobs**: container, Windows/Python 3.11 and 3.12, and Ubuntu/Python 3.11 and 3.12. This is a fresh CI result for the amended publication candidate; it must not be substituted for the historical local test totals above. The organization-repository PR requires its own passing CI; no outcome should be inferred from the personal-repository run.
+
+### Public verification trail and interpretation
+
+- **External trigger:** [M8ven MCP Trust Index listing](https://m8ven.ai/mcp/gsa-mcp-hackathon/civicgate-nova-labs-research). Its static score, heuristics and any future badge are **not** a certification of CivicGate governance, security, or responsible AI.
+- **CivicGate findings and scope:** this report's presence/semantics/correction sections; the [22-registration before/after matrix](MCP-ANNOTATIONS-03_METADATA_MATRIX.json).
+- **Protected evidence:** the [13-file frozen WRITE-01 integrity summary](MCP-ANNOTATIONS-03_FROZEN_WRITE01_INTEGRITY.json) and the [pinned v1 manifest](../evals/manifests/write01_candidate_v1.json). Raw local audit captures remain in the separately preserved private review bundle, not in the public repository.
+- **Reproducible implementation and checks:** [opt-in metadata v2](../src/civicgate/mcp/metadata_v2.py), [semantic/transport tests](../tests/mcp/test_metadata_v2.py), and the [STDIO test fixture](../tests/mcp/metadata_v2_stdio_fixture.py).
+- **CI evidence:** [Windows 3.11 original diagnostic failure](https://github.com/drosadocastro-bit/CIVICGATE/actions/runs/45640646487) and [corrected five-job successful PR validation](https://github.com/drosadocastro-bit/CIVICGATE/actions/runs/45657276877).
+
+No trust badge has been added based on these internal results. A future badge, if issued or justified following a fresh external assessment, should be linked to the actual assessment and presented as an external directory signal—not as proof of safe deployment or comprehensive model assurance.
