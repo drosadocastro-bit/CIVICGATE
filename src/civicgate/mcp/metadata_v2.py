@@ -6,6 +6,7 @@ Install before transport startup. Direct server.list_tools remains the legacy vi
 """
 
 from dataclasses import dataclass
+from importlib import import_module
 from importlib.metadata import version
 from typing import Any
 
@@ -41,12 +42,13 @@ def _composition(owner: Any, gateway: Any) -> tuple[Any, str, Any]:
     # Evaluation packages are source-checkout-only; no runtime factory or
     # credential reader is invoked to classify a trusted host owner.
     if type(owner).__module__ == "evals.write01.stdio_v1":
-        from evals.write01.stdio_v1 import WriteMCPServerV1
+        WriteMCPServerV1 = import_module("evals.write01.stdio_v1").WriteMCPServerV1
 
         if type(owner) is WriteMCPServerV1:
             return owner, "write01-stdio", None
     if type(owner).__module__ == "evals.proposals.r022.stdio_v1":
-        from evals.proposals.r022.stdio_v1 import ScopedFaaGateway, ScopedFaaMCPServer
+        r022 = import_module("evals.proposals.r022.stdio_v1")
+        ScopedFaaGateway, ScopedFaaMCPServer = r022.ScopedFaaGateway, r022.ScopedFaaMCPServer
 
         if (
             type(owner) is ScopedFaaMCPServer

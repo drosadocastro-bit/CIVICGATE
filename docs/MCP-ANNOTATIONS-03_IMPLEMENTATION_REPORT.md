@@ -80,3 +80,9 @@ To return to the legacy discovery view, create a fresh authorized process/sessio
 - Frozen historical v1 metadata remains visible to direct-source analyzers, which is a deliberate evidence-preservation tradeoff.
 
 **Publication principle:** Metadata must describe observed behavior; it does not create execution authority. Deterministic policy decides, and the Gateway enforces. Agent K observes.
+
+## Publication CI compatibility note — November 25, 2026
+
+The initial GitHub Actions Linux/Python 3.11 and 3.12 checks on the publication branches revealed a source-typing traversal issue: static imports of optional, frozen evaluation modules inside metadata_v2.py caused mypy to check three historical evals files, finding 14 unrelated pre-existing type errors there. The original local MCP-ANNOTATIONS-03 candidate had been tested with scoped mypy follow-imports=skip on the new module rather than the complete CI import graph.
+
+A minimal publication compatibility amendment changes only metadata_v2.py to load those optional evaluation modules through importlib.import_module with fixed module names. Exact owner-type checks, trusted-host restrictions, tool-call behavior, public annotation values, authorization policy, and frozen evaluation files remain unchanged. This amended metadata_v2.py has a different source hash than the locally reviewed candidate; it is not presented as byte-identical to that original. The local test suite results above remain historical, and the independent GitHub PR CI runs determine whether the amended publication candidate is accepted. No test assertions or project-wide mypy configuration were weakened.
