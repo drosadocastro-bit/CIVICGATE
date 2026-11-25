@@ -1,6 +1,6 @@
 # CivicGate
 
-[![CI](https://github.com/drosadocastro-bit/CIVICGATE/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/drosadocastro-bit/CIVICGATE/actions/workflows/ci.yml?query=branch%3Amain)
+[![CI](https://github.com/drosadocastro-bit/CIVICGATE/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/drosadocastro-bit/CIVICGATE/actions/workflows/ci.yml?query=branch%3Amain) [![M8ven Score](https://m8ven.ai/badge/mcp/drosadocastro-bit-civicgate-1o1ai6?v=c8fc9d17d3de3677154c4591652bee44)](https://m8ven.ai/mcp/drosadocastro-bit-civicgate-1o1ai6?s=readme)
 
 > Capability does not create authority.
 
